@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account | Build Your Way Out</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+  <link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+</head>
+<body>
+
+  <main class="reflection-page">
+
+    <header class="page-topbar">
+      <a href="mood.html" class="back-link">← Back</a>
+      <a href="index.html" class="logo mood-logo">
+        <span class="logo-icon">❧</span>
+        Build Your Way Out
+      </a>
+      <span id="authStatus" class="auth-status"></span>
+    </header>
+
+    <section class="reflection-header">
+      <h1>Your account.</h1>
+      <p id="accountEmailLine">Loading...</p>
+    </section>
+
+    <section class="auth-layout">
+
+      <form class="reflection-form auth-form" id="passwordForm">
+        <h2 class="account-section-title">Change Password</h2>
+
+        <div class="form-row">
+          <label>
+            New password
+            <input id="newPassword" type="password" required minlength="6" placeholder="At least 6 characters" />
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            Confirm new password
+            <input id="newPasswordConfirm" type="password" required minlength="6" placeholder="Type it again" />
+          </label>
+        </div>
+
+        <p id="passwordError" class="auth-error" hidden></p>
+        <p id="passwordNotice" class="auth-notice" hidden></p>
+
+        <button type="submit" class="btn primary-btn save-btn" id="passwordSubmitBtn">
+          ♡ Update Password
+        </button>
+      </form>
+
+      <div class="danger-zone">
+        <h2 class="account-section-title">Danger Zone</h2>
+        <p>
+          Deleting your account permanently removes your login and every
+          reflection you've saved. This can't be undone.
+        </p>
+
+        <button type="button" class="btn danger-btn" id="showDeleteBtn">Delete My Account</button>
+
+        <div id="deleteConfirmBlock" class="delete-confirm-block" hidden>
+          <p>Type <strong>DELETE</strong> below to confirm.</p>
+          <input id="deleteConfirmInput" type="text" placeholder="Type DELETE" />
+          <p id="deleteError" class="auth-error" hidden></p>
+          <div class="delete-confirm-actions">
+            <button type="button" class="btn secondary-btn" id="cancelDeleteBtn">Cancel</button>
+            <button type="button" class="btn danger-btn" id="confirmDeleteBtn">Permanently Delete</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script type="module" src="js/account.js"></script>
+
+  <footer class="site-footer">
+    <p class="crisis-note">
+      <strong>If you're in crisis:</strong> in the U.S., call or text
+      <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+      <strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+      both free, confidential, and available 24/7. Outside the U.S., please search
+      for your local emergency or crisis line.
+    </p>
+    <p class="footer-disclaimer">
+      Build Your Way Out is a self-reflection and skill-building tool. It is not
+      therapy, medical advice, or a crisis service.
+    </p>
+    <p class="footer-links">
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+    </p>
+  </footer>
+
+</body>
+</html>

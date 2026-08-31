@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | Build Your Way Out</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+  <link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+</head>
+<body>
+
+  <main class="reflection-page">
+
+    <header class="page-topbar">
+      <a href="index.html" class="back-link">← Back</a>
+      <a href="index.html" class="logo mood-logo">
+        <span class="logo-icon">❧</span>
+        Build Your Way Out
+      </a>
+      <span id="authStatus" class="auth-status"></span>
+    </header>
+
+    <section class="reflection-header">
+      <h1>Privacy Policy</h1>
+      <p class="legal-updated">Last updated: [DATE]</p>
+    </section>
+
+    <section class="legal-content">
+
+      <p class="legal-notice">
+        This is a draft policy written to give you a solid starting point. It has
+        not been reviewed by a lawyer. Please have it reviewed before relying on
+        it for a public launch, and fill in the bracketed placeholders (business
+        name, contact email, state) before publishing.
+      </p>
+
+      <h2>Who we are</h2>
+      <p>
+        Build Your Way Out ("we," "us," "our") is operated by [YOUR BUSINESS NAME / YOUR NAME].
+        This policy explains what information we collect when you use Build Your Way Out,
+        how we use it, and the choices you have.
+      </p>
+
+      <h2>What we collect</h2>
+      <p>We collect the following information:</p>
+      <ul>
+        <li><strong>Account information:</strong> your email address and a securely hashed password, when you create an account.</li>
+        <li><strong>Reflection journal entries:</strong> the text you write in the reflection form (how you felt before/after, what you built, what you learned).</li>
+        <li><strong>Mood and build selections:</strong> which mood you chose and which guided build you were given, used only to avoid repeating the same build and to personalize your experience.</li>
+        <li><strong>Basic technical data:</strong> standard information collected automatically by our hosting and database providers (such as timestamps and error logs) to keep the service running.</li>
+      </ul>
+      <p>
+        If you use Build Your Way Out without creating an account, your reflections and
+        mood history are stored only in your browser (localStorage) and are never sent
+        to us.
+      </p>
+
+      <h2>How we use your information</h2>
+      <p>We use your information only to:</p>
+      <ul>
+        <li>Provide the core functionality of the app (saving and displaying your journal, personalizing builds).</li>
+        <li>Maintain your account (authentication, password resets).</li>
+        <li>Keep the service secure and working as intended.</li>
+      </ul>
+      <p>
+        We do not sell your data. We do not run third-party advertising or analytics
+        trackers against the content of your reflections.
+      </p>
+
+      <h2>How your data is stored</h2>
+      <p>
+        Your account and journal data are stored in a managed Postgres database
+        (via Supabase), with access restricted at the database level so that only
+        you can read or write your own reflections. Data is encrypted at rest and
+        in transit by our infrastructure provider.
+      </p>
+
+      <h2>Sharing</h2>
+      <p>
+        We do not share your reflection content with third parties. We may share
+        limited technical information with service providers who help us run the
+        app (for example, our hosting and database provider), solely for the
+        purpose of operating the service, and only to the extent necessary for
+        them to do so.
+      </p>
+      <p>
+        We may disclose information if required to do so by law, or to protect
+        the rights, safety, or property of Build Your Way Out, our users, or
+        others.
+      </p>
+
+      <h2>Your choices and rights</h2>
+      <ul>
+        <li><strong>Access and export:</strong> you can view your reflections at any time in your journal.</li>
+        <li><strong>Deletion:</strong> you can delete individual reflections, or delete your account and all associated data, at any time from your account settings. [If account deletion isn't built yet, update this line and provide a contact method instead.]</li>
+        <li><strong>California residents:</strong> depending on applicable law, you may have additional rights to know, delete, or opt out of the sale of personal information. We do not sell personal information.</li>
+      </ul>
+
+      <h2>Children's privacy</h2>
+      <p>
+        Build Your Way Out is not directed to children under 13, and we do not
+        knowingly collect information from children under 13. If you are under
+        18, we encourage you to use this app with the awareness and support of a
+        parent, guardian, or trusted adult.
+      </p>
+
+      <h2>Data retention</h2>
+      <p>
+        We retain your account and reflection data for as long as your account
+        is active. If you delete your account, we delete your associated data
+        within [30] days, except where we're required to retain it for legal
+        reasons.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>
+        We may update this policy from time to time. If we make material
+        changes, we'll update the date at the top of this page.
+      </p>
+
+      <h2>Contact us</h2>
+      <p>
+        Questions about this policy or your data? Contact us at
+        <a href="mailto:[email protected]">[email protected]</a>.
+      </p>
+
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { initAuthStatus } from "./js/authStatus.js";
+    initAuthStatus();
+  </script>
+
+  <footer class="site-footer">
+    <p class="crisis-note">
+      <strong>If you're in crisis:</strong> in the U.S., call or text
+      <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+      <strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+      both free, confidential, and available 24/7. Outside the U.S., please search
+      for your local emergency or crisis line.
+    </p>
+    <p class="footer-disclaimer">
+      Build Your Way Out is a self-reflection and skill-building tool. It is not
+      therapy, medical advice, or a crisis service.
+    </p>
+    <p class="footer-links">
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+    </p>
+  </footer>
+
+</body>
+</html>

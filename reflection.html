@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reflection | Build Your Way Out</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+  <link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+</head>
+<body>
+
+  <main class="reflection-page">
+
+    <header class="page-topbar">
+      <a href="project.html" class="back-link">← Back</a>
+
+      <a href="index.html" class="logo mood-logo">
+        <span class="logo-icon">❧</span>
+        Build Your Way Out
+      </a>
+
+      <a href="mood.html" class="outline-pill">View Projects</a>
+      <span id="authStatus" class="auth-status"></span>
+    </header>
+
+    <section class="reflection-header">
+      <h1>Before you move on, take a moment.</h1>
+      <p>Reflect on what you built and how you feel now.</p>
+    </section>
+
+    <section class="reflection-layout">
+
+      <form class="reflection-form" id="reflectionForm">
+
+        <div class="form-row">
+          <label>
+            How did you feel before building?
+            <textarea id="beforeFeeling" placeholder="Write your thoughts..."></textarea>
+          </label>
+
+          <label>
+            How do you feel now?
+            <textarea id="afterFeeling" placeholder="Write your thoughts..."></textarea>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            What did you build?
+            <input id="projectBuilt" type="text" placeholder="Name of your project..." />
+          </label>
+
+          <label>
+            What did you learn from this?
+            <textarea id="lessonLearned" placeholder="Write your thoughts..."></textarea>
+          </label>
+        </div>
+
+        <button type="submit" class="btn primary-btn save-btn">
+          ♡ Save Reflection
+        </button>
+
+      </form>
+
+      <aside class="journal-panel">
+        <h2>Your Build Journal</h2>
+        <p id="journalScopeNote" class="journal-scope-note"></p>
+
+        <div id="journalEntries" class="journal-list">
+          <!-- JavaScript will place saved reflections here -->
+        </div>
+      </aside>
+
+    </section>
+
+  </main>
+
+  <script type="module" src="js/reflection.js"></script>
+  <footer class="site-footer">
+    <p class="crisis-note">
+      <strong>If you're in crisis:</strong> in the U.S., call or text
+      <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+      <strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+      both free, confidential, and available 24/7. Outside the U.S., please search
+      for your local emergency or crisis line.
+    </p>
+    <p class="footer-disclaimer">
+      Build Your Way Out is a self-reflection and skill-building tool. It is not
+      therapy, medical advice, or a crisis service.
+    </p>
+    <p class="footer-links">
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+    </p>
+  </footer>
+</body>
+</html>

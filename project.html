@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Build | Build Your Way Out</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+  <link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+</head>
+
+<body>
+  <main class="project-page">
+    <!-- PAGE TOP NAVIGATION -->
+    <header class="page-topbar">
+      <a href="mood.html" class="back-link">← Back</a>
+      <a href="index.html" class="logo mood-logo">
+        <span class="logo-icon">❧</span>
+        Build Your Way Out
+      </a>
+      <a href="reflection.html" class="outline-pill">View Journal</a>
+      <span id="authStatus" class="auth-status"></span>
+    </header>
+
+
+    <!-- PROJECT RECOMMENDATION AREA -->
+    <section class="project-layout">
+
+      <!-- "Your Build" Card -->
+      <article class="project-info-card">
+        <p class="eyebrow">Your Build</p>
+        <h1 id="title">Breathing Timer App</h1> <!-- Changes by selected mood -->
+        <p id="description">Build a calming breathing circle that expands and contracts to guide your focus.</p> <!-- Changes by selected mood -->
+
+         <!-- Dynamic Preview -->    
+        <div class="mini-preview" id="miniPreview"></div>
+
+        <!-- Built-In Coding Workspace Start Button -->
+        <button type="button" class="btn primary-btn project-btn" id="startGuidedBuild">Start Guided Build</button>
+      </article>
+
+      <!-- "Steps to Build" Card "-->
+      <article class="steps-card">
+        <h2>Steps to Build</h2>
+
+        <!-- Steps List -->
+        <ol id="steps" class="steps-list"></ol>
+      </article>
+
+    </section>
+
+
+    <!-- ENCOURAGEMENT / MOTIVATION BANNER -->
+    <section class="project-note">
+      <span>❧</span>
+      <p>You don’t need to finish everything today. <br /> One small step still counts.</p>
+    </section>
+
+
+    <!-- BUILT-IN CODING EXPERIENCE -->
+    <!-- Hidden at first. Appears when user clicks "Start Guided Build" -->
+    <section class="code-workspace hidden" id="codeWorkspace">
+
+      <!-- Guided Step + Editor Box -->
+      <div class="workspace-left">
+
+        <p id="stepCounter">Step 1 of 5</p> <!-- Filled by JS -->
+        <h2 id="guidedStepTitle">Name your breathing tool</h2> <!-- Filled by JS -->
+        <p id="guidedInstructions">We added the structure for you. Customize the words below, then press Apply Step.</p> <!-- Filled by JS -->
+
+        <!-- Code Box -->
+        <textarea id="stepEditor" title="Code editor for the current build step"></textarea>
+
+        <!-- Current Step Tip -->
+        <p class="editor-tip" id="editorTip">Tip: Only change the words between the tags.</p> 
+
+        <!-- Step Navigation Buttons -->
+        <div class="guided-actions">
+          <button type="button" class="btn secondary-btn" id="prevStep">Previous</button>
+          <button type="button" class="btn secondary-btn" id="applyStep">Apply Step</button>
+          <button type="button" class="btn primary-btn" id="nextStep">Next Step</button>
+
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: LIVE PREVIEW OF WHAT USER IS BUILDING -->
+      <div class="workspace-right">
+        <h3>Live Preview</h3>
+
+        <!-- JavaScript writes the user’s mini project into this iframe -->
+        <iframe id="previewFrame" title="Live preview"></iframe>
+      </div>
+
+    </section>
+  </main>
+
+  
+  <!-- MAIN JAVASCRIPT FILE -->
+  <script type="module" src="js/main.js"></script>
+  <footer class="site-footer">
+    <p class="crisis-note">
+      <strong>If you're in crisis:</strong> in the U.S., call or text
+      <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+      <strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+      both free, confidential, and available 24/7. Outside the U.S., please search
+      for your local emergency or crisis line.
+    </p>
+    <p class="footer-disclaimer">
+      Build Your Way Out is a self-reflection and skill-building tool. It is not
+      therapy, medical advice, or a crisis service.
+    </p>
+    <p class="footer-links">
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+    </p>
+  </footer>
+</body>
+</html>

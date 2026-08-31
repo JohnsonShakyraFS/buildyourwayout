@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service | Build Your Way Out</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+  <link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+</head>
+<body>
+
+  <main class="reflection-page">
+
+    <header class="page-topbar">
+      <a href="index.html" class="back-link">← Back</a>
+      <a href="index.html" class="logo mood-logo">
+        <span class="logo-icon">❧</span>
+        Build Your Way Out
+      </a>
+      <span id="authStatus" class="auth-status"></span>
+    </header>
+
+    <section class="reflection-header">
+      <h1>Terms of Service</h1>
+      <p class="legal-updated">Last updated: [DATE]</p>
+    </section>
+
+    <section class="legal-content">
+
+      <p class="legal-notice">
+        This is a draft written to give you a solid starting point. It has not
+        been reviewed by a lawyer. Please have it reviewed before relying on it
+        for a public launch, and fill in the bracketed placeholders (business
+        name, contact email, state/jurisdiction) before publishing.
+      </p>
+
+      <h2>1. Not a medical or crisis service</h2>
+      <p>
+        Build Your Way Out is a self-reflection and coding skill-building tool.
+        It is <strong>not</strong> therapy, counseling, medical advice, or a
+        crisis service, and using it does not create a therapist-patient or
+        doctor-patient relationship. It is not a substitute for professional
+        mental health care.
+      </p>
+      <p>
+        If you are in crisis or having thoughts of harming yourself, please
+        contact emergency services, call or text 988 (in the U.S.), or reach
+        out to a mental health professional immediately.
+      </p>
+
+      <h2>2. Who can use this app</h2>
+      <p>
+        You must be at least 13 years old to create an account. If you are
+        under 18, we encourage you to use this app with the involvement of a
+        parent or guardian.
+      </p>
+
+      <h2>3. Your account</h2>
+      <p>
+        You're responsible for keeping your account credentials secure and for
+        any activity that happens under your account. Let us know right away
+        if you believe your account has been compromised.
+      </p>
+
+      <h2>4. Your content</h2>
+      <p>
+        You own what you write in your reflections. By using the app, you give
+        us a limited license to store and display that content back to you as
+        part of providing the service. We don't use your reflection content for
+        anything beyond that — we don't train models on it, sell it, or share
+        it with advertisers.
+      </p>
+      <p>
+        You're responsible for what you write. Don't use the reflection tool to
+        submit content that is illegal, abusive, or that infringes someone
+        else's rights.
+      </p>
+
+      <h2>5. Acceptable use</h2>
+      <p>You agree not to:</p>
+      <ul>
+        <li>Attempt to access another user's account or data.</li>
+        <li>Scrape, reverse-engineer, or interfere with the app's normal operation.</li>
+        <li>Use the app for anything illegal or to harm others.</li>
+      </ul>
+
+      <h2>6. Termination</h2>
+      <p>
+        You can stop using Build Your Way Out and delete your account at any
+        time. We may suspend or terminate accounts that violate these terms.
+      </p>
+
+      <h2>7. Disclaimer of warranties</h2>
+      <p>
+        Build Your Way Out is provided "as is," without warranties of any kind.
+        We don't guarantee the app will be uninterrupted, error-free, or
+        suitable for any particular purpose.
+      </p>
+
+      <h2>8. Limitation of liability</h2>
+      <p>
+        To the fullest extent permitted by law, [YOUR BUSINESS NAME] is not
+        liable for any indirect, incidental, or consequential damages arising
+        from your use of the app.
+      </p>
+
+      <h2>9. Changes to these terms</h2>
+      <p>
+        We may update these terms from time to time. If we make material
+        changes, we'll update the date at the top of this page.
+      </p>
+
+      <h2>10. Governing law</h2>
+      <p>
+        These terms are governed by the laws of the State of [YOUR STATE],
+        United States, without regard to its conflict of law principles.
+      </p>
+
+      <h2>11. Contact us</h2>
+      <p>
+        Questions about these terms? Contact us at
+        <a href="mailto:[email protected]">[email protected]</a>.
+      </p>
+
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { initAuthStatus } from "./js/authStatus.js";
+    initAuthStatus();
+  </script>
+
+  <footer class="site-footer">
+    <p class="crisis-note">
+      <strong>If you're in crisis:</strong> in the U.S., call or text
+      <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+      <strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+      both free, confidential, and available 24/7. Outside the U.S., please search
+      for your local emergency or crisis line.
+    </p>
+    <p class="footer-disclaimer">
+      Build Your Way Out is a self-reflection and skill-building tool. It is not
+      therapy, medical advice, or a crisis service.
+    </p>
+    <p class="footer-links">
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+    </p>
+  </footer>
+
+</body>
+</html>

@@ -1144,6 +1144,9 @@ button {
     background: white;
   }
   
+  .hidden-until-ready {
+    visibility: hidden;
+  }
 
   /* REFLECTION STYLING ------------------------------------------------------------- */
 
@@ -2042,4 +2045,161 @@ button {
 .resume-banner-actions {
   display: flex;
   gap: 10px;
+}
+
+/* =========================
+   VIEW TOGGLE (Mood ↔ Library)
+   ========================= */
+   .view-toggle {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    max-width: 300px;
+    margin: 24px auto 0;
+  }
+  
+  .view-toggle-btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.6);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  
+  .view-toggle-btn.active {
+    border-color: var(--accent);
+    background: #f4eadc;
+    color: var(--accent-hover);
+  }
+  
+  /* =========================
+     PRICING PAGE
+     ========================= */
+  .pricing-page {
+    margin-top: 24px;
+  }
+  
+  .pricing-header {
+    text-align: center;
+    margin-top: 24px;
+  }
+  
+  .pricing-header h1 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(38px, 4vw, 54px);
+    font-weight: 600;
+  }
+  
+  .pricing-header p {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 17px;
+  }
+  
+  .pricing-plan-grid {
+    max-width: 900px;
+    margin: 40px auto 0;
+  }
+  
+  .pricing-plan-grid .plan-card a.btn {
+    text-decoration: none;
+    text-align: center;
+  }
+  
+  .pricing-note {
+    max-width: 600px;
+    margin: 28px auto 0;
+    padding: 14px 18px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    background: #eaf1f8;
+    border: 1px solid #cddceb;
+    border-radius: 10px;
+  }
+
+  /* =========================
+   STANDALONE JOURNAL PAGE
+   Wraps the journal panel without the two-column form layout
+   ========================= */
+.journal-standalone {
+  max-width: 700px;
+  margin: 26px auto 0;
+}
+
+/* =========================
+   JOURNAL — DELETE BUILD
+   ========================= */
+   .journal-entry-header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .journal-delete-btn {
+    width: auto;
+    padding: 4px 8px;
+    border: none;
+    background: none;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  
+  .journal-delete-btn:hover {
+    color: #b3452f;
+    background: #fbe9e4;
+  }
+
+  /* =========================
+   MOBILE — CODE WORKSPACE & GUIDED BUILD
+   ========================= */
+@media (max-width: 600px) {
+  .code-workspace {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .workspace-left,
+  .workspace-right {
+    padding: 16px;
+  }
+
+  .workspace-left h2 {
+    font-size: 24px;
+  }
+
+  #previewFrame {
+    min-height: 280px;
+  }
+
+  .CodeMirror {
+    min-height: 140px;
+    font-size: 13px;
+  }
+
+  .guided-actions {
+    flex-direction: column;
+  }
+
+  .guided-actions button {
+    width: 100%;
+  }
+
+  .mini-preview-frame {
+    height: 240px;
+  }
+}
+
+/* =========================
+   MOBILE — DIFFICULTY FILTER WRAPPING
+   ========================= */
+.difficulty-filter {
+  flex-wrap: wrap;
 }

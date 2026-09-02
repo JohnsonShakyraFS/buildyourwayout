@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Journal | Build Your Way Out</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+
+<main class="reflection-page">
+
+<header>
+<a href="index.html" class="logo">
+<span class="logo-icon">❧</span>
+        Build Your Way Out
+</a>
+<nav class="navbar">
+<div class="nav-links" id="navLinks"></div>
+<span id="authStatus" class="auth-status"></span>
+</nav>
+</header>
+
+<section class="reflection-header">
+<h1>Your Build Journal.</h1>
+<p>Every build you've completed, and how your mood has moved over time.</p>
+</section>
+
+<div class="journal-standalone">
+  <section class="journal-panel">
+    <h2>Emotional Trend</h2>
+
+    <section class="mood-trend-panel">
+      <h3 class="mood-trend-heading">Your emotional trend</h3>
+      <p id="moodTrendSummary" class="mood-trend-summary"></p>
+      <canvas id="moodTrendChart" height="160"></canvas>
+    </section>
+
+    <div id="supportBanner" class="support-banner hidden" role="status">
+      <p class="support-banner-text">
+        Your recent check-ins have been on the lower end for a little while.
+        That doesn't mean anything is wrong with you — just that it might help
+        to talk to someone.
+      </p>
+      <div class="support-banner-links">
+        <a href="tel:988">Call or text 988</a>
+        <span aria-hidden="true">·</span>
+        <a href="sms:741741">Text HOME to 741741</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank" rel="noopener">
+          SAMHSA National Helpline
+        </a>
+      </div>
+      <p class="support-banner-disclaimer">
+        Build Your Way Out doesn't diagnose or provide therapy — it's a
+        self-reflection tool. If you're not in the U.S., please search for
+        your local crisis or support line.
+      </p>
+      <button type="button" id="dismissSupportBanner" class="support-banner-dismiss">
+        Dismiss
+      </button>
+    </div>
+
+    <p id="journalScopeNote" class="journal-scope-note"></p>
+
+    <div id="journalEntries" class="journal-list">
+      <!-- JavaScript renders past reflections here -->
+    </div>
+  </section>
+</div>
+
+</main>
+
+<script type="module" src="js/journal.js"></script>
+
+<footer class="site-footer">
+<p class="crisis-note">
+<strong>If you're in crisis:</strong> in the U.S., call or text
+<a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+<strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+      both free, confidential, and available 24/7. Outside the U.S., please search
+      for your local emergency or crisis line.
+</p>
+<p class="footer-disclaimer">
+      Build Your Way Out is a self-reflection and skill-building tool. It is not
+      therapy, medical advice, or a crisis service.
+</p>
+<p class="footer-links">
+<a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+</p>
+</footer>
+
+</body>
+</html>

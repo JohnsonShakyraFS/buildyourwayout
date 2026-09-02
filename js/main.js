@@ -1,6 +1,10 @@
 import { moods, pickBuildForMood, pickBuildForMoodAccount } from "./moods.js";
 import { builds } from "./builds.js";
 import { initAuthStatus } from "./authStatus.js";
+import { initMainNav } from "./mainNav.js";
+// ...
+initAuthStatus();
+initMainNav();
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import { getCurrentUser } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
@@ -120,6 +124,9 @@ if (window.location.pathname.includes("project.html")) {
       stepsList.appendChild(li);
     });
 
+    document.getElementById("projectInfoCard").classList.remove("hidden-until-ready");
+    document.getElementById("stepsCard").classList.remove("hidden-until-ready");
+
     const miniPreview = document.getElementById("miniPreview");
     if (miniPreview) {
       const demoFrame = document.createElement("iframe");
@@ -162,6 +169,16 @@ if (window.location.pathname.includes("project.html")) {
         mode: "javascript",
         theme: "default",
         viewportMargin: Infinity
+      });
+    }
+
+    if (stepEditor && window.CodeMirror) {
+      cmEditor = CodeMirror.fromTextArea(stepEditor, {
+        lineNumbers: true,
+        mode: "javascript",
+        theme: "default",
+        viewportMargin: Infinity,
+        lineWrapping: true
       });
     }
 

@@ -15,42 +15,42 @@
        icon: "〰",
        iconColor: "blue",
        tagline: "Build something calming and rhythmic.",
-       builds: ["breathing-timer", "calm-color-mixer", "grounding-check-in"]
+       builds: ["breathing-timer", "calm-color-mixer", "grounding-check-in", "worry-postponement-box", "anchor-shape-morph", "steady-hands-trace", "anxiety-thermometer-log", "safe-place-builder", "box-breathing-counter", "whatif-flip-cards", "live-worry-scale", "calm-routine-builder", "hold-to-release"]
      },
      overthinking: {
        label: "Overthinking",
        icon: "🧠",
        iconColor: "purple",
        tagline: "Organize your thoughts into something visual.",
-       builds: ["thought-sorter", "worry-jar", "decision-weigher"]
+       builds: ["thought-sorter", "worry-jar", "decision-weigher", "loop-breaker", "base-rate-check", "elimination-bracket", "confidence-decay-meter", "situation-lens-shuffler", "mental-tabs-closer", "certainty-contract", "keyboard-shortcut-categorizer", "spiral-zoom-out", "time-cost-accumulator"]
      },
      unmotivated: {
        label: "Unmotivated",
        icon: "🌱",
        iconColor: "green",
        tagline: "Start small with a tiny wins tracker.",
-       builds: ["wins-tracker", "momentum-checklist", "two-minute-starter"]
+       builds: ["wins-tracker", "momentum-checklist", "two-minute-starter", "habit-streak-tracker", "task-breakdown-chunker", "momentum-ball", "excuse-buster", "five-second-launch", "task-roulette-wheel", "minimum-effort-contract", "domino-chain", "tiny-task-dice", "accountability-ping", "energy-battery-meter"]
      },
      sad: {
        label: "Sad",
        icon: "☁",
        iconColor: "blue",
        tagline: "Create something gentle and encouraging.",
-       builds: ["affirmation-generator", "gratitude-snapshot", "memory-lane"]
+       builds: ["affirmation-generator", "gratitude-snapshot", "memory-lane", "self-compassion-rewriter", "comfort-memory-match", "emotion-weather-report", "locked-comfort-checklist", "tears-counter", "warm-light-dimmer", "story-pages", "cumulative-hug-timer", "comfort-object-builder", "wave-of-grief"]
      },
      angry: {
        label: "Angry",
        icon: "🔥",
        iconColor: "orange",
        tagline: "Channel some energy into a focused build.",
-       builds: ["energy-release-timer", "pressure-release-valve", "smash-board"]
+       builds: ["energy-release-timer", "pressure-release-valve", "smash-board", "punch-counter", "shred-it", "volume-knob", "rage-journal", "durability-wall", "snapback-slider", "scream-meter", "combo-clicker", "anger-weather-vane", "cooldown-grid"]
      },
      lonely: {
        label: "Lonely",
        icon: "🌙",
        iconColor: "teal",
        tagline: "Create something that keeps you a little company.",
-       builds: ["message-in-a-bottle", "constellation-builder", "companion-note-wall"]
+       builds: ["message-in-a-bottle", "constellation-builder", "companion-note-wall", "branching-dialogue-companion", "shared-silence-timer", "window-lights", "companion-footsteps", "echo-chamber", "companion-plant", "orbit-companion", "someones-awake-map", "companion-breathing-sync", "compliment-ping-pong"]
      }
    };
    

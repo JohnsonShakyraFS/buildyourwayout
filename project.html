@@ -21,22 +21,22 @@
 <body>
   <main class="project-page">
     <!-- PAGE TOP NAVIGATION -->
-    <header class="page-topbar">
-      <a href="mood.html" class="back-link">← Back</a>
-      <a href="index.html" class="logo mood-logo">
+    <header>
+      <a href="index.html" class="logo">
         <span class="logo-icon">❧</span>
         Build Your Way Out
       </a>
-      <a href="reflection.html" class="outline-pill">View Journal</a>
-      <span id="authStatus" class="auth-status"></span>
+      <nav class="navbar">
+        <div class="nav-links" id="navLinks"></div>
+        <span id="authStatus" class="auth-status"></span>
+      </nav>
     </header>
-
 
     <!-- PROJECT RECOMMENDATION AREA -->
     <section class="project-layout">
 
       <!-- "Your Build" Card -->
-      <article class="project-info-card">
+      <article class="project-info-card hidden-until-ready" id="projectInfoCard">
         <p class="eyebrow">Your Build</p>
         <h1 id="title">Breathing Timer App</h1> <!-- Changes by selected mood -->
         <p id="description">Build a calming breathing circle that expands and contracts to guide your focus.</p> <!-- Changes by selected mood -->
@@ -56,7 +56,7 @@
       </article>
 
       <!-- "Steps to Build" Card "-->
-      <article class="steps-card">
+      <article class="steps-card hidden-until-ready" id="stepsCard">
         <h2>Steps to Build</h2>
 
         <!-- Steps List -->

@@ -1,6 +1,10 @@
 import { moods } from "./moods.js";
 import { builds } from "./builds.js";
 import { initAuthStatus } from "./authStatus.js";
+import { initMainNav } from "./mainNav.js";
+// ...
+initAuthStatus();
+initMainNav();
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import { getCurrentUser } from "./auth.js";
 

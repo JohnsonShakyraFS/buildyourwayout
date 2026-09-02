@@ -1,6 +1,10 @@
 import { getCurrentUser, updatePassword, deleteAccount } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
 import { initAuthStatus } from "./authStatus.js";
+import { initMainNav } from "./mainNav.js";
+// ...
+initAuthStatus();
+initMainNav();
 import { registerServiceWorker } from "./registerServiceWorker.js";
 
 initAuthStatus();

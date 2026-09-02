@@ -12,16 +12,16 @@ export function initAuthStatus() {
   function render(user) {
     if (user) {
       el.innerHTML = `
-        <a href="account.html" class="auth-link">Account</a>
         <span class="auth-email">${user.email}</span>
         <button type="button" class="auth-link-btn" id="logoutBtn">Log Out</button>
       `;
       const logoutBtn = document.getElementById("logoutBtn");
       logoutBtn.addEventListener("click", async () => {
         await signOut();
+        window.location.href = "index.html";
       });
     } else {
-      el.innerHTML = `<a href="login.html" class="auth-link">Log In</a>`;
+      el.innerHTML = "";
     }
   }
 

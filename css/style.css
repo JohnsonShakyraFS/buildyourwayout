@@ -2203,3 +2203,60 @@ button {
 .difficulty-filter {
   flex-wrap: wrap;
 }
+
+/* =========================
+   LOADING STATES — shared spinner
+   ========================= */
+   @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    vertical-align: middle;
+  }
+  
+  .loading-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    color: var(--muted);
+    font-size: 14px;
+    justify-content: center;
+  }
+  
+  /* =========================
+     NAV — loading skeleton
+     ========================= */
+  .nav-links-skeleton {
+    display: flex;
+    gap: 18px;
+  }
+  
+  .nav-links-skeleton span {
+    display: inline-block;
+    width: 60px;
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.08);
+  }
+  
+  /* =========================
+     PROJECT — build loading state
+     ========================= */
+  .build-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-size: 15px;
+  }

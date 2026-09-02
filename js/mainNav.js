@@ -21,7 +21,18 @@ function renderLinks(user) {
   }
 }
 
+function renderSkeleton() {
+  const el = document.getElementById("navLinks");
+  if (!el) return;
+  el.innerHTML = `
+    <span class="nav-links-skeleton">
+      <span></span><span></span><span></span>
+    </span>
+  `;
+}
+
 export function initMainNav() {
+  renderSkeleton();
   getCurrentUser().then(renderLinks);
   onAuthChange(renderLinks);
 }

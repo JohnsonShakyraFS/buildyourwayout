@@ -126,6 +126,7 @@ if (window.location.pathname.includes("project.html")) {
 
     document.getElementById("projectInfoCard").classList.remove("hidden-until-ready");
     document.getElementById("stepsCard").classList.remove("hidden-until-ready");
+    document.getElementById("buildLoadingIndicator")?.remove();
 
     const miniPreview = document.getElementById("miniPreview");
     if (miniPreview) {

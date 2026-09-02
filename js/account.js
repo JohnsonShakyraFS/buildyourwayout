@@ -197,12 +197,17 @@ planGrid.addEventListener("click", async (event) => {
    reflection represents one completed build.
    ============================================================ */
 
-async function loadProgressAndHistory(userId) {
-  const { data, error } = await supabase
-    .from("reflections")
-    .select("id, project, mood_label, mood_before, mood_after, created_at")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false });
+   async function loadProgressAndHistory(userId) {
+    progressStats.innerHTML = `<div class="loading-inline"><span class="spinner"></span> Loading your progress...</div>`;
+    buildHistoryList.innerHTML = `<div class="loading-inline"><span class="spinner"></span> Loading your build history...</div>`;
+  
+    const { data, error } = await supabase
+      .from("reflections")
+      .select("id, project, mood_label, mood_before, mood_after, created_at")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+  
+    // ...rest of the function stays exactly the same
 
   if (error) {
     console.error("Error loading build history:", error);

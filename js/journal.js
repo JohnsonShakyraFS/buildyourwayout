@@ -188,8 +188,8 @@ async function loadJournal(user) {
   if (!journalEntries) return;
 
   journalEntries.innerHTML = `
-    <p class="journal-loading">Loading your journal...</p>
-  `;
+  <p class="journal-loading"><span class="spinner"></span> Loading your journal...</p>
+`;
 
   const { data, error } = await supabase
     .from("reflections")

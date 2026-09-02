@@ -59,7 +59,9 @@ authForm.addEventListener("submit", async (event) => {
   const email = emailInput.value.trim();
   const password = passwordInput.value;
 
+  const originalLabel = submitBtn.textContent;
   submitBtn.disabled = true;
+  submitBtn.textContent = mode === "signin" ? "Logging in..." : "Signing up...";
 
   const { data, error } =
     mode === "signin"
@@ -67,6 +69,7 @@ authForm.addEventListener("submit", async (event) => {
       : await signUp(email, password);
 
   submitBtn.disabled = false;
+  submitBtn.textContent = originalLabel;
 
   if (error) {
     errorEl.textContent = error.message;

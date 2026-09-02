@@ -3,20 +3,51 @@ import { builds } from "./builds.js";
 import { initAuthStatus } from "./authStatus.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import { getCurrentUser } from "./auth.js";
+import { supabase } from "./supabaseClient.js";
 
 initAuthStatus();
 registerServiceWorker();
 
+/* ==============================================
+   ACCESS GATE
+   mood.html and project.html are the actual product —
+   guests get bounced to login before anything renders.
+   ============================================== */
+const GATED_PAGES = ["mood.html", "project.html"];
+const isGatedPage = GATED_PAGES.some(page => window.location.pathname.includes(page));
+
+let gateUser = null;
+if (isGatedPage) {
+  gateUser = await getCurrentUser();
+  if (!gateUser) {
+    window.location.href = "login.html";
+  }
+}
+
+if (!isGatedPage || gateUser) {
+
 /* ------------------------------------------------------------
    Renders a build's html/css/js into a single iframe document.
-   Shared by both the mini-preview and the guided workspace so
-   there is exactly one place that knows how to render a build.
+   Also injects a tiny error handler so a runtime mistake in the
+   user's JS gets reported back to the parent page instead of
+   failing silently.
    ------------------------------------------------------------ */
 function renderDoc(state) {
   return `
     <!DOCTYPE html>
     <html>
-      <head><style>${state.css}</style></head>
+      <head>
+        <style>${state.css}</style>
+        <script>
+          window.onerror = function (message) {
+            window.parent.postMessage(
+              { type: "buildPreviewError", message: message },
+              "*"
+            );
+            return true;
+          };
+        <\/script>
+      </head>
       <body>
         ${state.html}
         <script>${state.js}<\/script>
@@ -27,8 +58,6 @@ function renderDoc(state) {
 
 /* ==============================================
    MOOD PAGE LOGIC - Runs only on mood.html
-   Cards are generated from moods.js so adding a
-   new mood never requires touching this HTML.
    ============================================== */
 if (window.location.pathname.includes("mood.html")) {
   const moodGrid = document.getElementById("moodGrid");
@@ -50,11 +79,6 @@ if (window.location.pathname.includes("mood.html")) {
   }
 }
 
-/* ========================================================
-   MOOD SELECTION - picks a build for the chosen mood
-   (avoiding a repeat of the last build for that mood, when
-   more than one option exists) and moves to project.html
-   ======================================================== */
 window.selectMood = async function (moodKey) {
   const user = await getCurrentUser();
 
@@ -82,9 +106,6 @@ if (window.location.pathname.includes("project.html")) {
     window.location.href = "mood.html";
   } else {
 
-    /* -------------------------
-       Load selected build info
-       ------------------------- */
     const titleEl = document.getElementById("title");
     const descEl = document.getElementById("description");
     const stepsList = document.getElementById("steps");
@@ -99,11 +120,6 @@ if (window.location.pathname.includes("project.html")) {
       stepsList.appendChild(li);
     });
 
-    /* -------------------------------------------------------
-       DYNAMIC MINI PREVIEW - a live, working demo of the build
-       rendered in a small iframe. Fully generic: works for any
-       build without needing per-mood markup.
-       ------------------------------------------------------- */
     const miniPreview = document.getElementById("miniPreview");
     if (miniPreview) {
       const demoFrame = document.createElement("iframe");
@@ -113,11 +129,6 @@ if (window.location.pathname.includes("project.html")) {
       miniPreview.appendChild(demoFrame);
     }
 
-    /* ======================================================================
-       BUILT-IN CODING EXPERIENCE - beginner step-by-step editor
-       Works against a private copy of the build's state so edits never
-       mutate the shared build definition in builds.js.
-       ====================================================================== */
     const startGuidedBuild = document.getElementById("startGuidedBuild");
     const codeWorkspace = document.getElementById("codeWorkspace");
 
@@ -126,19 +137,181 @@ if (window.location.pathname.includes("project.html")) {
     const guidedInstructions = document.getElementById("guidedInstructions");
     const stepEditor = document.getElementById("stepEditor");
     const editorTip = document.getElementById("editorTip");
+    const editorError = document.getElementById("editorError");
 
     const applyStep = document.getElementById("applyStep");
     const prevStep = document.getElementById("prevStep");
     const nextStep = document.getElementById("nextStep");
     const previewFrame = document.getElementById("previewFrame");
 
+    const resumeBanner = document.getElementById("resumeBanner");
+    const resumeBtn = document.getElementById("resumeBtn");
+    const startOverBtn = document.getElementById("startOverBtn");
+
     let currentStep = 0;
-    const buildState = JSON.parse(JSON.stringify(build.initialState));
+    let buildState = JSON.parse(JSON.stringify(build.initialState));
     const beginnerSteps = build.guidedSteps;
+
+    /* ------------------------------------------------------------
+       CODE EDITOR (syntax highlighting)
+       ------------------------------------------------------------ */
+    let cmEditor = null;
+    if (stepEditor && window.CodeMirror) {
+      cmEditor = CodeMirror.fromTextArea(stepEditor, {
+        lineNumbers: true,
+        mode: "javascript",
+        theme: "default",
+        viewportMargin: Infinity
+      });
+    }
+
+    function getEditorValue() {
+      return cmEditor ? cmEditor.getValue() : stepEditor.value;
+    }
+
+    function setEditorValue(value) {
+      if (cmEditor) {
+        cmEditor.setValue(value);
+      } else {
+        stepEditor.value = value;
+      }
+    }
+
+    function setEditorMode(mode) {
+      if (cmEditor) cmEditor.setOption("mode", mode);
+    }
+
+    function setEditorReadOnly(readOnly) {
+      if (cmEditor) {
+        cmEditor.setOption("readOnly", readOnly);
+      } else {
+        stepEditor.disabled = readOnly;
+      }
+    }
+
+    function pickModeForCode(code) {
+      const trimmed = code.trim();
+      if (trimmed.startsWith("<")) return "htmlmixed";
+      if (/^[a-zA-Z-]+\s*:\s*.+;?\s*$/.test(trimmed) && !/^(const|let|var|function)\b/.test(trimmed)) {
+        return "css";
+      }
+      return "javascript";
+    }
+
+    /* ------------------------------------------------------------
+       ERROR BANNER
+       ------------------------------------------------------------ */
+    function showEditorError(message) {
+      if (!editorError) return;
+      editorError.textContent = message;
+      editorError.hidden = false;
+    }
+
+    function hideEditorError() {
+      if (!editorError) return;
+      editorError.hidden = true;
+    }
+
+    window.addEventListener("message", (event) => {
+      if (event.data && event.data.type === "buildPreviewError") {
+        showEditorError("Your build hit an error while running: " + event.data.message);
+      }
+    });
 
     function updatePreview() {
       if (!previewFrame) return;
       previewFrame.srcdoc = renderDoc(buildState);
+    }
+
+    /* ------------------------------------------------------------
+       SAVE / RESUME PROGRESS
+       Saved per user + build id. Deleted once the build is
+       actually finished (user reaches reflection).
+       ------------------------------------------------------------ */
+    async function saveProgress() {
+      if (!gateUser) return;
+
+      const { error } = await supabase
+        .from("build_progress")
+        .upsert({
+          user_id: gateUser.id,
+          build_id: buildId,
+          mood_key: moodKey,
+          current_step: currentStep,
+          build_state: buildState,
+          updated_at: new Date().toISOString()
+        });
+
+      if (error) {
+        console.error("Error saving build progress:", error);
+      }
+    }
+
+    async function clearProgress() {
+      if (!gateUser) return;
+
+      const { error } = await supabase
+        .from("build_progress")
+        .delete()
+        .eq("user_id", gateUser.id)
+        .eq("build_id", buildId);
+
+      if (error) {
+        console.error("Error clearing build progress:", error);
+      }
+    }
+
+    async function checkForSavedProgress() {
+      if (!gateUser || !resumeBanner) return;
+
+      const { data, error } = await supabase
+        .from("build_progress")
+        .select("current_step, build_state")
+        .eq("user_id", gateUser.id)
+        .eq("build_id", buildId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error checking build progress:", error);
+        return;
+      }
+
+      if (data) {
+        resumeBanner.classList.remove("hidden");
+
+        resumeBtn.addEventListener("click", () => {
+          currentStep = data.current_step;
+          buildState = data.build_state;
+          resumeBanner.classList.add("hidden");
+          codeWorkspace.classList.remove("hidden");
+          renderStep();
+          codeWorkspace.scrollIntoView({ behavior: "smooth" });
+        }, { once: true });
+
+        startOverBtn.addEventListener("click", async () => {
+          await clearProgress();
+          currentStep = 0;
+          buildState = JSON.parse(JSON.stringify(build.initialState));
+          resumeBanner.classList.add("hidden");
+          codeWorkspace.classList.remove("hidden");
+          renderStep();
+          codeWorkspace.scrollIntoView({ behavior: "smooth" });
+        }, { once: true });
+      }
+    }
+
+    function runCurrentStep() {
+      hideEditorError();
+      try {
+        beginnerSteps[currentStep].apply(getEditorValue(), buildState);
+      } catch (err) {
+        console.error("Error applying step:", err);
+        showEditorError("Something went wrong applying your changes: " + err.message);
+        return false;
+      }
+      updatePreview();
+      saveProgress();
+      return true;
     }
 
     function renderStep() {
@@ -148,21 +321,28 @@ if (window.location.pathname.includes("project.html")) {
       guidedStepTitle.textContent = step.title;
       guidedInstructions.textContent = step.instructions;
       editorTip.textContent = step.tip;
-      stepEditor.value = step.starterCode;
+
+      hideEditorError();
+      setEditorValue(step.starterCode);
+      setEditorMode(pickModeForCode(step.starterCode));
 
       prevStep.disabled = currentStep === 0;
 
       if (currentStep === beginnerSteps.length - 1) {
-        stepEditor.disabled = true;
+        setEditorReadOnly(true);
         applyStep.style.display = "none";
         nextStep.textContent = "Go to Reflection";
       } else {
-        stepEditor.disabled = false;
+        setEditorReadOnly(false);
         applyStep.style.display = "inline-flex";
         nextStep.textContent = "Next Step";
       }
 
       updatePreview();
+
+      if (cmEditor) {
+        setTimeout(() => cmEditor.refresh(), 0);
+      }
     }
 
     if (startGuidedBuild) {
@@ -175,19 +355,21 @@ if (window.location.pathname.includes("project.html")) {
 
     if (applyStep) {
       applyStep.addEventListener("click", function () {
-        beginnerSteps[currentStep].apply(stepEditor.value, buildState);
-        updatePreview();
+        runCurrentStep();
       });
     }
 
     if (nextStep) {
-      nextStep.addEventListener("click", function () {
-        beginnerSteps[currentStep].apply(stepEditor.value, buildState);
+      nextStep.addEventListener("click", async function () {
+        const ok = runCurrentStep();
+        if (!ok) return;
 
         if (currentStep < beginnerSteps.length - 1) {
           currentStep++;
           renderStep();
+          saveProgress();
         } else {
+          await clearProgress();
           window.location.href = "reflection.html";
         }
       });
@@ -198,8 +380,13 @@ if (window.location.pathname.includes("project.html")) {
         if (currentStep > 0) {
           currentStep--;
           renderStep();
+          saveProgress();
         }
       });
     }
+
+    checkForSavedProgress();
   }
 }
+
+} // end access gate wrapper

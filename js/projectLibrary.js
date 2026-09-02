@@ -2,9 +2,15 @@ import { moods } from "./moods.js";
 import { builds } from "./builds.js";
 import { initAuthStatus } from "./authStatus.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
+import { getCurrentUser } from "./auth.js";
 
 initAuthStatus();
 registerServiceWorker();
+
+const user = await getCurrentUser();
+if (!user) {
+  window.location.href = "login.html";
+}
 
 const container = document.getElementById("libraryContent");
 

@@ -36,6 +36,109 @@
       <p id="accountEmailLine">Loading...</p>
     </section>
 
+    <section class="account-overview">
+      <div class="account-profile-card">
+        <h2 class="account-section-title">Your Build Profile</h2>
+        <p id="profileTypeLine">Loading...</p>
+        <button type="button" id="retakeQuestionnaireBtn" class="btn secondary-btn">
+          Retake Questionnaire
+        </button>
+      </div>
+    
+      <div class="account-progress-card">
+        <h2 class="account-section-title">Your Progress</h2>
+        <div id="progressStats" class="progress-stats-grid">
+          <!-- filled by JS -->
+        </div>
+      </div>
+    </section>
+
+    <section class="account-details-grid">
+
+      <div class="account-details-card">
+        <h2 class="account-section-title">Profile Details</h2>
+    
+        <form id="nameForm">
+          <div class="form-row">
+            <label>
+              Display name
+              <input id="displayNameInput" type="text" placeholder="What should we call you?" />
+            </label>
+          </div>
+          <button type="submit" class="btn secondary-btn" id="nameSaveBtn">Save Name</button>
+          <p id="nameNotice" class="auth-notice" hidden></p>
+        </form>
+      </div>
+    
+      <div class="account-details-card">
+        <h2 class="account-section-title">Preferences</h2>
+    
+        <label class="preference-toggle">
+          <input type="checkbox" id="prefEmailReminders" />
+          <span>Email me build reminders</span>
+        </label>
+    
+        <label class="preference-toggle">
+          <input type="checkbox" id="prefShowMoodNotes" />
+          <span>Show my written mood notes in Build History</span>
+        </label>
+    
+        <button type="button" class="btn secondary-btn" id="prefsSaveBtn">Save Preferences</button>
+        <p id="prefsNotice" class="auth-notice" hidden></p>
+      </div>
+    
+    </section>
+    
+    <section class="account-subscription-card">
+      <h2 class="account-section-title">Subscription</h2>
+      <p class="subscription-placeholder-note">
+        Payment processing isn't connected yet — selecting a plan below just
+        updates your account for now. Real billing is coming soon.
+      </p>
+    
+      <div class="plan-grid" id="planGrid">
+        <article class="plan-card" data-plan="free">
+          <h3>Free</h3>
+          <p class="plan-price">$0<span>/mo</span></p>
+          <ul class="plan-features">
+            <li>Unlimited guided builds</li>
+            <li>Mood check-ins + journal</li>
+            <li>Basic emotional trend chart</li>
+          </ul>
+          <button type="button" class="btn secondary-btn plan-select-btn">Select</button>
+        </article>
+    
+        <article class="plan-card" data-plan="plus">
+          <h3>Plus</h3>
+          <p class="plan-price">$5<span>/mo</span></p>
+          <ul class="plan-features">
+            <li>Everything in Free</li>
+            <li>Extended trend history + filtering</li>
+            <li>Intermediate build difficulty unlocked</li>
+          </ul>
+          <button type="button" class="btn secondary-btn plan-select-btn">Select</button>
+        </article>
+    
+        <article class="plan-card" data-plan="premium">
+          <h3>Premium</h3>
+          <p class="plan-price">$12<span>/mo</span></p>
+          <ul class="plan-features">
+            <li>Everything in Plus</li>
+            <li>All difficulty levels + advanced builds</li>
+            <li>Priority support</li>
+          </ul>
+          <button type="button" class="btn secondary-btn plan-select-btn">Select</button>
+        </article>
+      </div>
+    </section>
+    
+    <section class="account-history-card">
+      <h2 class="account-section-title">Build History</h2>
+      <div id="buildHistoryList" class="build-history-list">
+        <!-- filled by JS -->
+      </div>
+    </section>
+
     <section class="auth-layout">
 
       <form class="reflection-form auth-form" id="passwordForm">

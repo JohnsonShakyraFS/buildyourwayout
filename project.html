@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
@@ -42,6 +43,13 @@
 
          <!-- Dynamic Preview -->    
         <div class="mini-preview" id="miniPreview"></div>
+        <div id="resumeBanner" class="resume-banner hidden">
+          <p>You have unfinished progress on this build.</p>
+          <div class="resume-banner-actions">
+            <button type="button" id="resumeBtn" class="btn secondary-btn">Resume Where I Left Off</button>
+            <button type="button" id="startOverBtn" class="btn secondary-btn">Start Over</button>
+          </div>
+        </div>
 
         <!-- Built-In Coding Workspace Start Button -->
         <button type="button" class="btn primary-btn project-btn" id="startGuidedBuild">Start Guided Build</button>
@@ -80,14 +88,14 @@
         <textarea id="stepEditor" title="Code editor for the current build step"></textarea>
 
         <!-- Current Step Tip -->
-        <p class="editor-tip" id="editorTip">Tip: Only change the words between the tags.</p> 
+        <p class="editor-tip" id="editorTip">Tip: Only change the words between the tags.</p>
+        <p class="editor-error" id="editorError" hidden></p>
 
         <!-- Step Navigation Buttons -->
         <div class="guided-actions">
           <button type="button" class="btn secondary-btn" id="prevStep">Previous</button>
-          <button type="button" class="btn secondary-btn" id="applyStep">Apply Step</button>
+          <button type="button" class="btn secondary-btn" id="applyStep">▶ Run Code</button>
           <button type="button" class="btn primary-btn" id="nextStep">Next Step</button>
-
         </div>
       </div>
 
@@ -102,7 +110,13 @@
     </section>
   </main>
 
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+<script type="module" src="js/main.js"></script>
+
   <!-- MAIN JAVASCRIPT FILE -->
   <script type="module" src="js/main.js"></script>
   <footer class="site-footer">

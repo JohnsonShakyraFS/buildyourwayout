@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>A Few Questions | Build Your Way Out</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+</head>
+<body>
+
+<main class="reflection-page">
+
+<header class="page-topbar">
+  <span></span>
+  <a href="index.html" class="logo mood-logo">
+    <span class="logo-icon">❧</span>
+    Build Your Way Out
+  </a>
+  <span></span>
+  <span id="authStatus" class="auth-status"></span>
+</header>
+
+<section class="reflection-header">
+  <h1>Just a few things.</h1>
+  <p>There's no wrong answer here — this just helps us point you in a good direction.</p>
+</section>
+
+<form id="onboardingForm" class="reflection-form onboarding-form">
+
+  <div class="onboarding-question" data-question="motivation" data-select="single">
+    <h3>What brings you to Build Your Way Out?</h3>
+    <div class="choice-grid">
+      <button type="button" class="choice-card" data-value="skills">Learn new skills</button>
+      <button type="button" class="choice-card" data-value="confidence">Build confidence</button>
+      <button type="button" class="choice-card" data-value="productive">Something productive to focus on</button>
+      <button type="button" class="choice-card" data-value="creativity">Explore creativity</button>
+      <button type="button" class="choice-card" data-value="unstuck">Get unstuck</button>
+      <button type="button" class="choice-card" data-value="combo">A bit of everything</button>
+    </div>
+  </div>
+
+  <div class="onboarding-question" data-question="buildInterest" data-select="single">
+    <h3>What are you hoping to build?</h3>
+    <div class="choice-grid">
+      <button type="button" class="choice-card" data-value="websites">Websites</button>
+      <button type="button" class="choice-card" data-value="apps">Apps</button>
+      <button type="button" class="choice-card" data-value="creative">Creative projects</button>
+      <button type="button" class="choice-card" data-value="tools">Digital tools</button>
+      <button type="button" class="choice-card" data-value="unsure">I don't know yet</button>
+    </div>
+  </div>
+
+  <div class="onboarding-question" data-question="codingComfort" data-select="single">
+    <h3>How comfortable are you with coding?</h3>
+    <div class="choice-grid">
+      <button type="button" class="choice-card" data-value="beginner">Complete beginner</button>
+      <button type="button" class="choice-card" data-value="dabbled">I've experimented a little</button>
+      <button type="button" class="choice-card" data-value="intermediate">Intermediate</button>
+      <button type="button" class="choice-card" data-value="experienced">Experienced</button>
+    </div>
+  </div>
+
+  <div class="onboarding-question" data-question="goals" data-select="multi">
+    <h3>What are your goals? (pick any that fit)</h3>
+    <div class="choice-grid">
+      <button type="button" class="choice-card" data-value="fundamentals">Learn the fundamentals</button>
+      <button type="button" class="choice-card" data-value="portfolio">Build a portfolio</button>
+      <button type="button" class="choice-card" data-value="calm">Find a calmer way to process stress</button>
+      <button type="button" class="choice-card" data-value="consistency">Build a consistent habit</button>
+      <button type="button" class="choice-card" data-value="career">Explore a career change</button>
+    </div>
+  </div>
+
+  <p id="onboardingError" class="auth-error" hidden></p>
+
+  <button type="submit" class="btn primary-btn save-btn">
+    See My Build Profile
+  </button>
+
+</form>
+
+</main>
+
+<script type="module" src="js/onboarding-questionnaire.js"></script>
+
+<footer class="site-footer">
+<p class="crisis-note">
+<strong>If you're in crisis:</strong> in the U.S., call or text
+<a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+<strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+  both free, confidential, and available 24/7. Outside the U.S., please search
+  for your local emergency or crisis line.
+</p>
+<p class="footer-disclaimer">
+  Build Your Way Out is a self-reflection and skill-building tool. It is not
+  therapy, medical advice, or a crisis service.
+</p>
+<p class="footer-links">
+<a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+</p>
+</footer>
+</body>
+</html>

@@ -1,6 +1,7 @@
 import { signUp, signIn, getCurrentUser } from "./auth.js";
 import { initAuthStatus } from "./authStatus.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
+import { redirectAfterAuth } from "./onboarding.js";
 
 initAuthStatus();
 registerServiceWorker();
@@ -21,7 +22,7 @@ let mode = "signin"; // or "signup"
 
 /* If already logged in, no need to be here */
 getCurrentUser().then(user => {
-  if (user) window.location.href = "mood.html";
+  if (user) redirectAfterAuth(user);
 });
 
 function setMode(newMode) {
@@ -81,7 +82,7 @@ authForm.addEventListener("submit", async (event) => {
     return;
   }
 
-  window.location.href = "mood.html";
+  await redirectAfterAuth(data.user);
 });
 
 setMode("signin");

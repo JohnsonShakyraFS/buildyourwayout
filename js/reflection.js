@@ -1,205 +1,337 @@
-import { moods, pickBuildForMood, pickBuildForMoodAccount } from "./moods.js";
-import { builds } from "./builds.js";
+import { supabase } from "./supabaseClient.js";
 import { initAuthStatus } from "./authStatus.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import { getCurrentUser } from "./auth.js";
+import { moods } from "./moods.js";
+import { builds } from "./builds.js";
 
 initAuthStatus();
 registerServiceWorker();
 
-/* ------------------------------------------------------------
-   Renders a build's html/css/js into a single iframe document.
-   Shared by both the mini-preview and the guided workspace so
-   there is exactly one place that knows how to render a build.
-   ------------------------------------------------------------ */
-function renderDoc(state) {
-  return `
-    <!DOCTYPE html>
-    <html>
-      <head><style>${state.css}</style></head>
-      <body>
-        ${state.html}
-        <script>${state.js}<\/script>
-      </body>
-    </html>
-  `;
-}
+/* ============================================================
+   REFLECTION PAGE
+   Handles:
+   - Saving reflections
+   - Loading the user's journal
+   - Displaying saved reflections
+   ============================================================ */
 
-/* ==============================================
-   MOOD PAGE LOGIC - Runs only on mood.html
-   Cards are generated from moods.js so adding a
-   new mood never requires touching this HTML.
-   ============================================== */
-if (window.location.pathname.includes("mood.html")) {
-  const moodGrid = document.getElementById("moodGrid");
+const reflectionForm = document.getElementById("reflectionForm");
+const journalEntries = document.getElementById("journalEntries");
+const journalScopeNote = document.getElementById("journalScopeNote");
 
-  if (moodGrid) {
-    Object.entries(moods).forEach(([key, mood], index) => {
-      const button = document.createElement("button");
-      button.className = "mood-card" + (index === 0 ? " active-mood" : "");
-      button.innerHTML = `
-        <span class="mood-icon ${mood.iconColor}">${mood.icon}</span>
-        <div>
-          <h2>${mood.label}</h2>
-          <p>${mood.tagline}</p>
-        </div>
-      `;
-      button.addEventListener("click", () => selectMood(key));
-      moodGrid.appendChild(button);
-    });
+const beforeFeeling = document.getElementById("beforeFeeling");
+const afterFeeling = document.getElementById("afterFeeling");
+const projectBuilt = document.getElementById("projectBuilt");
+const lessonLearned = document.getElementById("lessonLearned");
+
+const selectedMoodKey = localStorage.getItem("selectedMood");
+const selectedBuildId = localStorage.getItem("selectedBuildId");
+
+const selectedMood = selectedMoodKey ? moods[selectedMoodKey] : null;
+const selectedBuild = selectedBuildId ? builds[selectedBuildId] : null;
+
+
+/* ============================================================
+   STATUS MESSAGE
+   Creates a message area without requiring another HTML element.
+   ============================================================ */
+
+function showMessage(message, type = "success") {
+  let messageEl = document.getElementById("reflectionMessage");
+
+  if (!messageEl) {
+    messageEl = document.createElement("div");
+    messageEl.id = "reflectionMessage";
+    messageEl.setAttribute("role", "status");
+
+    reflectionForm?.prepend(messageEl);
   }
+
+  messageEl.textContent = message;
+  messageEl.className = `reflection-message ${type}`;
+
+  messageEl.scrollIntoView({
+    behavior: "smooth",
+    block: "nearest"
+  });
 }
 
-/* ========================================================
-   MOOD SELECTION - picks a build for the chosen mood
-   (avoiding a repeat of the last build for that mood, when
-   more than one option exists) and moves to project.html
-   ======================================================== */
-window.selectMood = async function (moodKey) {
+
+/* ============================================================
+   AUTHENTICATION CHECK
+   ============================================================ */
+
+async function requireUser() {
   const user = await getCurrentUser();
 
-  const buildId = user
-    ? await pickBuildForMoodAccount(moodKey, user.id)
-    : pickBuildForMood(moodKey);
+  if (!user) {
+    showMessage(
+      "Please sign in to save your reflection and build journal.",
+      "error"
+    );
 
-  if (!buildId) return;
+    if (reflectionForm) {
+      reflectionForm.querySelectorAll("input, textarea, button").forEach(el => {
+        el.disabled = true;
+      });
+    }
 
-  localStorage.setItem("selectedMood", moodKey);
-  localStorage.setItem("selectedBuildId", buildId);
-  window.location.href = "project.html";
-};
+    return null;
+  }
 
-/* ==============================================
-   PROJECT PAGE LOGIC - Runs only on project.html
-   ============================================== */
-if (window.location.pathname.includes("project.html")) {
-  const moodKey = localStorage.getItem("selectedMood");
-  const buildId = localStorage.getItem("selectedBuildId");
-  const mood = moods[moodKey];
-  const build = builds[buildId];
+  return user;
+}
 
-  if (!mood || !build) {
-    window.location.href = "mood.html";
-  } else {
 
-    /* -------------------------
-       Load selected build info
-       ------------------------- */
-    const titleEl = document.getElementById("title");
-    const descEl = document.getElementById("description");
-    const stepsList = document.getElementById("steps");
+/* ============================================================
+   LOAD USER'S JOURNAL
+   ============================================================ */
 
-    titleEl.textContent = build.title;
-    descEl.textContent = build.description;
+async function loadJournal(user) {
+  if (!journalEntries) return;
 
-    stepsList.innerHTML = "";
-    build.steps.forEach(step => {
-      const li = document.createElement("li");
-      li.textContent = step;
-      stepsList.appendChild(li);
+  journalEntries.innerHTML = `
+    <p class="journal-loading">Loading your journal...</p>
+  `;
+
+  const { data, error } = await supabase
+    .from("reflections")
+    .select(`
+      id,
+      mood_label,
+      mood_key,
+      build_id,
+      project,
+      before_feeling,
+      after_feeling,
+      lesson,
+      created_at
+    `)
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error loading reflections:", error);
+
+    journalEntries.innerHTML = `
+      <p class="journal-error">
+        We couldn't load your journal right now. Please refresh and try again.
+      </p>
+    `;
+
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    journalEntries.innerHTML = `
+      <div class="empty-journal">
+        <h3>Your journal is waiting for you.</h3>
+        <p>
+          Complete your first reflection and it will appear here.
+        </p>
+      </div>
+    `;
+
+    if (journalScopeNote) {
+      journalScopeNote.textContent =
+        "Your reflections are private to your account.";
+    }
+
+    return;
+  }
+
+  if (journalScopeNote) {
+    journalScopeNote.textContent =
+      `${data.length} reflection${data.length === 1 ? "" : "s"} saved • Private to your account`;
+  }
+
+  journalEntries.innerHTML = "";
+
+  data.forEach(reflection => {
+    const entry = document.createElement("article");
+    entry.className = "journal-entry";
+
+    const date = new Date(reflection.created_at);
+
+    const formattedDate = date.toLocaleDateString(undefined, {
+      month: "long",
+      day: "numeric",
+      year: "numeric"
     });
 
-    /* -------------------------------------------------------
-       DYNAMIC MINI PREVIEW - a live, working demo of the build
-       rendered in a small iframe. Fully generic: works for any
-       build without needing per-mood markup.
-       ------------------------------------------------------- */
-    const miniPreview = document.getElementById("miniPreview");
-    if (miniPreview) {
-      const demoFrame = document.createElement("iframe");
-      demoFrame.className = "mini-preview-frame";
-      demoFrame.title = "Preview of " + build.title;
-      demoFrame.srcdoc = renderDoc(build.initialState);
-      miniPreview.appendChild(demoFrame);
-    }
+    const moodName =
+      reflection.mood_label ||
+      moods[reflection.mood_key]?.label ||
+      "Reflection";
 
-    /* ======================================================================
-       BUILT-IN CODING EXPERIENCE - beginner step-by-step editor
-       Works against a private copy of the build's state so edits never
-       mutate the shared build definition in builds.js.
-       ====================================================================== */
-    const startGuidedBuild = document.getElementById("startGuidedBuild");
-    const codeWorkspace = document.getElementById("codeWorkspace");
+    entry.innerHTML = `
+      <div class="journal-entry-header">
+        <div>
+          <span class="journal-mood">${escapeHtml(moodName)}</span>
+          <h3>${escapeHtml(reflection.project || "Build Reflection")}</h3>
+        </div>
 
-    const stepCounter = document.getElementById("stepCounter");
-    const guidedStepTitle = document.getElementById("guidedStepTitle");
-    const guidedInstructions = document.getElementById("guidedInstructions");
-    const stepEditor = document.getElementById("stepEditor");
-    const editorTip = document.getElementById("editorTip");
+        <time datetime="${reflection.created_at}">
+          ${formattedDate}
+        </time>
+      </div>
 
-    const applyStep = document.getElementById("applyStep");
-    const prevStep = document.getElementById("prevStep");
-    const nextStep = document.getElementById("nextStep");
-    const previewFrame = document.getElementById("previewFrame");
+      <div class="journal-entry-section">
+        <strong>Before building</strong>
+        <p>${escapeHtml(reflection.before_feeling)}</p>
+      </div>
 
-    let currentStep = 0;
-    const buildState = JSON.parse(JSON.stringify(build.initialState));
-    const beginnerSteps = build.guidedSteps;
+      <div class="journal-entry-section">
+        <strong>After building</strong>
+        <p>${escapeHtml(reflection.after_feeling)}</p>
+      </div>
 
-    function updatePreview() {
-      if (!previewFrame) return;
-      previewFrame.srcdoc = renderDoc(buildState);
-    }
+      <div class="journal-entry-section">
+        <strong>What I learned</strong>
+        <p>${escapeHtml(reflection.lesson)}</p>
+      </div>
+    `;
 
-    function renderStep() {
-      const step = beginnerSteps[currentStep];
+    journalEntries.appendChild(entry);
+  });
+}
 
-      stepCounter.textContent = `Step ${currentStep + 1} of ${beginnerSteps.length}`;
-      guidedStepTitle.textContent = step.title;
-      guidedInstructions.textContent = step.instructions;
-      editorTip.textContent = step.tip;
-      stepEditor.value = step.starterCode;
 
-      prevStep.disabled = currentStep === 0;
+/* ============================================================
+   SAVE REFLECTION
+   ============================================================ */
 
-      if (currentStep === beginnerSteps.length - 1) {
-        stepEditor.disabled = true;
-        applyStep.style.display = "none";
-        nextStep.textContent = "Go to Reflection";
-      } else {
-        stepEditor.disabled = false;
-        applyStep.style.display = "inline-flex";
-        nextStep.textContent = "Next Step";
-      }
+async function saveReflection(event) {
+  event.preventDefault();
 
-      updatePreview();
-    }
+  const user = await getCurrentUser();
 
-    if (startGuidedBuild) {
-      startGuidedBuild.addEventListener("click", function () {
-        codeWorkspace.classList.remove("hidden");
-        renderStep();
-        codeWorkspace.scrollIntoView({ behavior: "smooth" });
-      });
-    }
+  if (!user) {
+    showMessage(
+      "Please sign in before saving a reflection.",
+      "error"
+    );
 
-    if (applyStep) {
-      applyStep.addEventListener("click", function () {
-        beginnerSteps[currentStep].apply(stepEditor.value, buildState);
-        updatePreview();
-      });
-    }
-
-    if (nextStep) {
-      nextStep.addEventListener("click", function () {
-        beginnerSteps[currentStep].apply(stepEditor.value, buildState);
-
-        if (currentStep < beginnerSteps.length - 1) {
-          currentStep++;
-          renderStep();
-        } else {
-          window.location.href = "reflection.html";
-        }
-      });
-    }
-
-    if (prevStep) {
-      prevStep.addEventListener("click", function () {
-        if (currentStep > 0) {
-          currentStep--;
-          renderStep();
-        }
-      });
-    }
+    return;
   }
+
+  const before = beforeFeeling.value.trim();
+  const after = afterFeeling.value.trim();
+  const project = projectBuilt.value.trim();
+  const lesson = lessonLearned.value.trim();
+
+  if (!before || !after || !project || !lesson) {
+    showMessage(
+      "Please complete all reflection fields before saving.",
+      "error"
+    );
+
+    return;
+  }
+
+  const submitButton = reflectionForm.querySelector(
+    'button[type="submit"]'
+  );
+
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.textContent = "Saving...";
+  }
+
+  const reflection = {
+    user_id: user.id,
+
+    mood_label: selectedMood?.label || "Unknown mood",
+    mood_key: selectedMoodKey || null,
+
+    build_id: selectedBuildId || null,
+
+    project,
+    before_feeling: before,
+    after_feeling: after,
+    lesson
+  };
+
+  const { data, error } = await supabase
+    .from("reflections")
+    .insert(reflection)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error saving reflection:", error);
+
+    showMessage(
+      "We couldn't save your reflection. Please try again.",
+      "error"
+    );
+
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = "♡ Save Reflection";
+    }
+
+    return;
+  }
+
+  console.log("Reflection saved:", data);
+
+  showMessage(
+    "Your reflection has been saved to your Build Journal. ♡",
+    "success"
+  );
+
+  reflectionForm.reset();
+
+  if (submitButton) {
+    submitButton.disabled = false;
+    submitButton.textContent = "♡ Save Reflection";
+  }
+
+  await loadJournal(user);
+}
+
+
+/* ============================================================
+   HTML ESCAPING
+   Prevents user-entered reflection text from being interpreted
+   as HTML when displayed in the journal.
+   ============================================================ */
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+/* ============================================================
+   INITIALIZE
+   ============================================================ */
+
+async function initReflectionPage() {
+  if (!reflectionForm) return;
+
+  const user = await requireUser();
+
+  if (!user) return;
+
+  /*
+    Pre-fill the project name from the build the user just completed.
+    The user can still edit it.
+  */
+  if (selectedBuild?.title && !projectBuilt.value) {
+    projectBuilt.value = selectedBuild.title;
+  }
+
+  await loadJournal(user);
+}
+
+if (reflectionForm) {
+  reflectionForm.addEventListener("submit", saveReflection);
+  initReflectionPage();
 }

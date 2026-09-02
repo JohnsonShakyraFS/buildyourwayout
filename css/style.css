@@ -915,6 +915,118 @@ button {
   
 
   /* REFLECTION STYLING ------------------------------------------------------------- */
+
+  /* ============================================================
+   REFLECTION STATUS
+   ============================================================ */
+
+.reflection-message {
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.reflection-message.success {
+  background: #eef8f1;
+  border: 1px solid #b9dec3;
+}
+
+.reflection-message.error {
+  background: #fff2f2;
+  border: 1px solid #e4bcbc;
+}
+
+
+/* ============================================================
+   REFLECTION PRIVACY NOTE
+   ============================================================ */
+
+.reflection-privacy-note {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  text-align: center;
+}
+
+
+/* ============================================================
+   JOURNAL
+   ============================================================ */
+
+.journal-loading,
+.journal-error {
+  padding: 20px;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.empty-journal {
+  padding: 30px 20px;
+  text-align: center;
+}
+
+.empty-journal h3 {
+  margin-bottom: 8px;
+}
+
+.empty-journal p {
+  margin: 0;
+  opacity: 0.7;
+}
+
+.journal-entry {
+  padding: 20px;
+  margin-bottom: 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.journal-entry-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.journal-entry-header h3 {
+  margin: 5px 0 0;
+}
+
+.journal-entry-header time {
+  font-size: 0.8rem;
+  opacity: 0.65;
+  white-space: nowrap;
+}
+
+.journal-mood {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+.journal-entry-section {
+  margin-top: 14px;
+}
+
+.journal-entry-section strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.journal-entry-section p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.journal-scope-note {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
   /* =========================
      REFLECTION PAGE
      ========================= */

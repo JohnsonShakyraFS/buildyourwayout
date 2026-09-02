@@ -11,17 +11,19 @@ registerServiceWorker();
 /* ============================================================
    REFLECTION PAGE
    Handles:
-   - Saving reflections
+   - Saving reflections (1-5 mood ratings)
    - Loading the user's journal
    - Displaying saved reflections
+   - Rendering the emotional trend chart
    ============================================================ */
 
 const reflectionForm = document.getElementById("reflectionForm");
 const journalEntries = document.getElementById("journalEntries");
 const journalScopeNote = document.getElementById("journalScopeNote");
 
-const beforeFeeling = document.getElementById("beforeFeeling");
-const afterFeeling = document.getElementById("afterFeeling");
+const moodBeforeScale = document.getElementById("moodBeforeScale");
+const moodAfterScale = document.getElementById("moodAfterScale");
+const moodNote = document.getElementById("moodNote");
 const projectBuilt = document.getElementById("projectBuilt");
 const lessonLearned = document.getElementById("lessonLearned");
 
@@ -31,10 +33,48 @@ const selectedBuildId = localStorage.getItem("selectedBuildId");
 const selectedMood = selectedMoodKey ? moods[selectedMoodKey] : null;
 const selectedBuild = selectedBuildId ? builds[selectedBuildId] : null;
 
+let beforeRating = null;
+let afterRating = null;
+let moodTrendChartInstance = null;
+
+const MOOD_LABELS = {
+  1: "😞 Very low",
+  2: "😕 Low",
+  3: "😐 Okay",
+  4: "🙂 Good",
+  5: "😊 Great"
+};
+
+const LOW_MOOD_THRESHOLD = 2.5;
+const LOOKBACK_COUNT = 3;
+const SUPPORT_DISMISS_KEY = "supportBannerDismissedAt";
+const SUPPORT_DISMISS_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+/* ============================================================
+   MOOD SCALE INTERACTION
+   ============================================================ */
+
+function setupMoodScale(container, onSelect) {
+  if (!container) return;
+
+  container.addEventListener("click", (event) => {
+    const button = event.target.closest(".mood-option");
+    if (!button) return;
+
+    container.querySelectorAll(".mood-option").forEach(btn =>
+      btn.classList.remove("selected")
+    );
+    button.classList.add("selected");
+
+    onSelect(Number(button.dataset.value));
+  });
+}
+
+setupMoodScale(moodBeforeScale, (value) => { beforeRating = value; });
+setupMoodScale(moodAfterScale, (value) => { afterRating = value; });
 
 /* ============================================================
    STATUS MESSAGE
-   Creates a message area without requiring another HTML element.
    ============================================================ */
 
 function showMessage(message, type = "success") {
@@ -56,7 +96,6 @@ function showMessage(message, type = "success") {
     block: "nearest"
   });
 }
-
 
 /* ============================================================
    AUTHENTICATION CHECK
@@ -83,6 +122,148 @@ async function requireUser() {
   return user;
 }
 
+/* ============================================================
+   EMOTIONAL TREND CHART
+   ============================================================ */
+   function shouldShowSupportBanner(afterValues) {
+    if (afterValues.length < LOOKBACK_COUNT) return false;
+  
+    const recent = afterValues.slice(-LOOKBACK_COUNT);
+    const avg = recent.reduce((sum, v) => sum + v, 0) / recent.length;
+  
+    if (avg > LOW_MOOD_THRESHOLD) return false;
+  
+    const dismissedAt = Number(localStorage.getItem(SUPPORT_DISMISS_KEY) || 0);
+    const cooledDown = Date.now() - dismissedAt > SUPPORT_DISMISS_COOLDOWN_MS;
+  
+    return cooledDown;
+  }
+  
+  function setupSupportBanner() {
+    const dismissBtn = document.getElementById("dismissSupportBanner");
+    if (!dismissBtn) return;
+  
+    dismissBtn.addEventListener("click", () => {
+      const banner = document.getElementById("supportBanner");
+      if (banner) banner.classList.add("hidden");
+      localStorage.setItem(SUPPORT_DISMISS_KEY, String(Date.now()));
+    });
+  }
+  
+  setupSupportBanner();
+  
+function describeTrend(afterValues) {
+  if (afterValues.length < 2) {
+    return "Complete a few more reflections to start seeing your trend.";
+  }
+
+  const midpoint = Math.floor(afterValues.length / 2) || 1;
+  const earlier = afterValues.slice(0, midpoint);
+  const recent = afterValues.slice(midpoint).length
+    ? afterValues.slice(midpoint)
+    : earlier;
+
+  const avg = arr => arr.reduce((sum, v) => sum + v, 0) / arr.length;
+  const diff = avg(recent) - avg(earlier);
+
+  if (diff > 0.4) {
+    return "↑ Improving — your recent check-ins have generally moved upward.";
+  }
+  if (diff < -0.4) {
+    return "↓ Trending down — your recent check-ins have been lower than before.";
+  }
+  return "→ Holding steady — your mood has been fairly consistent.";
+}
+
+function renderMoodTrend(data) {
+  const canvas = document.getElementById("moodTrendChart");
+  const summaryEl = document.getElementById("moodTrendSummary");
+  const supportBanner = document.getElementById("supportBanner");
+
+  if (!canvas || !summaryEl) return;
+
+  const chronological = [...data].reverse();
+
+  const withMoods = chronological.filter(
+    r => typeof r.mood_before === "number" && typeof r.mood_after === "number"
+  );
+
+  if (withMoods.length === 0) {
+    summaryEl.textContent =
+      "Complete a reflection with mood ratings to see your trend.";
+    canvas.style.display = "none";
+    supportBanner?.classList.add("hidden");
+    return;
+  }
+
+  canvas.style.display = "block";
+
+  const labels = withMoods.map(r =>
+    new Date(r.created_at).toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric"
+    })
+  );
+
+  const beforeValues = withMoods.map(r => r.mood_before);
+  const afterValues = withMoods.map(r => r.mood_after);
+
+  summaryEl.textContent = describeTrend(afterValues);
+
+  if (supportBanner) {
+    if (shouldShowSupportBanner(afterValues)) {
+      supportBanner.classList.remove("hidden");
+    } else {
+      supportBanner.classList.add("hidden");
+    }
+  }
+
+  if (moodTrendChartInstance) {
+    moodTrendChartInstance.destroy();
+  }
+
+  moodTrendChartInstance = new Chart(canvas, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Before",
+          data: beforeValues,
+          borderColor: "#c8bda9",
+          backgroundColor: "transparent",
+          tension: 0.3,
+          pointRadius: 3
+        },
+        {
+          label: "After",
+          data: afterValues,
+          borderColor: "#c8a96a",
+          backgroundColor: "transparent",
+          tension: 0.3,
+          pointRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          min: 1,
+          max: 5,
+          ticks: { stepSize: 1 }
+        }
+      },
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { boxWidth: 10, font: { size: 11 } }
+        }
+      }
+    }
+  });
+}
 
 /* ============================================================
    LOAD USER'S JOURNAL
@@ -103,8 +284,9 @@ async function loadJournal(user) {
       mood_key,
       build_id,
       project,
-      before_feeling,
-      after_feeling,
+      mood_before,
+      mood_after,
+      mood_note,
       lesson,
       created_at
     `)
@@ -120,8 +302,11 @@ async function loadJournal(user) {
       </p>
     `;
 
+    renderMoodTrend([]);
     return;
   }
+
+  renderMoodTrend(data || []);
 
   if (!data || data.length === 0) {
     journalEntries.innerHTML = `
@@ -165,6 +350,18 @@ async function loadJournal(user) {
       moods[reflection.mood_key]?.label ||
       "Reflection";
 
+    const beforeLabel = MOOD_LABELS[reflection.mood_before] || "—";
+    const afterLabel = MOOD_LABELS[reflection.mood_after] || "—";
+
+    const noteHtml = reflection.mood_note
+      ? `
+        <div class="journal-entry-section">
+          <strong>In their own words</strong>
+          <p>${escapeHtml(reflection.mood_note)}</p>
+        </div>
+      `
+      : "";
+
     entry.innerHTML = `
       <div class="journal-entry-header">
         <div>
@@ -177,15 +374,13 @@ async function loadJournal(user) {
         </time>
       </div>
 
-      <div class="journal-entry-section">
-        <strong>Before building</strong>
-        <p>${escapeHtml(reflection.before_feeling)}</p>
+      <div class="journal-entry-section mood-shift">
+        <span class="mood-shift-item"><strong>Before:</strong> ${beforeLabel}</span>
+        <span class="mood-shift-arrow">→</span>
+        <span class="mood-shift-item"><strong>After:</strong> ${afterLabel}</span>
       </div>
 
-      <div class="journal-entry-section">
-        <strong>After building</strong>
-        <p>${escapeHtml(reflection.after_feeling)}</p>
-      </div>
+      ${noteHtml}
 
       <div class="journal-entry-section">
         <strong>What I learned</strong>
@@ -196,7 +391,6 @@ async function loadJournal(user) {
     journalEntries.appendChild(entry);
   });
 }
-
 
 /* ============================================================
    SAVE REFLECTION
@@ -216,14 +410,13 @@ async function saveReflection(event) {
     return;
   }
 
-  const before = beforeFeeling.value.trim();
-  const after = afterFeeling.value.trim();
   const project = projectBuilt.value.trim();
   const lesson = lessonLearned.value.trim();
+  const note = moodNote.value.trim();
 
-  if (!before || !after || !project || !lesson) {
+  if (!beforeRating || !afterRating || !project || !lesson) {
     showMessage(
-      "Please complete all reflection fields before saving.",
+      "Please select how you felt before and after, and fill out the rest of the fields.",
       "error"
     );
 
@@ -248,8 +441,9 @@ async function saveReflection(event) {
     build_id: selectedBuildId || null,
 
     project,
-    before_feeling: before,
-    after_feeling: after,
+    mood_before: beforeRating,
+    mood_after: afterRating,
+    mood_note: note || null,
     lesson
   };
 
@@ -277,12 +471,23 @@ async function saveReflection(event) {
 
   console.log("Reflection saved:", data);
 
+  const delta = afterRating - beforeRating;
+  let shiftPhrase = "stayed about the same";
+  if (delta >= 1) shiftPhrase = "improved";
+  else if (delta <= -1) shiftPhrase = "dropped a bit";
+
   showMessage(
-    "Your reflection has been saved to your Build Journal. ♡",
+    `Saved to your Build Journal. Your mood ${shiftPhrase} during this build ` +
+    `(${MOOD_LABELS[beforeRating]} → ${MOOD_LABELS[afterRating]}). ♡`,
     "success"
   );
 
   reflectionForm.reset();
+  beforeRating = null;
+  afterRating = null;
+  document.querySelectorAll(".mood-option.selected").forEach(btn =>
+    btn.classList.remove("selected")
+  );
 
   if (submitButton) {
     submitButton.disabled = false;
@@ -292,11 +497,8 @@ async function saveReflection(event) {
   await loadJournal(user);
 }
 
-
 /* ============================================================
    HTML ESCAPING
-   Prevents user-entered reflection text from being interpreted
-   as HTML when displayed in the journal.
    ============================================================ */
 
 function escapeHtml(value) {
@@ -307,7 +509,6 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
-
 
 /* ============================================================
    INITIALIZE
@@ -320,10 +521,6 @@ async function initReflectionPage() {
 
   if (!user) return;
 
-  /*
-    Pre-fill the project name from the build the user just completed.
-    The user can still edit it.
-  */
   if (selectedBuild?.title && !projectBuilt.value) {
     projectBuilt.value = selectedBuild.title;
   }

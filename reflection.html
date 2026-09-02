@@ -18,7 +18,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
 </head>
-<body>
+<body>x
 
   <main class="reflection-page">
 
@@ -44,14 +44,33 @@
       <form class="reflection-form" id="reflectionForm">
 
         <div class="form-row">
+          <div class="mood-field">
+            <label class="mood-field-label">How did you feel before building?</label>
+            <div class="mood-scale" id="moodBeforeScale" role="radiogroup" aria-label="Mood before building">
+              <button type="button" class="mood-option" data-value="1" aria-label="Very low">😞</button>
+              <button type="button" class="mood-option" data-value="2" aria-label="Low">😕</button>
+              <button type="button" class="mood-option" data-value="3" aria-label="Okay">😐</button>
+              <button type="button" class="mood-option" data-value="4" aria-label="Good">🙂</button>
+              <button type="button" class="mood-option" data-value="5" aria-label="Great">😊</button>
+            </div>
+          </div>
+        
+          <div class="mood-field">
+            <label class="mood-field-label">How do you feel now?</label>
+            <div class="mood-scale" id="moodAfterScale" role="radiogroup" aria-label="Mood after building">
+              <button type="button" class="mood-option" data-value="1" aria-label="Very low">😞</button>
+              <button type="button" class="mood-option" data-value="2" aria-label="Low">😕</button>
+              <button type="button" class="mood-option" data-value="3" aria-label="Okay">😐</button>
+              <button type="button" class="mood-option" data-value="4" aria-label="Good">🙂</button>
+              <button type="button" class="mood-option" data-value="5" aria-label="Great">😊</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
           <label>
-            How did you feel before building?
-            <textarea id="beforeFeeling" placeholder="Write your thoughts..."></textarea>
-          </label>
-
-          <label>
-            How do you feel now?
-            <textarea id="afterFeeling" placeholder="Write your thoughts..."></textarea>
+            Want to say more about how you feel? (optional)
+            <textarea id="moodNote" placeholder="Anything you'd like to add..."></textarea>
           </label>
         </div>
 
@@ -79,6 +98,35 @@
 
       <aside class="journal-panel">
         <h2>Your Build Journal</h2>
+        <section class="mood-trend-panel">
+          <h3 class="mood-trend-heading">Your emotional trend</h3>
+          <p id="moodTrendSummary" class="mood-trend-summary"></p>
+          <canvas id="moodTrendChart" height="160"></canvas>
+        </section>
+        <div id="supportBanner" class="support-banner hidden" role="status">
+          <p class="support-banner-text">
+            Your recent check-ins have been on the lower end for a little while.
+            That doesn't mean anything is wrong with you — just that it might help
+            to talk to someone.
+          </p>
+          <div class="support-banner-links">
+            <a href="tel:988">Call or text 988</a>
+            <span aria-hidden="true">·</span>
+            <a href="sms:741741">Text HOME to 741741</a>
+            <span aria-hidden="true">·</span>
+            <a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank" rel="noopener">
+              SAMHSA National Helpline
+            </a>
+          </div>
+          <p class="support-banner-disclaimer">
+            Build Your Way Out doesn't diagnose or provide therapy — it's a
+            self-reflection tool. If you're not in the U.S., please search for
+            your local crisis or support line.
+          </p>
+          <button type="button" id="dismissSupportBanner" class="support-banner-dismiss">
+            Dismiss
+          </button>
+        </div>
         <p id="journalScopeNote" class="journal-scope-note"></p>
 
         <div id="journalEntries" class="journal-list">
@@ -90,6 +138,7 @@
 
   </main>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
   <script type="module" src="js/reflection.js"></script>
   <footer class="site-footer">
     <p class="crisis-note">

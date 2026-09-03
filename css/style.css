@@ -2260,3 +2260,14 @@ button {
     color: var(--muted);
     font-size: 15px;
   }
+
+  /* =========================
+   LIBRARY — EMPTY FILTER STATE
+   ========================= */
+.library-empty-state {
+  grid-column: 1 / -1;
+}
+
+.library-empty-state .btn {
+  margin-top: 14px;
+}

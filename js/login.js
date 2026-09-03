@@ -37,6 +37,7 @@ function setMode(newMode) {
     toggleText.textContent = "Don't have an account?";
     toggleBtn.textContent = "Sign Up";
     forgotRow.hidden = false;
+    passwordInput.setAttribute("autocomplete", "current-password");
   } else {
     heading.textContent = "Let's get you set up.";
     subheading.textContent = "Create an account to save your journal.";
@@ -44,6 +45,7 @@ function setMode(newMode) {
     toggleText.textContent = "Already have an account?";
     toggleBtn.textContent = "Log In";
     forgotRow.hidden = true;
+    passwordInput.setAttribute("autocomplete", "new-password");
   }
 }
 

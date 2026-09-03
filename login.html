@@ -19,8 +19,8 @@
   <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
 </head>
 <body>
-
-  <main class="reflection-page">
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+  <main class="reflection-page" id="mainContent">
 
     <header class="page-topbar">
       <a href="index.html" class="back-link">← Back</a>
@@ -44,19 +44,19 @@
         <div class="form-row">
           <label>
             Email
-            <input id="authEmail" type="email" required placeholder="you@example.com" />
+            <input id="authEmail" type="email" required placeholder="you@example.com" autocomplete="email" />
           </label>
         </div>
 
         <div class="form-row">
           <label>
             Password
-            <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters" />
+            <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters" autocomplete="current-password" />
           </label>
         </div>
 
-        <p id="authError" class="auth-error" hidden></p>
-        <p id="authNotice" class="auth-notice" hidden></p>
+        <p id="authError" class="auth-error" aria-live="polite" hidden></p>
+        <p id="authNotice" class="auth-notice" aria-live="polite" hidden></p>
 
         <p class="auth-forgot" id="authForgotRow">
           <a href="forgot-password.html" class="auth-link">Forgot your password?</a>

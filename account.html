@@ -19,8 +19,8 @@
   <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
 </head>
 <body>
-
-  <main class="reflection-page">
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+  <main class="reflection-page" id="mainContent">
 
     <header>
       <a href="index.html" class="logo">
@@ -149,19 +149,22 @@
         <div class="form-row">
           <label>
             New password
-            <input id="newPassword" type="password" required minlength="6" placeholder="At least 6 characters" />
+            <input id="newPassword" type="password" required minlength="6" placeholder="At least 6 characters" autocomplete="new-password" />
           </label>
         </div>
 
         <div class="form-row">
           <label>
             Confirm new password
-            <input id="newPasswordConfirm" type="password" required minlength="6" placeholder="Type it again" />
+            <input id="newPasswordConfirm" type="password" required minlength="6" placeholder="Type it again" autocomplete="new-password" />
           </label>
         </div>
 
-        <p id="passwordError" class="auth-error" hidden></p>
-        <p id="passwordNotice" class="auth-notice" hidden></p>
+        <p id="passwordError" class="auth-error" aria-live="polite" hidden></p>
+        <p id="passwordNotice" class="auth-notice" aria-live="polite" hidden></p>
+        <p id="nameNotice" class="auth-notice" aria-live="polite" hidden></p>
+        <p id="prefsNotice" class="auth-notice" aria-live="polite" hidden></p>
+        <p id="deleteError" class="auth-error" aria-live="polite" hidden></p>
 
         <button type="submit" class="btn primary-btn save-btn" id="passwordSubmitBtn">
           ♡ Update Password

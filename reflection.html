@@ -18,9 +18,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
 </head>
-<body>x
-
-  <main class="reflection-page">
+<body>
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+  <main class="reflection-page" id="mainContent">
 
     <header>
       <a href="index.html" class="logo">
@@ -100,7 +100,7 @@
         <section class="mood-trend-panel">
           <h3 class="mood-trend-heading">Your emotional trend</h3>
           <p id="moodTrendSummary" class="mood-trend-summary"></p>
-          <canvas id="moodTrendChart" height="160"></canvas>
+          <canvas id="moodTrendChart" height="160" aria-hidden="true"></canvas>
         </section>
         <div id="supportBanner" class="support-banner hidden" role="status">
           <p class="support-banner-text">

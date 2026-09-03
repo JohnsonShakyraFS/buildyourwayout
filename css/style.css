@@ -2,15 +2,71 @@
    GLOBAL DESIGN SYSTEM
    ========================= */
    :root {
-    --bg: #f5f1eb;
+    --bg: #eef3f1;
     --card: #ffffff;
-    --soft-card: #eae3d9;
-    --text: #2b2b2b;
-    --muted: #6f6a64;
-    --accent: #c8a96a;
-    --accent-hover: #b89555;
-    --border: #d6cec2;
-    --shadow: 0 18px 45px rgba(83, 68, 50, 0.08);
+    --soft-card: #dfe9e4;
+    --text: #212c29;
+    --muted: #5f766e;
+    --accent: #4f9490;
+    --accent-hover: #3f7d79;
+    --border: #c7d9d3;
+    --shadow: 0 18px 45px rgba(40, 70, 65, 0.10);
+
+    /* ---- SPACING SCALE ----
+       A consistent rhythm instead of ad-hoc pixel values.
+       Use these for margin/padding wherever a value isn't
+       tied to a very specific illustration/decorative shape. */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-7: 32px;
+    --space-8: 40px;
+    --space-9: 48px;
+
+    /* ---- RADIUS SCALE ----
+       sm/md = small controls and inner list rows
+       lg/xl = primary content cards
+       2xl   = feature-level cards
+       page  = large page-shell wrappers
+       pill  = fully-rounded buttons/chips */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    --radius-page: 14px;
+    --radius-pill: 999px;
+
+    /* ---- TYPE SCALE ---- */
+    --text-xs: 12px;
+    --text-sm: 13px;
+    --text-base: 14px;
+    --text-md: 15px;
+    --text-lg: 17px;
+    --text-xl: 18px;
+
+    /* Page-title h1 — used by every top-level page header
+       (mood, reflection/journal, pricing, project) so they all
+       read as the same visual "weight" of heading. */
+    --h1-size: clamp(38px, 4vw, 54px);
+
+    /* Section headings (h2) — card/panel section titles like
+       "Steps to Build", "Live Preview", "Emotional Trend".
+       Subsection headings (h3) — smaller titles inside a card,
+       like a mood-card's name or a feature's title. */
+    --h2-size: 26px;
+    --h3-size: 20px;
+
+    /* ---- CONTROLS ----
+       .btn = primary/secondary CTA buttons
+       chip = compact pill controls (filters, toggles, choices) */
+    --btn-height: 54px;
+    --btn-padding-x: var(--space-7);
+    --chip-height: 44px;
+    --chip-padding-x: var(--space-5);
   }
 
 /* =========================
@@ -31,6 +87,26 @@ a {
     color: inherit;
     text-decoration: none;
 }
+
+/* =========================
+   PAGE TRANSITIONS
+   A subtle fade + rise on every page's <main> so navigating
+   between pages feels like a soft transition rather than an
+   abrupt jump-cut. Kept short (0.35s) so it never feels slow.
+   ========================= */
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+main {
+    animation: pageFadeIn 0.35s ease;
+}
 button, input, textarea, select {
     font-family: inherit;
   }
@@ -45,22 +121,94 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 54px;
-    padding: 0 32px;
+    min-height: var(--btn-height);
+    padding: 0 var(--btn-padding-x);
     border: none;
-    border-radius: 999px;
-    font-size: 15px;
+    border-radius: var(--radius-pill);
+    font-size: var(--text-md);
     font-weight: 600;
 } 
 .primary-btn {
-    background: linear-gradient(180deg, #d6b474, var(--accent));
+    background: linear-gradient(180deg, #6bb0ac, var(--accent));
     color: white;
-    box-shadow: 0 12px 24px rgba(184, 149, 85, 0.22);
+    box-shadow: 0 12px 24px rgba(79, 148, 144, 0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.primary-btn:hover {
+    filter: brightness(1.04);
+    box-shadow: 0 14px 28px rgba(79, 148, 144, 0.32);
+}
+.primary-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 8px 16px rgba(79, 148, 144, 0.28);
 }
 .secondary-btn {
     background: rgba(255, 255, 255, 0.55);
     border: 1px solid var(--border);
     color: var(--text);
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+.secondary-btn:hover {
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.85);
+}
+.secondary-btn:active {
+    transform: translateY(1px);
+}
+
+/* Disabled state applies to any .btn variant, and to plain
+   buttons/inputs elsewhere in the app that get toggled off
+   during a submit/loading cycle. */
+.btn:disabled,
+button:disabled,
+input:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    filter: none;
+    transform: none;
+    box-shadow: none;
+}
+
+/* =========================
+    GLOBAL CHIPS
+    Compact pill controls that share one visual language:
+    choice cards (onboarding), difficulty filter pills, and
+    the mood/library view toggle. All three are the same UI
+    role — a selectable/filter pill — so they share sizing.
+    ========================= */
+.choice-card,
+.difficulty-filter-btn,
+.view-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--chip-height);
+    padding: 0 var(--chip-padding-x);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.68);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--text);
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.choice-card:hover,
+.difficulty-filter-btn:hover,
+.view-toggle-btn:hover {
+    border-color: var(--accent);
+}
+
+.choice-card.selected,
+.difficulty-filter-btn.active,
+.view-toggle-btn.active {
+    border-color: var(--accent);
+    background: #dcebe5;
+    color: var(--accent-hover);
+}
+
+.choice-card.selected {
+    box-shadow: 0 8px 18px rgba(79, 148, 144, 0.22);
 }
   
 /* =========================
@@ -69,7 +217,7 @@ button {
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-2);
     font-family: "Playfair Display", serif;
     font-size: 22px;
     font-weight: 600;
@@ -85,46 +233,48 @@ button {
    .account-overview {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-top: 26px;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
   }
   
   .account-profile-card,
   .account-progress-card,
-  .account-history-card {
-    padding: 26px;
+  .account-history-card,
+  .account-details-card,
+  .account-subscription-card {
+    padding: var(--space-6);
     background: rgba(255, 255, 255, 0.72);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
   }
   
   .account-history-card {
-    margin-top: 24px;
+    margin-top: var(--space-6);
   }
   
   .account-profile-card #profileTypeLine {
-    margin: 8px 0 18px;
+    margin: var(--space-2) 0 var(--space-5);
     color: var(--muted);
-    font-size: 15px;
+    font-size: var(--text-md);
   }
   
   .progress-stats-grid {
-    margin-top: 12px;
+    margin-top: var(--space-3);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
+    gap: var(--space-4);
   }
   
   .progress-stat {
-    padding: 16px 10px;
+    padding: var(--space-4) var(--space-3);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    background: #f8f0e4;
+    gap: var(--space-1);
+    background: #e2ede8;
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
     text-align: center;
   }
   
@@ -136,7 +286,7 @@ button {
   }
   
   .progress-stat-label {
-    font-size: 12px;
+    font-size: var(--text-xs);
     color: var(--muted);
   }
   
@@ -144,36 +294,36 @@ button {
      ACCOUNT — BUILD HISTORY
      ========================= */
   .build-history-list {
-    margin-top: 12px;
+    margin-top: var(--space-3);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-3);
   }
   
   .build-history-row {
-    padding: 14px 16px;
+    padding: var(--space-4);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: var(--space-4);
     background: rgba(255, 255, 255, 0.6);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
   }
   
   .build-history-row strong {
     display: block;
-    font-size: 14px;
+    font-size: var(--text-base);
     color: var(--text);
   }
   
   .build-history-date {
-    font-size: 12px;
+    font-size: var(--text-xs);
     color: var(--muted);
   }
   
   .build-history-shift {
-    font-size: 15px;
+    font-size: var(--text-lg);
     white-space: nowrap;
   }
   
@@ -193,28 +343,20 @@ button {
    .account-details-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-top: 24px;
-  }
-  
-  .account-details-card {
-    padding: 26px;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
+    gap: var(--space-6);
+    margin-top: var(--space-6);
   }
   
   .account-details-card #nameForm .form-row {
-    margin-bottom: 16px;
+    margin-bottom: var(--space-4);
   }
   
   .preference-toggle {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 14px;
-    font-size: 14px;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-base);
     color: var(--text);
     cursor: pointer;
   }
@@ -229,48 +371,43 @@ button {
      ACCOUNT — SUBSCRIPTION
      ========================= */
   .account-subscription-card {
-    margin-top: 24px;
-    padding: 26px;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
+    margin-top: var(--space-6);
   }
   
   .subscription-placeholder-note {
-    margin: 4px 0 20px;
-    padding: 12px 16px;
+    margin: var(--space-1) 0 var(--space-5);
+    padding: var(--space-3) var(--space-4);
     background: #eaf1f8;
     border: 1px solid #cddceb;
-    border-radius: 10px;
-    font-size: 13px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
     color: #4f6f91;
   }
   
   .plan-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: var(--space-4);
   }
   
   .plan-card {
-    padding: 24px;
+    padding: var(--space-6);
     display: flex;
     flex-direction: column;
-    background: #f8f0e4;
+    background: #e2ede8;
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
   
   .plan-card h3 {
     font-family: "Playfair Display", serif;
-    font-size: 20px;
+    font-size: var(--h3-size);
     font-weight: 600;
   }
   
   .plan-price {
-    margin: 8px 0 16px;
+    margin: var(--space-2) 0 var(--space-4);
     font-family: "Playfair Display", serif;
     font-size: 26px;
     font-weight: 600;
@@ -278,20 +415,20 @@ button {
   }
   
   .plan-price span {
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 400;
     color: var(--muted);
   }
   
   .plan-features {
     list-style: none;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-5);
     flex-grow: 1;
   }
   
   .plan-features li {
-    padding: 6px 0;
-    font-size: 13px;
+    padding: var(--space-2) 0;
+    font-size: var(--text-sm);
     color: var(--text);
     border-bottom: 1px solid var(--border);
   }
@@ -302,7 +439,7 @@ button {
   
   .plan-card.current-plan {
     border-color: var(--accent);
-    box-shadow: 0 8px 18px rgba(184, 149, 85, 0.2);
+    box-shadow: 0 8px 18px rgba(79, 148, 144, 0.22);
   }
   
   @media (max-width: 900px) {
@@ -319,29 +456,29 @@ button {
 .navbar {
     width: min(1360px, calc(100% - 48px));
     height: 76px;
-    margin: 24px auto 0;
-    padding: 0 40px;
+    margin: var(--space-6) auto 0;
+    padding: 0 var(--space-8);
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: rgba(255, 255, 255, 0.55);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-page);
     box-shadow: var(--shadow);
 } 
 .nav-links {
     display: flex;
     align-items: center;
     gap: 34px;
-    font-size: 14px;
+    font-size: var(--text-base);
     font-weight: 500;
 }
 .nav-button {
     padding: 14px 28px;
-    background: linear-gradient(180deg, #d6b474, var(--accent));
+    background: linear-gradient(180deg, #6bb0ac, var(--accent));
     color: white !important;
-    border-radius: 999px;
-    box-shadow: 0 10px 20px rgba(184, 149, 85, 0.25);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 10px 20px rgba(79, 148, 144, 0.28);
 }
   
 /* =========================
@@ -371,19 +508,21 @@ button {
 }
 .hero-content p {
     max-width: 520px;
-    margin-top: 28px;
-    font-size: 18px;
+    margin-top: var(--space-7);
+    font-size: var(--text-xl);
     line-height: 1.7;
     color: var(--muted);
 }
 .hero-buttons {
     display: flex;
-    gap: 18px;
+    gap: var(--space-4);
     margin-top: 34px;
 }
   
 /* =========================
     HOME PAGE ILLUSTRATION
+    Decorative hand-tuned shapes — not part of the reusable
+    UI system, so these stay as literal values on purpose.
     ========================= */
 .hero-visual {
     position: relative;
@@ -397,7 +536,7 @@ button {
     width: 390px;
     height: 390px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #eee3d4, #faf7f1);
+    background: linear-gradient(135deg, #dcebe6, #f2f8f6);
 }
 .desk-scene {
     position: relative;
@@ -422,7 +561,7 @@ button {
     height: 6px;
     margin-bottom: 11px;
     border-radius: 999px;
-    background: #d7c49b;
+    background: #a9c9c2;
 }
 .screen div:nth-child(2) {
     width: 70%;
@@ -439,7 +578,7 @@ button {
     width: 250px;
     height: 24px;
     margin-left: -20px;
-    background: #c7b49c;
+    background: #a9c7c1;
     border-radius: 0 0 18px 18px;
 }
 .mug {
@@ -448,7 +587,7 @@ button {
     bottom: 45px;
     width: 62px;
     height: 72px;
-    background: #c8bda9;
+    background: #9fc4be;
     border-radius: 8px 8px 22px 22px;
 }
 .mug::after {
@@ -458,7 +597,7 @@ button {
     top: 20px;
     width: 28px;
     height: 30px;
-    border: 6px solid #c8bda9;
+    border: 6px solid #9fc4be;
     border-left: none;
     border-radius: 0 18px 18px 0;
 } 
@@ -483,7 +622,7 @@ button {
     position: absolute;
     width: 42px;
     height: 22px;
-    background: #858272;
+    background: #6f8c82;
     border-radius: 50% 0 50% 0;
 }
 .leaf-one {
@@ -514,19 +653,19 @@ button {
     margin-top: 52px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 26px;
-    padding-bottom: 40px;
+    gap: var(--space-6);
+    padding-bottom: var(--space-8);
 }
   
 .feature-card {
     min-height: 170px;
-    padding: 30px;
+    padding: var(--space-7);
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: var(--space-6);
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 22px;
+    border-radius: var(--radius-2xl);
     box-shadow: var(--shadow);
 }
   
@@ -537,26 +676,26 @@ button {
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: #f4eadc;
+    background: #dcebe5;
     color: var(--accent);
     font-size: 32px;
 }
   
 .feature-number {
-    font-size: 18px;
+    font-size: var(--text-xl);
     color: var(--muted);
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
 }
   
 .feature-card h3 {
     font-family: "Playfair Display", serif;
-    font-size: 21px;
-    margin-bottom: 8px;
+    font-size: var(--h3-size);
+    margin-bottom: var(--space-2);
 }
   
 .feature-card p:last-child {
     color: var(--text);
-    font-size: 14px;
+    font-size: var(--text-base);
     line-height: 1.6;
 }
 
@@ -570,10 +709,10 @@ button {
     display: grid;
     grid-template-columns: 1fr auto 1fr auto;
     align-items: center;
-    gap: 16px;
+    gap: var(--space-4);
 }
 .back-link {
-    font-size: 15px;
+    font-size: var(--text-md);
     font-weight: 500;
     color: var(--text);
 }
@@ -582,11 +721,11 @@ button {
 }
 .outline-pill {
     justify-self: end;
-    padding: 12px 24px;
+    padding: var(--space-3) var(--space-6);
     border: 1px solid var(--border);
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: rgba(255, 255, 255, 0.55);
-    font-size: 14px;
+    font-size: var(--text-base);
     font-weight: 500;
 }
 
@@ -598,8 +737,8 @@ button {
     justify-self: end;
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 14px;
+    gap: var(--space-3);
+    font-size: var(--text-base);
 }
 .auth-email {
     color: var(--text);
@@ -615,9 +754,9 @@ button {
     background: none;
     padding: 0;
     font-family: inherit;
-    font-size: 14px;
+    font-size: var(--text-base);
     font-weight: 500;
-    color: var(--accent, #c8a96a);
+    color: var(--accent, #4f9490);
     cursor: pointer;
     text-decoration: underline;
 }
@@ -635,27 +774,27 @@ button {
 .auth-error {
     color: #b3452f;
     background: #fbe9e4;
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 14px;
-    margin-top: 4px;
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    margin-top: var(--space-1);
 }
 .auth-notice {
     color: #4f6f91;
     background: #eaf1f8;
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 14px;
-    margin-top: 4px;
+    border-radius: var(--radius-sm);
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-base);
+    margin-top: var(--space-1);
 }
 .auth-toggle {
     text-align: center;
-    font-size: 14px;
-    color: #6f6a64;
-    margin-top: 10px;
+    font-size: var(--text-base);
+    color: var(--muted);
+    margin-top: var(--space-3);
 }
 .auth-toggle .auth-link-btn {
-    margin-left: 4px;
+    margin-left: var(--space-1);
 }
 
 
@@ -666,11 +805,11 @@ button {
   .mood-page {
     width: min(1360px, calc(100% - 48px));
     min-height: calc(100vh - 48px);
-    margin: 24px auto;
-    padding: 32px 48px 56px;
+    margin: var(--space-6) auto;
+    padding: var(--space-7) var(--space-8) 56px;
     background: rgba(255, 255, 255, 0.45);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-page);
     box-shadow: var(--shadow);
   }
   .mood-header {
@@ -679,35 +818,35 @@ button {
   }
   .mood-header h1 {
     font-family: "Playfair Display", serif;
-    font-size: clamp(42px, 4vw, 60px);
+    font-size: var(--h1-size);
     font-weight: 600;
     letter-spacing: -1px;
   }
   .mood-header p {
-    margin-top: 14px;
+    margin-top: var(--space-4);
     color: var(--muted);
-    font-size: 18px;
+    font-size: var(--text-xl);
     line-height: 1.6;
   }
   .mood-grid {
     width: min(980px, 100%);
-    margin: 40px auto 0;
+    margin: var(--space-8) auto 0;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 24px;
+    gap: var(--space-6);
   }
   .mood-card {
     width: 310px;
     min-height: 150px;
-    padding: 26px;
+    padding: var(--space-6);
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: var(--space-5);
     text-align: left;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 18px;
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
     cursor: pointer;
     font: inherit;
@@ -746,20 +885,20 @@ button {
   }
   .mood-card h2 {
     font-family: "Playfair Display", serif;
-    font-size: 24px;
+    font-size: var(--h2-size);
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
   }
   .mood-card p {
     color: var(--muted);
-    font-size: 13px;
+    font-size: var(--text-sm);
     line-height: 1.5;
   }
   .mood-note {
     margin-top: 44px;
     text-align: center;
     color: var(--muted);
-    font-size: 17px;
+    font-size: var(--text-xl);
   }
   
 
@@ -770,11 +909,11 @@ button {
   .project-page {
     width: min(1360px, calc(100% - 48px));
     min-height: calc(100vh - 48px);
-    margin: 24px auto;
-    padding: 32px 48px 28px;
+    margin: var(--space-6) auto;
+    padding: var(--space-7) var(--space-8) 28px;
     background: rgba(255, 255, 255, 0.45);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-page);
     box-shadow: var(--shadow);
   }
   .project-layout {
@@ -782,37 +921,37 @@ button {
     margin: 48px auto 0;
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
-    gap: 36px;
+    gap: var(--space-7);
     align-items: stretch;
   }
   .project-info-card, .steps-card {
     background: rgba(255, 255, 255, 0.72);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
   }
   .project-info-card {
-    padding: 34px 42px;
+    padding: var(--space-7) 42px;
     text-align: center;
   }
   .eyebrow {
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
     font-family: "Playfair Display", serif;
     font-size: 22px;
     color: var(--text);
   }
   .project-info-card h1 {
     font-family: "Playfair Display", serif;
-    font-size: clamp(36px, 4vw, 48px);
+    font-size: var(--h1-size);
     font-weight: 600;
     letter-spacing: -0.8px;
     line-height: 1.05;
   }
   .project-info-card > p:not(.eyebrow) {
     max-width: 420px;
-    margin: 20px auto 0;
+    margin: var(--space-5) auto 0;
     color: var(--muted);
-    font-size: 17px;
+    font-size: var(--text-xl);
     line-height: 1.65;
   }
   .project-btn {
@@ -825,11 +964,11 @@ button {
      ========================= */
   .mini-preview {
     width: min(330px, 100%);
-    margin: 24px auto 22px;
-    padding: 22px;
-    background: linear-gradient(135deg, #f7f1e8, #ffffff);
+    margin: var(--space-6) auto 22px;
+    padding: var(--space-5);
+    background: linear-gradient(135deg, #e7f1ee, #ffffff);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-md);
   }
 
   /* =========================
@@ -840,7 +979,7 @@ button {
     width: 100%;
     height: 320px;
     border: none;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
     background: white;
   }
   
@@ -867,22 +1006,22 @@ button {
       inset 0 0 20px rgba(255, 255, 255, 0.28);
   }
   .breathing-text {
-    margin-top: 14px;
-    font-size: 14px;
+    margin-top: var(--space-4);
+    font-size: var(--text-base);
     color: var(--muted);
     text-align: center;
   } 
   .preview-buttons {
-    margin-top: 18px;
+    margin-top: var(--space-5);
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: var(--space-3);
   } 
   .preview-buttons button {
     min-width: 82px;
     padding: 10px 18px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     background: #ffffff;
     font-family: "Inter", sans-serif;
     color: var(--text);
@@ -924,12 +1063,12 @@ button {
   .thought-preview {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-3);
   }
   .thought-preview input, .thought-preview select {
     padding: 10px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     background: #ffffff;
     font-family: "Inter", sans-serif;
     color: var(--text);
@@ -937,21 +1076,21 @@ button {
   .thought-preview button {
     padding: 10px;
     border: none;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--accent);
     color: white;
     font-weight: 500;
   }
   .thought-preview ul {
-    margin-top: 10px;
+    margin-top: var(--space-3);
     padding: 0;
     list-style: none;
   }
   .thought-preview li {
-    padding: 8px;
-    background: #f8f0e4;
-    border-radius: 8px;
-    font-size: 13px;
+    padding: var(--space-2);
+    background: #e2ede8;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
     color: var(--text);
     text-align: left;
   }
@@ -963,12 +1102,12 @@ button {
 .wins-preview {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-3);
   } 
   .wins-preview input {
     padding: 10px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     background: #ffffff;
     font-family: "Inter", sans-serif;
     color: var(--text);
@@ -976,21 +1115,21 @@ button {
   .wins-preview button {
     padding: 10px;
     border: none;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: var(--accent);
     color: white;
     font-weight: 500;
   }
   .wins-preview ul {
-    margin-top: 10px;
+    margin-top: var(--space-3);
     padding: 0;
     list-style: none;
   }
   .wins-preview li {
-    padding: 8px;
-    background: #f8f0e4;
-    border-radius: 8px;
-    font-size: 13px;
+    padding: var(--space-2);
+    background: #e2ede8;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
     color: var(--text);
     text-align: left;
   }
@@ -1002,17 +1141,17 @@ button {
     padding: 38px 46px;
   }
   .steps-card h2 {
-    margin-bottom: 28px;
+    margin-bottom: var(--space-7);
     text-align: center;
     font-family: "Playfair Display", serif;
-    font-size: 30px;
+    font-size: var(--h2-size);
     font-weight: 600;
   }
   .steps-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: var(--space-6);
     counter-reset: step-counter;
   } 
   .steps-list li {
@@ -1020,9 +1159,9 @@ button {
     display: grid;
     grid-template-columns: 52px 1fr;
     align-items: center;
-    gap: 18px;
+    gap: var(--space-5);
     color: var(--muted);
-    font-size: 15px;
+    font-size: var(--text-md);
     line-height: 1.5;
   }
   .steps-list li::before {
@@ -1032,10 +1171,10 @@ button {
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: #f4eadc;
+    background: #dcebe5;
     border: 1px solid var(--border);
     color: var(--text);
-    font-size: 18px;
+    font-size: var(--text-xl);
     font-weight: 600;
   }
   
@@ -1045,14 +1184,14 @@ button {
   .project-note {
     width: min(1040px, 100%);
     min-height: 112px;
-    margin: 28px auto 0;
-    padding: 22px 48px;
+    margin: var(--space-7) auto 0;
+    padding: var(--space-5) var(--space-8);
     display: flex;
     align-items: center;
-    gap: 28px;
-    background: rgba(255, 249, 239, 0.72);
+    gap: var(--space-7);
+    background: rgba(235, 245, 242, 0.72);
     border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
   }
   .project-note span {
     font-size: 42px;
@@ -1075,26 +1214,26 @@ button {
   }
   .code-workspace {
     width: min(1120px, 100%);
-    margin: 28px auto 0;
-    padding: 28px;
+    margin: var(--space-7) auto 0;
+    padding: var(--space-7);
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 28px;
+    gap: var(--space-7);
     background: rgba(255, 255, 255, 0.72);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
   }
   .workspace-left, .workspace-right {
     background: #ffffff;
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
   }
   .workspace-left h2 {
-    margin: 8px 0 12px;
+    margin: var(--space-2) 0 var(--space-3);
     font-family: "Playfair Display", serif;
-    font-size: 30px;
+    font-size: var(--h2-size);
   }
   .workspace-left p {
     color: var(--muted);
@@ -1103,28 +1242,28 @@ button {
   #stepEditor {
     width: 100%;
     min-height: 180px;
-    margin-top: 18px;
-    padding: 16px;
+    margin-top: var(--space-5);
+    padding: var(--space-4);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     font-family: monospace;
-    font-size: 14px;
+    font-size: var(--text-base);
     line-height: 1.6;
     resize: vertical;
     outline: none;
   }
   #stepEditor:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(200, 169, 106, 0.14);
+    box-shadow: 0 0 0 4px rgba(79, 148, 144, 0.16);
   }
   .editor-tip {
-    margin-top: 10px;
-    font-size: 13px;
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
   }
   .guided-actions {
-    margin-top: 22px;
+    margin-top: var(--space-5);
     display: flex;
-    gap: 12px;
+    gap: var(--space-3);
     flex-wrap: wrap;
   }
   .guided-actions button {
@@ -1132,15 +1271,15 @@ button {
     cursor: pointer;
   }
   .workspace-right h3 {
-    margin-bottom: 16px;
+    margin-bottom: var(--space-4);
     font-family: "Playfair Display", serif;
-    font-size: 26px;
+    font-size: var(--h3-size);
   }
   #previewFrame {
     width: 100%;
     min-height: 500px;
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     background: white;
   }
   
@@ -1152,23 +1291,26 @@ button {
 
   /* =========================
      MOOD RATING SCALE
-     Before/after emotion picker on the reflection form
+     Before/after emotion picker on the reflection form.
+     Kept visually distinct from .choice-card chips on purpose —
+     these are a circular rating scale, a different UI role from
+     a selectable pill, so they don't share the chip tokens.
      ========================= */
   .mood-field {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-3);
   }
 
   .mood-field-label {
-    font-size: 14px;
+    font-size: var(--text-base);
     font-weight: 500;
     color: var(--text);
   }
 
   .mood-scale {
     display: flex;
-    gap: 10px;
+    gap: var(--space-3);
   }
 
   .mood-option {
@@ -1197,13 +1339,13 @@ button {
   .mood-option:focus-visible {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(200, 169, 106, 0.18);
+    box-shadow: 0 0 0 4px rgba(79, 148, 144, 0.20);
   }
 
   .mood-option.selected {
     border-color: var(--accent);
-    background: #f4eadc;
-    box-shadow: 0 8px 18px rgba(184, 149, 85, 0.2);
+    background: #dcebe5;
+    box-shadow: 0 8px 18px rgba(79, 148, 144, 0.22);
     filter: grayscale(0%);
     opacity: 1;
     transform: translateY(-2px) scale(1.08);
@@ -1216,9 +1358,9 @@ button {
   .mood-shift {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: var(--space-4);
     flex-wrap: wrap;
-    font-size: 14px;
+    font-size: var(--text-base);
     color: var(--text);
   }
 
@@ -1236,10 +1378,10 @@ button {
      ============================================================ */
 
   .reflection-message {
-    padding: 14px 18px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    font-size: 0.95rem;
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-5);
+    font-size: var(--text-md);
     line-height: 1.5;
   }
 
@@ -1261,8 +1403,8 @@ button {
      ============================================================ */
 
   .reflection-privacy-note {
-    margin-top: 12px;
-    font-size: 0.85rem;
+    margin-top: var(--space-3);
+    font-size: var(--text-sm);
     color: var(--muted);
     text-align: center;
   }
@@ -1274,15 +1416,15 @@ button {
 
   .journal-loading,
   .journal-error {
-    padding: 20px;
+    padding: var(--space-5);
     text-align: center;
     color: var(--muted);
   }
 
   .journal-entry {
-    padding: 20px;
-    margin-bottom: 18px;
-    border-radius: 16px;
+    padding: var(--space-5);
+    margin-bottom: var(--space-4);
+    border-radius: var(--radius-lg);
     border: 1px solid var(--border);
     background: rgba(255, 255, 255, 0.72);
   }
@@ -1290,25 +1432,25 @@ button {
   .journal-entry-header {
     display: flex;
     justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 18px;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
   }
 
   .journal-entry-header h3 {
-    margin: 5px 0 0;
+    margin: var(--space-1) 0 0;
     font-family: "Playfair Display", serif;
-    font-size: 17px;
+    font-size: var(--text-lg);
     font-weight: 600;
   }
 
   .journal-entry-header time {
-    font-size: 0.8rem;
+    font-size: var(--text-xs);
     color: var(--muted);
     white-space: nowrap;
   }
 
   .journal-mood {
-    font-size: 0.75rem;
+    font-size: var(--text-sm);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -1316,13 +1458,13 @@ button {
   }
 
   .journal-entry-section {
-    margin-top: 14px;
+    margin-top: var(--space-4);
   }
 
   .journal-entry-section strong {
     display: block;
-    margin-bottom: 5px;
-    font-size: 13px;
+    margin-bottom: var(--space-1);
+    font-size: var(--text-sm);
     color: var(--text);
   }
 
@@ -1338,11 +1480,11 @@ button {
   .reflection-page {
     width: min(1360px, calc(100% - 48px));
     min-height: calc(100vh - 48px);
-    margin: 24px auto;
-    padding: 32px 48px 36px;
+    margin: var(--space-6) auto;
+    padding: var(--space-7) var(--space-8) 36px;
     background: rgba(255, 255, 255, 0.45);
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-page);
     box-shadow: var(--shadow);
   }
   .reflection-header {
@@ -1351,71 +1493,71 @@ button {
   }
   .reflection-header h1 {
     font-family: "Playfair Display", serif;
-    font-size: clamp(34px, 4vw, 48px);
+    font-size: var(--h1-size);
     font-weight: 600;
     letter-spacing: -0.8px;
   }
   .reflection-header p {
-    margin-top: 12px;
+    margin-top: var(--space-3);
     color: var(--muted);
-    font-size: 17px;
+    font-size: var(--text-lg);
   }
   .reflection-layout {
-    margin: 26px auto 0;
+    margin: var(--space-6) auto 0;
     display: grid;
     grid-template-columns: 1fr 340px;
-    gap: 28px;
+    gap: var(--space-7);
     align-items: start;
   }
   .reflection-form {
     min-height: 500px;
-    padding: 32px;
+    padding: var(--space-7);
     background: rgba(255, 255, 255, 0.72);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
   }
   .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 28px;
-    margin-bottom: 24px;
+    gap: var(--space-7);
+    margin-bottom: var(--space-6);
   }
   .reflection-form label {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-3);
     color: var(--text);
-    font-size: 14px;
+    font-size: var(--text-base);
     font-weight: 500;
   }
   .reflection-form textarea, .reflection-form input {
     width: 100%;
     border: 1px solid var(--border);
     background: rgba(255, 255, 255, 0.68);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     font-family: "Inter", sans-serif;
-    font-size: 14px;
+    font-size: var(--text-base);
     color: var(--text);
     outline: none;
   }
   .reflection-form textarea {
     min-height: 120px;
-    padding: 16px;
+    padding: var(--space-4);
     resize: vertical;
   }
   .reflection-form input {
     height: 52px;
-    padding: 0 16px;
+    padding: 0 var(--space-4);
   }
   .reflection-form textarea:focus, .reflection-form input:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(200, 169, 106, 0.14);
+    box-shadow: 0 0 0 4px rgba(79, 148, 144, 0.16);
   }
   .save-btn {
     display: flex;
     width: 250px;
-    margin: 34px auto 0;
+    margin: var(--space-7) auto 0;
     border: none;
     cursor: pointer;
   }
@@ -1424,38 +1566,38 @@ button {
      REFLECTION JOURNAL PANEL
      ========================= */
   .journal-panel {
-    padding: 26px 18px;
+    padding: var(--space-6) var(--space-4);
     background: rgba(255, 255, 255, 0.72);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
   }
   .journal-panel h2 {
-    margin-bottom: 18px;
-    padding-left: 8px;
+    margin-bottom: var(--space-4);
+    padding-left: var(--space-2);
     font-family: "Playfair Display", serif;
-    font-size: 24px;
+    font-size: var(--h2-size);
     font-weight: 600;
   }
   .journal-scope-note {
-    margin: -10px 0 18px;
-    padding-left: 8px;
-    font-size: 13px;
+    margin: -10px 0 var(--space-4);
+    padding-left: var(--space-2);
+    font-size: var(--text-sm);
     color: var(--muted);
   }
   .journal-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-4);
   }
   .journal-card {
-    padding: 18px;
+    padding: var(--space-4);
     display: grid;
     grid-template-columns: 48px 1fr;
-    gap: 14px;
-    background: #f8f0e4;
+    gap: var(--space-3);
+    background: #e2ede8;
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
   }
   .journal-avatar {
     width: 44px;
@@ -1467,33 +1609,33 @@ button {
     font-size: 20px;
   } 
   .journal-card h3 {
-    margin-bottom: 6px;
-    font-size: 14px;
+    margin-bottom: var(--space-1);
+    font-size: var(--text-base);
     font-weight: 600;
   }
   .journal-card p {
     color: var(--muted);
-    font-size: 13px;
+    font-size: var(--text-sm);
     line-height: 1.5;
   }
   .journal-date {
     display: block;
-    margin-top: 10px;
-    font-size: 12px;
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
     color: var(--muted);
   }
   .empty-journal {
-    padding: 24px 18px;
+    padding: var(--space-6) var(--space-4);
     text-align: center;
     color: var(--muted);
-    font-size: 14px;
+    font-size: var(--text-base);
     line-height: 1.6;
-    background: #f8f0e4;
+    background: #e2ede8;
     border: 1px dashed var(--border);
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
   }
   .empty-journal h3 {
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
     font-family: "Playfair Display", serif;
     color: var(--text);
   }
@@ -1503,24 +1645,24 @@ button {
    Chart + summary shown above the journal list
    ========================= */
 .mood-trend-panel {
-  margin-bottom: 22px;
-  padding-bottom: 18px;
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
   border-bottom: 1px solid var(--border);
 }
 
 .mood-trend-heading {
-  padding-left: 8px;
+  padding-left: var(--space-2);
   font-family: "Playfair Display", serif;
   font-size: 16px;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: var(--space-2);
 }
 
 .mood-trend-summary {
-  padding-left: 8px;
-  font-size: 13px;
+  padding-left: var(--space-2);
+  font-size: var(--text-sm);
   color: var(--muted);
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3);
 }
 
 #moodTrendChart {
@@ -1533,11 +1675,11 @@ button {
    Gentle nudge shown for sustained low mood, not a diagnosis
    ========================= */
    .support-banner {
-    margin-bottom: 22px;
-    padding: 18px;
+    margin-bottom: var(--space-5);
+    padding: var(--space-4);
     background: #fbeee4;
     border: 1px solid #eccfb8;
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
   }
   
   .support-banner.hidden {
@@ -1545,20 +1687,20 @@ button {
   }
   
   .support-banner-text {
-    font-size: 14px;
+    font-size: var(--text-base);
     line-height: 1.6;
     color: #6f4a2f;
-    margin-bottom: 12px;
+    margin-bottom: var(--space-3);
   }
   
   .support-banner-links {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--space-2);
     align-items: center;
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 600;
-    margin-bottom: 12px;
+    margin-bottom: var(--space-3);
   }
   
   .support-banner-links a {
@@ -1571,18 +1713,18 @@ button {
   }
   
   .support-banner-disclaimer {
-    font-size: 12px;
+    font-size: var(--text-xs);
     color: #8a6f56;
     line-height: 1.5;
-    margin-bottom: 12px;
+    margin-bottom: var(--space-3);
   }
   
   .support-banner-dismiss {
-    padding: 8px 16px;
+    padding: var(--space-2) var(--space-4);
     border: 1px solid #eccfb8;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: rgba(255, 255, 255, 0.6);
-    font-size: 13px;
+    font-size: var(--text-sm);
     font-weight: 500;
     color: #6f4a2f;
   }
@@ -1593,20 +1735,19 @@ button {
 
   /* =========================
    ONBOARDING — CHOICE CARDS
-   Reusable clickable option grid for the questionnaire
    ========================= */
 .onboarding-form {
   display: block;
 }
 
 .onboarding-question {
-  margin-bottom: 32px;
+  margin-bottom: var(--space-7);
 }
 
 .onboarding-question h3 {
-  margin-bottom: 14px;
+  margin-bottom: var(--space-4);
   font-family: "Playfair Display", serif;
-  font-size: 18px;
+  font-size: var(--text-xl);
   font-weight: 600;
   color: var(--text);
 }
@@ -1614,29 +1755,7 @@ button {
 .choice-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-}
-
-.choice-card {
-  padding: 12px 20px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.68);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text);
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-
-.choice-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-1px);
-}
-
-.choice-card.selected {
-  border-color: var(--accent);
-  background: #f4eadc;
-  box-shadow: 0 8px 18px rgba(184, 149, 85, 0.2);
+  gap: var(--space-3);
 }
 
 /* =========================
@@ -1652,7 +1771,7 @@ button {
    ONBOARDING — RESULTS PAGE
    ========================= */
 .onboarding-results-card #profileName {
-  margin-top: 6px;
+  margin-top: var(--space-2);
   font-family: "Playfair Display", serif;
   font-size: clamp(30px, 4vw, 42px);
   font-weight: 600;
@@ -1660,7 +1779,7 @@ button {
 }
 
 .starting-path {
-  margin-top: 28px;
+  margin-top: var(--space-7);
   text-align: left;
 }
 
@@ -1668,22 +1787,22 @@ button {
   font-family: "Playfair Display", serif;
   font-size: 16px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
 }
 
 .starting-path-tags {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .starting-path-tags li {
-  padding: 10px 16px;
-  background: #f8f0e4;
+  padding: var(--space-3) var(--space-4);
+  background: #e2ede8;
   border: 1px solid var(--border);
-  border-radius: 12px;
-  font-size: 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
   color: var(--text);
 }
 
@@ -1694,15 +1813,15 @@ button {
   @media (max-width: 950px) {
     .navbar {
       height: auto;
-      padding: 24px;
+      padding: var(--space-6);
       flex-direction: column;
-      gap: 20px;
+      gap: var(--space-5);
     }
   
     .nav-links {
       flex-wrap: wrap;
       justify-content: center;
-      gap: 18px;
+      gap: var(--space-5);
     }
   
     .hero {
@@ -1726,7 +1845,7 @@ button {
     }
   
     .reflection-page {
-      padding: 24px;
+      padding: var(--space-6);
     }
   
     .reflection-layout {
@@ -1743,7 +1862,7 @@ button {
   }
   @media (max-width: 900px) {
     .project-page {
-      padding: 24px;
+      padding: var(--space-6);
     }
   
     .project-layout {
@@ -1751,7 +1870,7 @@ button {
     }
   
     .project-note {
-      padding: 24px;
+      padding: var(--space-6);
       align-items: flex-start;
     }
   
@@ -1765,13 +1884,13 @@ button {
   }
   @media (max-width: 750px) {
     .mood-page {
-      padding: 24px;
+      padding: var(--space-6);
     }
   
     .page-topbar {
       grid-template-columns: 1fr;
       justify-items: center;
-      gap: 18px;
+      gap: var(--space-5);
     }
   
     .back-link,
@@ -1791,13 +1910,13 @@ button {
    ========================= */
 .site-footer {
   width: min(1360px, calc(100% - 48px));
-  margin: 0 auto 32px;
-  padding: 24px 32px;
+  margin: 0 auto var(--space-7);
+  padding: var(--space-6) var(--space-7);
   text-align: center;
   border-top: 1px solid var(--border);
 }
 .crisis-note {
-  font-size: 14px;
+  font-size: var(--text-base);
   color: var(--text);
   max-width: 640px;
   margin: 0 auto;
@@ -1809,16 +1928,16 @@ button {
   text-decoration: underline;
 }
 .footer-disclaimer {
-  margin-top: 10px;
-  font-size: 13px;
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
   color: var(--muted, #8a8477);
   max-width: 640px;
   margin-left: auto;
   margin-right: auto;
 }
 .footer-links {
-  margin-top: 14px;
-  font-size: 13px;
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
 }
 .footer-links a {
   color: var(--muted, #8a8477);
@@ -1830,12 +1949,12 @@ button {
    ========================= */
 .legal-content {
   max-width: 760px;
-  margin: 40px auto 0;
+  margin: var(--space-8) auto 0;
   line-height: 1.7;
   color: var(--text);
 }
 .legal-content h2 {
-  margin-top: 34px;
+  margin-top: var(--space-7);
   font-family: "Playfair Display", serif;
   font-size: 22px;
   font-weight: 600;
@@ -1845,7 +1964,7 @@ button {
 }
 .legal-content p,
 .legal-content li {
-  margin-top: 10px;
+  margin-top: var(--space-3);
   color: var(--text);
 }
 .legal-content ul {
@@ -1853,16 +1972,16 @@ button {
 }
 .legal-updated {
   color: var(--muted, #8a8477);
-  font-size: 14px;
-  margin-top: 6px;
+  font-size: var(--text-base);
+  margin-top: var(--space-2);
 }
 .legal-notice {
-  margin-top: 28px;
-  padding: 16px 18px;
+  margin-top: var(--space-7);
+  padding: var(--space-4);
   background: #fbeee4;
   border: 1px solid #eccfb8;
-  border-radius: 12px;
-  font-size: 14px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
   color: #6f4a2f;
 }
 
@@ -1872,7 +1991,7 @@ button {
 .auth-forgot {
   text-align: right;
   margin-top: -6px;
-  font-size: 13px;
+  font-size: var(--text-sm);
 }
 
 /* =========================
@@ -1880,50 +1999,55 @@ button {
    ========================= */
 .account-section-title {
   font-family: "Playfair Display", serif;
-  font-size: 20px;
+  font-size: var(--h3-size);
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: var(--space-2);
 }
 .danger-zone {
-  margin-top: 32px;
-  padding: 26px;
+  margin-top: var(--space-7);
+  padding: var(--space-6);
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid #eccfb8;
-  border-radius: 20px;
+  border-radius: var(--radius-xl);
 }
 .danger-zone p {
   color: var(--muted, #6f6a64);
-  font-size: 14px;
-  margin: 8px 0 16px;
+  font-size: var(--text-base);
+  margin: var(--space-2) 0 var(--space-4);
 }
 .danger-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--btn-height);
+  padding: 0 var(--btn-padding-x);
   background: #b3452f;
   color: white;
   border: none;
-  padding: 12px 22px;
-  border-radius: 999px;
-  font-weight: 500;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-md);
+  font-weight: 600;
   cursor: pointer;
 }
 .danger-btn:hover {
   background: #96351f;
 }
 .delete-confirm-block {
-  margin-top: 18px;
-  padding-top: 18px;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
   border-top: 1px solid var(--border);
 }
 .delete-confirm-block input {
   width: 100%;
-  margin-top: 10px;
-  padding: 12px 14px;
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
   border: 1px solid #d6cec2;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
 }
 .delete-confirm-actions {
   display: flex;
-  gap: 10px;
-  margin-top: 14px;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
 }
 .delete-confirm-actions button {
   flex: 1;
@@ -1936,7 +2060,7 @@ button {
    ========================= */
 .library-content {
   max-width: 1100px;
-  margin: 40px auto 0;
+  margin: var(--space-8) auto 0;
 }
 .library-mood-section {
   margin-bottom: 44px;
@@ -1944,45 +2068,45 @@ button {
 .library-mood-heading {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
   font-family: "Playfair Display", serif;
-  font-size: 24px;
+  font-size: var(--h2-size);
   font-weight: 600;
-  margin-bottom: 18px;
+  margin-bottom: var(--space-4);
 }
 .library-mood-heading .mood-icon {
   width: 40px;
   height: 40px;
-  font-size: 18px;
+  font-size: var(--text-xl);
   flex: 0 0 40px;
 }
 .library-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 18px;
+  gap: var(--space-4);
 }
 .library-card {
-  padding: 22px;
+  padding: var(--space-5);
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
 }
 .library-card h3 {
   font-family: "Playfair Display", serif;
-  font-size: 18px;
+  font-size: var(--text-xl);
   font-weight: 600;
 }
 .library-card p {
-  margin-top: 8px;
+  margin-top: var(--space-2);
   color: var(--muted, #6f6a64);
-  font-size: 14px;
+  font-size: var(--text-base);
   flex-grow: 1;
 }
 .library-try-btn {
-  margin-top: 16px;
+  margin-top: var(--space-4);
   align-self: flex-start;
 }
 
@@ -1992,26 +2116,26 @@ button {
    .CodeMirror {
     height: auto;
     min-height: 180px;
-    margin-top: 18px;
+    margin-top: var(--space-5);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     font-family: monospace;
-    font-size: 14px;
+    font-size: var(--text-base);
     line-height: 1.6;
   }
   
   .CodeMirror-focused {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(200, 169, 106, 0.14);
+    box-shadow: 0 0 0 4px rgba(79, 148, 144, 0.16);
   }
   
   .editor-error {
-    margin-top: 10px;
-    padding: 12px 14px;
+    margin-top: var(--space-3);
+    padding: var(--space-3) var(--space-4);
     background: #fbe9e4;
     border: 1px solid #e4bcbc;
-    border-radius: 10px;
-    font-size: 13px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
     color: #b3452f;
     line-height: 1.5;
   }
@@ -2020,16 +2144,16 @@ button {
    RESUME BUILD BANNER
    ========================= */
 .resume-banner {
-  margin: 20px auto 0;
-  padding: 18px 22px;
+  margin: var(--space-5) auto 0;
+  padding: var(--space-4) var(--space-5);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-4);
   flex-wrap: wrap;
   background: #eaf1f8;
   border: 1px solid #cddceb;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
 }
 
 .resume-banner.hidden {
@@ -2038,13 +2162,13 @@ button {
 
 .resume-banner p {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--text-base);
   color: #4f6f91;
 }
 
 .resume-banner-actions {
   display: flex;
-  gap: 10px;
+  gap: var(--space-3);
 }
 
 /* =========================
@@ -2052,57 +2176,43 @@ button {
    ========================= */
    .view-toggle {
     display: flex;
-    gap: 10px;
+    gap: var(--space-3);
     justify-content: center;
     max-width: 300px;
-    margin: 24px auto 0;
+    margin: var(--space-6) auto 0;
   }
-  
+
   .view-toggle-btn {
     flex: 1;
-    text-align: center;
-    padding: 10px 0;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.6);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
-  }
-  
-  .view-toggle-btn.active {
-    border-color: var(--accent);
-    background: #f4eadc;
-    color: var(--accent-hover);
   }
   
   /* =========================
      PRICING PAGE
      ========================= */
   .pricing-page {
-    margin-top: 24px;
+    margin-top: var(--space-6);
   }
   
   .pricing-header {
     text-align: center;
-    margin-top: 24px;
+    margin-top: var(--space-6);
   }
   
   .pricing-header h1 {
     font-family: "Playfair Display", serif;
-    font-size: clamp(38px, 4vw, 54px);
+    font-size: var(--h1-size);
     font-weight: 600;
   }
   
   .pricing-header p {
-    margin-top: 12px;
+    margin-top: var(--space-3);
     color: var(--muted);
-    font-size: 17px;
+    font-size: var(--text-lg);
   }
   
   .pricing-plan-grid {
     max-width: 900px;
-    margin: 40px auto 0;
+    margin: var(--space-8) auto 0;
   }
   
   .pricing-plan-grid .plan-card a.btn {
@@ -2112,14 +2222,14 @@ button {
   
   .pricing-note {
     max-width: 600px;
-    margin: 28px auto 0;
-    padding: 14px 18px;
+    margin: var(--space-7) auto 0;
+    padding: var(--space-3) var(--space-4);
     text-align: center;
-    font-size: 13px;
+    font-size: var(--text-sm);
     color: var(--muted);
     background: #eaf1f8;
     border: 1px solid #cddceb;
-    border-radius: 10px;
+    border-radius: var(--radius-sm);
   }
 
   /* =========================
@@ -2128,7 +2238,7 @@ button {
    ========================= */
 .journal-standalone {
   max-width: 700px;
-  margin: 26px auto 0;
+  margin: var(--space-7) auto 0;
 }
 
 /* =========================
@@ -2137,18 +2247,18 @@ button {
    .journal-entry-header-right {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-3);
   }
   
   .journal-delete-btn {
     width: auto;
-    padding: 4px 8px;
+    padding: var(--space-1) var(--space-2);
     border: none;
     background: none;
     color: var(--muted);
-    font-size: 13px;
+    font-size: var(--text-sm);
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     transition: color 0.2s ease, background 0.2s ease;
   }
   
@@ -2162,13 +2272,13 @@ button {
    ========================= */
 @media (max-width: 600px) {
   .code-workspace {
-    padding: 16px;
-    gap: 16px;
+    padding: var(--space-4);
+    gap: var(--space-4);
   }
 
   .workspace-left,
   .workspace-right {
-    padding: 16px;
+    padding: var(--space-4);
   }
 
   .workspace-left h2 {
@@ -2181,7 +2291,7 @@ button {
 
   .CodeMirror {
     min-height: 140px;
-    font-size: 13px;
+    font-size: var(--text-sm);
   }
 
   .guided-actions {
@@ -2225,10 +2335,10 @@ button {
   .loading-inline {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 16px;
+    gap: var(--space-2);
+    padding: var(--space-4);
     color: var(--muted);
-    font-size: 14px;
+    font-size: var(--text-base);
     justify-content: center;
   }
   
@@ -2237,14 +2347,14 @@ button {
      ========================= */
   .nav-links-skeleton {
     display: flex;
-    gap: 18px;
+    gap: var(--space-5);
   }
   
   .nav-links-skeleton span {
     display: inline-block;
     width: 60px;
     height: 12px;
-    border-radius: 999px;
+    border-radius: var(--radius-pill);
     background: rgba(0, 0, 0, 0.08);
   }
   
@@ -2255,10 +2365,10 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 60px 20px;
+    gap: var(--space-3);
+    padding: 60px var(--space-5);
     color: var(--muted);
-    font-size: 15px;
+    font-size: var(--text-md);
   }
 
   /* =========================
@@ -2269,7 +2379,7 @@ button {
 }
 
 .library-empty-state .btn {
-  margin-top: 14px;
+  margin-top: var(--space-4);
 }
 
 /* =========================
@@ -2278,26 +2388,23 @@ button {
    .skip-link {
     position: absolute;
     top: -50px;
-    left: 12px;
+    left: var(--space-3);
     z-index: 1000;
-    padding: 10px 18px;
+    padding: var(--space-3) var(--space-5);
     background: var(--accent);
     color: white;
-    border-radius: 8px;
-    font-size: 14px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
     font-weight: 600;
     transition: top 0.2s ease;
   }
   
   .skip-link:focus {
-    top: 12px;
+    top: var(--space-3);
   }
   
   /* =========================
      ACCESSIBILITY — VISIBLE FOCUS STATES
-     Browsers already show a default outline, but it's
-     inconsistent across your custom buttons/cards/links.
-     This makes keyboard focus clearly visible everywhere.
      ========================= */
   a:focus-visible,
   button:focus-visible,
@@ -2314,9 +2421,6 @@ button {
   
   /* =========================
      ACCESSIBILITY — REDUCED MOTION
-     Disables decorative hover/transform animations for
-     people who've asked their OS to reduce motion. Loading
-     spinners are kept since they communicate real state.
      ========================= */
   @media (prefers-reduced-motion: reduce) {
     .mood-card,
@@ -2331,6 +2435,10 @@ button {
     .active-mood {
       transform: none !important;
     }
+
+    main {
+      animation: none !important;
+    }
   }
 
   /* =========================
@@ -2338,8 +2446,8 @@ button {
    ========================= */
 .field-hint {
   display: block;
-  margin-top: 4px;
-  font-size: 12px;
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
   color: var(--muted);
   min-height: 14px;
 }

@@ -1,10 +1,6 @@
 import { getCurrentUser, updatePassword, deleteAccount } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
 import { initAuthStatus } from "./authStatus.js";
-import { initMainNav } from "./mainNav.js";
-// ...
-initAuthStatus();
-initMainNav();
 import { registerServiceWorker } from "./registerServiceWorker.js";
 
 initAuthStatus();
@@ -128,10 +124,14 @@ nameForm.addEventListener("submit", async (event) => {
 
   if (error) {
     console.error("Error saving name:", error);
+    nameNotice.textContent = "We couldn't save your name. Check your connection and try again.";
+    nameNotice.className = "auth-error";
+    nameNotice.hidden = false;
     return;
   }
 
   nameNotice.textContent = "Name saved.";
+  nameNotice.className = "auth-notice";
   nameNotice.hidden = false;
 });
 
@@ -150,10 +150,14 @@ prefsSaveBtn.addEventListener("click", async () => {
 
   if (error) {
     console.error("Error saving preferences:", error);
+    prefsNotice.textContent = "We couldn't save your preferences. Check your connection and try again.";
+    prefsNotice.className = "auth-error";
+    prefsNotice.hidden = false;
     return;
   }
 
   prefsNotice.textContent = "Preferences saved.";
+  prefsNotice.className = "auth-notice";
   prefsNotice.hidden = false;
 });
 
@@ -185,6 +189,7 @@ planGrid.addEventListener("click", async (event) => {
     console.error("Error updating plan:", error);
     btn.disabled = false;
     btn.textContent = "Select";
+    alert("We couldn't switch your plan. Check your connection and try again.");
     return;
   }
 
@@ -197,22 +202,20 @@ planGrid.addEventListener("click", async (event) => {
    reflection represents one completed build.
    ============================================================ */
 
-   async function loadProgressAndHistory(userId) {
-    progressStats.innerHTML = `<div class="loading-inline"><span class="spinner"></span> Loading your progress...</div>`;
-    buildHistoryList.innerHTML = `<div class="loading-inline"><span class="spinner"></span> Loading your build history...</div>`;
-  
-    const { data, error } = await supabase
-      .from("reflections")
-      .select("id, project, mood_label, mood_before, mood_after, created_at")
-      .eq("user_id", userId)
-      .order("created_at", { ascending: false });
-  
-    // ...rest of the function stays exactly the same
+async function loadProgressAndHistory(userId) {
+  progressStats.innerHTML = `<div class="loading-inline"><span class="spinner"></span> Loading your progress...</div>`;
+  buildHistoryList.innerHTML = `<div class="loading-inline"><span class="spinner"></span> Loading your build history...</div>`;
+
+  const { data, error } = await supabase
+    .from("reflections")
+    .select("id, project, mood_label, mood_before, mood_after, created_at")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("Error loading build history:", error);
-    progressStats.innerHTML = `<p class="journal-error">Couldn't load your progress.</p>`;
-    buildHistoryList.innerHTML = `<p class="journal-error">Couldn't load your build history.</p>`;
+    progressStats.innerHTML = `<p class="journal-error">Couldn't load your progress. Refresh the page to try again.</p>`;
+    buildHistoryList.innerHTML = `<p class="journal-error">Couldn't load your build history. Refresh the page to try again.</p>`;
     return;
   }
 
@@ -337,7 +340,7 @@ function escapeHtml(value) {
 }
 
 /* ============================================================
-   CHANGE PASSWORD (unchanged from before)
+   CHANGE PASSWORD
    ============================================================ */
 
 passwordForm.addEventListener("submit", async (event) => {
@@ -367,7 +370,7 @@ passwordForm.addEventListener("submit", async (event) => {
 });
 
 /* ============================================================
-   DELETE ACCOUNT (unchanged from before)
+   DELETE ACCOUNT
    ============================================================ */
 
 showDeleteBtn.addEventListener("click", () => {

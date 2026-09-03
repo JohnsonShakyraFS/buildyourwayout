@@ -188,8 +188,8 @@ async function loadJournal(user) {
   if (!journalEntries) return;
 
   journalEntries.innerHTML = `
-  <p class="journal-loading"><span class="spinner"></span> Loading your journal...</p>
-`;
+    <p class="journal-loading"><span class="spinner"></span> Loading your journal...</p>
+  `;
 
   const { data, error } = await supabase
     .from("reflections")
@@ -213,7 +213,7 @@ async function loadJournal(user) {
 
     journalEntries.innerHTML = `
       <p class="journal-error">
-        We couldn't load your journal right now. Please refresh and try again.
+        We couldn't load your journal right now. Refresh the page to try again.
       </p>
     `;
 
@@ -319,6 +319,9 @@ async function deleteReflection(id) {
   );
   if (!confirmed) return;
 
+  const errorEl = document.getElementById("journalActionError");
+  if (errorEl) errorEl.hidden = true;
+
   const { error } = await supabase
     .from("reflections")
     .delete()
@@ -326,7 +329,11 @@ async function deleteReflection(id) {
 
   if (error) {
     console.error("Error deleting reflection:", error);
-    alert("We couldn't delete that build. Please try again.");
+    if (errorEl) {
+      errorEl.textContent = "We couldn't delete that build. Check your connection and try again.";
+      errorEl.hidden = false;
+      errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
     return;
   }
 

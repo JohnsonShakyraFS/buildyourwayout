@@ -51,6 +51,21 @@ toggleBtn.addEventListener("click", () => {
   setMode(mode === "signin" ? "signup" : "signin");
 });
 
+/* ------------------------------------------------------------
+   Turns raw error strings (which can be technical, like
+   "Failed to fetch" from a dropped connection) into plain
+   language. Supabase's own messages (e.g. "Invalid login
+   credentials") are already clear and pass through unchanged.
+   ------------------------------------------------------------ */
+function friendlyAuthError(message) {
+  if (!message) return "Something went wrong. Please try again.";
+  const lower = message.toLowerCase();
+  if (lower.includes("failed to fetch") || lower.includes("network")) {
+    return "Couldn't reach the server. Check your internet connection and try again.";
+  }
+  return message;
+}
+
 authForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   errorEl.hidden = true;
@@ -72,7 +87,7 @@ authForm.addEventListener("submit", async (event) => {
   submitBtn.textContent = originalLabel;
 
   if (error) {
-    errorEl.textContent = error.message;
+    errorEl.textContent = friendlyAuthError(error.message);
     errorEl.hidden = false;
     return;
   }

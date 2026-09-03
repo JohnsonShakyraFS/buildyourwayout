@@ -148,17 +148,19 @@
 
         <div class="form-row">
           <label>
-            New password
-            <input id="newPassword" type="password" required minlength="6" placeholder="At least 6 characters" autocomplete="new-password" />
+              New password
+              <input id="newPassword" type="password" required minlength="6" placeholder="At least 6 characters" autocomplete="new-password" />
+              <span id="newPasswordHint" class="field-hint"></span>
           </label>
-        </div>
-
-        <div class="form-row">
+          </div>
+          
+          <div class="form-row">
           <label>
-            Confirm new password
-            <input id="newPasswordConfirm" type="password" required minlength="6" placeholder="Type it again" autocomplete="new-password" />
+              Confirm new password
+              <input id="newPasswordConfirm" type="password" required minlength="6" placeholder="Type it again" autocomplete="new-password" />
+              <span id="passwordMatchHint" class="field-hint"></span>
           </label>
-        </div>
+          </div>
 
         <p id="passwordError" class="auth-error" aria-live="polite" hidden></p>
         <p id="passwordNotice" class="auth-notice" aria-live="polite" hidden></p>

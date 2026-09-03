@@ -25,6 +25,45 @@ getCurrentUser().then(user => {
   if (user) redirectAfterAuth(user);
 });
 
+function validateEmailLive() {
+  const value = emailInput.value.trim();
+
+  if (value === "") {
+    emailHint.textContent = "";
+    emailHint.className = "field-hint";
+    emailInput.classList.remove("field-invalid", "field-valid");
+    return;
+  }
+
+  const looksValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  emailHint.textContent = looksValid ? "" : "That doesn't look like a valid email.";
+  emailHint.className = "field-hint" + (looksValid ? "" : " invalid");
+  emailInput.classList.toggle("field-invalid", !looksValid);
+  emailInput.classList.toggle("field-valid", looksValid);
+}
+
+function validatePasswordLive() {
+  if (mode !== "signup" || passwordInput.value === "") {
+    passwordHint.textContent = "";
+    passwordHint.className = "field-hint";
+    passwordInput.classList.remove("field-invalid", "field-valid");
+    return;
+  }
+
+  const remaining = 6 - passwordInput.value.length;
+  const longEnough = remaining <= 0;
+
+  passwordHint.textContent = longEnough
+    ? "Good length."
+    : `${remaining} more character${remaining === 1 ? "" : "s"} needed.`;
+  passwordHint.className = "field-hint" + (longEnough ? " valid" : " invalid");
+  passwordInput.classList.toggle("field-invalid", !longEnough);
+  passwordInput.classList.toggle("field-valid", longEnough);
+}
+
+emailInput.addEventListener("input", validateEmailLive);
+passwordInput.addEventListener("input", validatePasswordLive);
+
 function setMode(newMode) {
   mode = newMode;
   errorEl.hidden = true;
@@ -47,6 +86,8 @@ function setMode(newMode) {
     forgotRow.hidden = true;
     passwordInput.setAttribute("autocomplete", "new-password");
   }
+
+  validatePasswordLive();
 }
 
 toggleBtn.addEventListener("click", () => {

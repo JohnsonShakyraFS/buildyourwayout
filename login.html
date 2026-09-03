@@ -43,17 +43,19 @@
 
         <div class="form-row">
           <label>
-            Email
-            <input id="authEmail" type="email" required placeholder="you@example.com" autocomplete="email" />
+              Email
+              <input id="authEmail" type="email" required placeholder="you@example.com" autocomplete="email" />
+              <span id="emailHint" class="field-hint"></span>
           </label>
-        </div>
-
-        <div class="form-row">
+          </div>
+          
+          <div class="form-row">
           <label>
-            Password
-            <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters" autocomplete="current-password" />
+              Password
+              <input id="authPassword" type="password" required minlength="6" placeholder="At least 6 characters" autocomplete="current-password" />
+              <span id="passwordHint" class="field-hint"></span>
           </label>
-        </div>
+          </div>
 
         <p id="authError" class="auth-error" aria-live="polite" hidden></p>
         <p id="authNotice" class="auth-notice" aria-live="polite" hidden></p>

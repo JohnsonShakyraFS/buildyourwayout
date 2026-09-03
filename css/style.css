@@ -2332,3 +2332,30 @@ button {
       transform: none !important;
     }
   }
+
+  /* =========================
+   FORM VALIDATION — live inline hints
+   ========================= */
+.field-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+  min-height: 14px;
+}
+
+.field-hint.invalid {
+  color: #b3452f;
+}
+
+.field-hint.valid {
+  color: #2f5b3f;
+}
+
+input.field-invalid {
+  border-color: #e4bcbc;
+}
+
+input.field-valid {
+  border-color: #b9dec3;
+}

@@ -2547,3 +2547,26 @@ input.field-valid {
   min-height: 44px;
   transition: opacity 0.3s ease;
 }
+
+/* =========================
+   PREVIEW FRAMES — more headroom before scaling kicks in
+   ========================= */
+   .mini-preview-frame {
+    height: 420px;
+  }
+  
+  @media (max-width: 600px) {
+    .mini-preview-frame {
+      height: 340px;
+    }
+  }
+
+  .mini-preview-frame,
+#previewFrame {
+  display: block;
+}
+
+.mini-preview,
+.workspace-right {
+  position: relative;
+}

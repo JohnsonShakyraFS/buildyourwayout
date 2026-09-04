@@ -2,14 +2,12 @@ import { moods, pickBuildForMood, pickBuildForMoodAccount } from "./moods.js";
 import { builds } from "./builds.js";
 import { initAuthStatus } from "./authStatus.js";
 import { initMainNav } from "./mainNav.js";
-// ...
-initAuthStatus();
-initMainNav();
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import { getCurrentUser } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
 
 initAuthStatus();
+initMainNav();
 registerServiceWorker();
 
 /* ==============================================
@@ -58,6 +56,59 @@ function renderDoc(state) {
       </body>
     </html>
   `;
+}
+
+/* ------------------------------------------------------------
+   Renders a build at a fixed, stable "design width" (so its own
+   responsive CSS like `width: min(420px, 90%)` always resolves
+   the same way), measures its real height once loaded, then
+   scales the whole iframe down from the outside to fit whatever
+   size its actual preview container is. Re-scales on window
+   resize so it stays correct if the layout shifts.
+   ------------------------------------------------------------ */
+const BUILD_DESIGN_WIDTH = 480;
+
+function fitIframeToContainer(iframe) {
+  iframe.style.width = BUILD_DESIGN_WIDTH + "px";
+  iframe.style.border = "none";
+  iframe.style.transformOrigin = "top left";
+
+  function applyScale() {
+    const container = iframe.parentElement;
+    if (!container) return;
+
+    const contentHeight = iframe.dataset.contentHeight;
+    if (!contentHeight) return;
+
+    const containerWidth = container.clientWidth;
+    const scale = Math.min(containerWidth / BUILD_DESIGN_WIDTH, 1);
+
+    iframe.style.transform = "scale(" + scale + ")";
+    container.style.overflow = "hidden";
+    container.style.height = (Number(contentHeight) * scale) + "px";
+  }
+
+  /* Polls (via requestAnimationFrame) until the iframe's document
+     actually has rendered content, instead of relying on a single
+     'load' event firing at a predictable time. srcdoc iframes can
+     finish loading before a 'load' listener gets attached if it's
+     assigned in the wrong order elsewhere in the code — polling
+     means we can't miss that window no matter what order things
+     happen in. */
+  function measureAndScale() {
+    const doc = iframe.contentDocument;
+    if (!doc || !doc.body || doc.body.scrollHeight === 0) {
+      requestAnimationFrame(measureAndScale);
+      return;
+    }
+    iframe.dataset.contentHeight = doc.body.scrollHeight;
+    iframe.style.height = doc.body.scrollHeight + "px";
+    applyScale();
+  }
+
+  iframe.addEventListener("load", measureAndScale);
+  requestAnimationFrame(measureAndScale);
+  window.addEventListener("resize", applyScale);
 }
 
 /* ==============================================
@@ -133,6 +184,7 @@ if (window.location.pathname.includes("project.html")) {
       const demoFrame = document.createElement("iframe");
       demoFrame.className = "mini-preview-frame";
       demoFrame.title = "Preview of " + build.title;
+      fitIframeToContainer(demoFrame);
       demoFrame.srcdoc = renderDoc(build.initialState);
       miniPreview.appendChild(demoFrame);
     }
@@ -152,6 +204,10 @@ if (window.location.pathname.includes("project.html")) {
     const nextStep = document.getElementById("nextStep");
     const previewFrame = document.getElementById("previewFrame");
 
+    if (previewFrame) {
+      fitIframeToContainer(previewFrame);
+    }
+
     const resumeBanner = document.getElementById("resumeBanner");
     const resumeBtn = document.getElementById("resumeBtn");
     const startOverBtn = document.getElementById("startOverBtn");
@@ -164,15 +220,6 @@ if (window.location.pathname.includes("project.html")) {
        CODE EDITOR (syntax highlighting)
        ------------------------------------------------------------ */
     let cmEditor = null;
-    if (stepEditor && window.CodeMirror) {
-      cmEditor = CodeMirror.fromTextArea(stepEditor, {
-        lineNumbers: true,
-        mode: "javascript",
-        theme: "default",
-        viewportMargin: Infinity
-      });
-    }
-
     if (stepEditor && window.CodeMirror) {
       cmEditor = CodeMirror.fromTextArea(stepEditor, {
         lineNumbers: true,

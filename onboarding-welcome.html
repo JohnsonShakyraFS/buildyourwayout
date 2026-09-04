@@ -19,8 +19,8 @@
 <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
 </head>
 <body>
-  <a href="#mainContent" class="skip-link">Skip to main content</a>
-<main class="mood-page onboarding-page" id="mainContent">
+
+<main class="mood-page onboarding-page">
 
 <header class="page-topbar">
   <span></span>
@@ -35,13 +35,37 @@
 <section class="mood-header onboarding-welcome-header">
   <h1>Welcome. Let's get to know you.</h1>
   <p>
-    A few quick questions so we can point you toward builds that actually
-    fit where you're at right now.
+    A couple of quick questions, then a few more, so we can point you
+    toward builds that actually fit where you're at right now.
   </p>
-  <button type="button" id="startOnboardingBtn" class="btn primary-btn">
-    Get Started
-  </button>
 </section>
+
+<form id="introForm" class="onboarding-intro-form">
+  <div class="form-row">
+    <label>
+      What's your name?
+      <input id="nameInput" type="text" placeholder="Your first name" required />
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      How old are you?
+      <input id="ageInput" type="number" min="13" max="120" placeholder="Your age" required />
+    </label>
+  </div>
+
+  <p id="introError" class="auth-error" aria-live="polite" hidden></p>
+
+  <button type="submit" class="btn primary-btn" id="startOnboardingBtn">
+    Continue
+  </button>
+</form>
+
+<div class="fun-fact-banner">
+  <p class="fun-fact-label">Did you know?</p>
+  <p id="funFactText" class="fun-fact-text"></p>
+</div>
 
 </main>
 

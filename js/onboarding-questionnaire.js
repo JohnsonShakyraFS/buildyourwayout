@@ -1,9 +1,14 @@
 import { getCurrentUser } from "./auth.js";
 import { initAuthStatus } from "./authStatus.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
+import { startFunFactRotation } from "./funFacts.js";
 
 initAuthStatus();
 registerServiceWorker();
+startFunFactRotation("funFactText");
+
+// ...rest of the file stays exactly the same
+
 
 async function requireUser() {
   const user = await getCurrentUser();

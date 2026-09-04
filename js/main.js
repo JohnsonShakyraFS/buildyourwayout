@@ -69,7 +69,7 @@ if (window.location.pathname.includes("mood.html")) {
   if (moodGrid) {
     Object.entries(moods).forEach(([key, mood], index) => {
       const button = document.createElement("button");
-      button.className = "mood-card" + (index === 0 ? " active-mood" : "");
+      button.className = "mood-card";
       button.innerHTML = `
         <span class="mood-icon ${mood.iconColor}">${mood.icon}</span>
         <div>

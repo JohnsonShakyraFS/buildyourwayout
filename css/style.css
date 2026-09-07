@@ -454,6 +454,10 @@ input:disabled {
     min-height: 420px;
     gap: 56px;
 }
+.hero-content,
+.hero-visual {
+    min-width: 0;
+}
 .hero-content h1 {
     max-width: 570px;
     font-family: "Playfair Display", serif;
@@ -894,7 +898,7 @@ input:disabled {
   }
   
   .mini-preview {
-    width: min(420px, 100%);
+    width: min(330px, 100%);
     margin: var(--space-6) auto 22px;
     padding: var(--space-5);
     background: linear-gradient(135deg, #e7f1ee, #ffffff);
@@ -903,14 +907,12 @@ input:disabled {
     overflow: hidden;
     max-width: 100%;
   }
-  
+
   .mini-preview-frame {
     width: 100%;
-    min-height: 200px;
     border: none;
     border-radius: var(--radius-sm);
     background: white;
-    display: block;
   }
   
   .breathing-circle {
@@ -1675,6 +1677,10 @@ input:disabled {
       grid-template-columns: 1fr;
       text-align: center;
     }
+
+    .hero-visual {
+      display: none;
+    }
   
     .hero-content p,
     .hero-content h1 {
@@ -1714,6 +1720,14 @@ input:disabled {
   
     .project-layout {
       grid-template-columns: 1fr;
+    }
+  
+    .project-info-card {
+      padding: var(--space-6) var(--space-4);
+    }
+  
+    .steps-card {
+      padding: var(--space-6) var(--space-4);
     }
   
     .project-note {
@@ -2107,6 +2121,10 @@ input:disabled {
 
   .guided-actions button {
     width: 100%;
+  }
+
+  .mini-preview {
+    padding: var(--space-3);
   }
 }
 

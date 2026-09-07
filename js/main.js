@@ -59,28 +59,19 @@ function renderDoc(state) {
 }
 
 /* ------------------------------------------------------------
-   Renders a build at a fixed, stable "design width" (so its own
-   responsive CSS like `width: min(420px, 90%)` always resolves
-   the same way), measures its real height once loaded, then
-   scales the whole iframe down from the outside to fit whatever
-   size its actual preview container is. Re-scales on window
-   resize so it stays correct if the layout shifts.
+   Sizes a build's preview iframe to fit its container. Width is
+   handled entirely by CSS (width: 100% on both .mini-preview-frame
+   and #previewFrame) — that's always correct and auto-adjusting,
+   so there's nothing for JS to do there. This only measures and
+   sets height, which CSS percentages can't express on their own,
+   by polling until the iframe's document actually has rendered
+   content (instead of relying on a single 'load' event, which can
+   fire before a listener gets attached depending on call order).
    ------------------------------------------------------------ */
-
 function fitIframeToContainer(iframe) {
   iframe.style.border = "none";
   iframe.style.display = "block";
 
-  function sizeWidthToContainer() {
-    const container = iframe.parentElement;
-    if (!container) return;
-    iframe.style.width = container.clientWidth + "px";
-  }
-
-  /* Polls until the iframe's document has real, rendered content,
-     then sets the iframe's height to match exactly. No transform,
-     no scaling — the build renders at its actual available width,
-     so it looks as spacious as the space around it allows. */
   function measureAndSetHeight() {
     const doc = iframe.contentDocument;
     if (!doc || !doc.body || doc.body.scrollHeight === 0) {
@@ -90,20 +81,12 @@ function fitIframeToContainer(iframe) {
     iframe.style.height = doc.body.scrollHeight + "px";
   }
 
-  sizeWidthToContainer();
-
-  iframe.addEventListener("load", () => {
-    sizeWidthToContainer();
-    measureAndSetHeight();
-  });
-
+  iframe.addEventListener("load", measureAndSetHeight);
   requestAnimationFrame(measureAndSetHeight);
-
-  window.addEventListener("resize", () => {
-    sizeWidthToContainer();
-    measureAndSetHeight();
-  });
+  window.addEventListener("resize", measureAndSetHeight);
 }
+
+
 
 /* ==============================================
    MOOD PAGE LOGIC - Runs only on mood.html

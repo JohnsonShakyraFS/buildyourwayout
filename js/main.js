@@ -66,49 +66,43 @@ function renderDoc(state) {
    size its actual preview container is. Re-scales on window
    resize so it stays correct if the layout shifts.
    ------------------------------------------------------------ */
-const BUILD_DESIGN_WIDTH = 480;
 
 function fitIframeToContainer(iframe) {
-  iframe.style.width = BUILD_DESIGN_WIDTH + "px";
   iframe.style.border = "none";
-  iframe.style.transformOrigin = "top left";
+  iframe.style.display = "block";
 
-  function applyScale() {
+  function sizeWidthToContainer() {
     const container = iframe.parentElement;
     if (!container) return;
-
-    const contentHeight = iframe.dataset.contentHeight;
-    if (!contentHeight) return;
-
-    const containerWidth = container.clientWidth;
-    const scale = Math.min(containerWidth / BUILD_DESIGN_WIDTH, 1);
-
-    iframe.style.transform = "scale(" + scale + ")";
-    container.style.overflow = "hidden";
-    container.style.height = (Number(contentHeight) * scale) + "px";
+    iframe.style.width = container.clientWidth + "px";
   }
 
-  /* Polls (via requestAnimationFrame) until the iframe's document
-     actually has rendered content, instead of relying on a single
-     'load' event firing at a predictable time. srcdoc iframes can
-     finish loading before a 'load' listener gets attached if it's
-     assigned in the wrong order elsewhere in the code — polling
-     means we can't miss that window no matter what order things
-     happen in. */
-  function measureAndScale() {
+  /* Polls until the iframe's document has real, rendered content,
+     then sets the iframe's height to match exactly. No transform,
+     no scaling — the build renders at its actual available width,
+     so it looks as spacious as the space around it allows. */
+  function measureAndSetHeight() {
     const doc = iframe.contentDocument;
     if (!doc || !doc.body || doc.body.scrollHeight === 0) {
-      requestAnimationFrame(measureAndScale);
+      requestAnimationFrame(measureAndSetHeight);
       return;
     }
-    iframe.dataset.contentHeight = doc.body.scrollHeight;
     iframe.style.height = doc.body.scrollHeight + "px";
-    applyScale();
   }
 
-  iframe.addEventListener("load", measureAndScale);
-  requestAnimationFrame(measureAndScale);
-  window.addEventListener("resize", applyScale);
+  sizeWidthToContainer();
+
+  iframe.addEventListener("load", () => {
+    sizeWidthToContainer();
+    measureAndSetHeight();
+  });
+
+  requestAnimationFrame(measureAndSetHeight);
+
+  window.addEventListener("resize", () => {
+    sizeWidthToContainer();
+    measureAndSetHeight();
+  });
 }
 
 /* ==============================================

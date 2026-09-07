@@ -12,10 +12,6 @@
     --border: #c7d9d3;
     --shadow: 0 18px 45px rgba(40, 70, 65, 0.10);
 
-    /* ---- SPACING SCALE ----
-       A consistent rhythm instead of ad-hoc pixel values.
-       Use these for margin/padding wherever a value isn't
-       tied to a very specific illustration/decorative shape. */
     --space-1: 4px;
     --space-2: 8px;
     --space-3: 12px;
@@ -26,12 +22,6 @@
     --space-8: 40px;
     --space-9: 48px;
 
-    /* ---- RADIUS SCALE ----
-       sm/md = small controls and inner list rows
-       lg/xl = primary content cards
-       2xl   = feature-level cards
-       page  = large page-shell wrappers
-       pill  = fully-rounded buttons/chips */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
@@ -40,7 +30,6 @@
     --radius-page: 14px;
     --radius-pill: 999px;
 
-    /* ---- TYPE SCALE ---- */
     --text-xs: 12px;
     --text-sm: 13px;
     --text-base: 14px;
@@ -48,21 +37,10 @@
     --text-lg: 17px;
     --text-xl: 18px;
 
-    /* Page-title h1 — used by every top-level page header
-       (mood, reflection/journal, pricing, project) so they all
-       read as the same visual "weight" of heading. */
     --h1-size: clamp(38px, 4vw, 54px);
-
-    /* Section headings (h2) — card/panel section titles like
-       "Steps to Build", "Live Preview", "Emotional Trend".
-       Subsection headings (h3) — smaller titles inside a card,
-       like a mood-card's name or a feature's title. */
     --h2-size: 26px;
     --h3-size: 20px;
 
-    /* ---- CONTROLS ----
-       .btn = primary/secondary CTA buttons
-       chip = compact pill controls (filters, toggles, choices) */
     --btn-height: 54px;
     --btn-padding-x: var(--space-7);
     --chip-height: 44px;
@@ -72,6 +50,9 @@
 /* =========================
     GLOBAL RESET
     ========================= */
+html, body {
+    overflow-x: hidden;
+}
 * {
     box-sizing: border-box;
     margin: 0;
@@ -90,9 +71,6 @@ a {
 
 /* =========================
    PAGE TRANSITIONS
-   A subtle fade + rise on every page's <main> so navigating
-   between pages feels like a soft transition rather than an
-   abrupt jump-cut. Kept short (0.35s) so it never feels slow.
    ========================= */
 @keyframes pageFadeIn {
     from {
@@ -156,9 +134,6 @@ button {
     transform: translateY(1px);
 }
 
-/* Disabled state applies to any .btn variant, and to plain
-   buttons/inputs elsewhere in the app that get toggled off
-   during a submit/loading cycle. */
 .btn:disabled,
 button:disabled,
 input:disabled {
@@ -171,10 +146,6 @@ input:disabled {
 
 /* =========================
     GLOBAL CHIPS
-    Compact pill controls that share one visual language:
-    choice cards (onboarding), difficulty filter pills, and
-    the mood/library view toggle. All three are the same UI
-    role — a selectable/filter pill — so they share sizing.
     ========================= */
 .choice-card,
 .difficulty-filter-btn,
@@ -290,9 +261,6 @@ input:disabled {
     color: var(--muted);
   }
   
-  /* =========================
-     ACCOUNT — BUILD HISTORY
-     ========================= */
   .build-history-list {
     margin-top: var(--space-3);
     display: flex;
@@ -367,9 +335,6 @@ input:disabled {
     accent-color: var(--accent);
   }
   
-  /* =========================
-     ACCOUNT — SUBSCRIPTION
-     ========================= */
   .account-subscription-card {
     margin-top: var(--space-6);
   }
@@ -450,9 +415,6 @@ input:disabled {
   }
 
 /* HOME STYLING ------------------------------------------------------------- */
-/* =========================
-    HOME PAGE NAVBAR
-    ========================= */
 .navbar {
     width: min(1360px, calc(100% - 48px));
     height: 76px;
@@ -481,9 +443,6 @@ input:disabled {
     box-shadow: 0 10px 20px rgba(79, 148, 144, 0.28);
 }
   
-/* =========================
-    HOME PAGE HERO
-    ========================= */
 .home-page {
     width: min(1200px, calc(100% - 48px));
     margin: 70px auto 0;
@@ -519,11 +478,6 @@ input:disabled {
     margin-top: 34px;
 }
   
-/* =========================
-    HOME PAGE ILLUSTRATION
-    Decorative hand-tuned shapes — not part of the reusable
-    UI system, so these stay as literal values on purpose.
-    ========================= */
 .hero-visual {
     position: relative;
     height: 430px;
@@ -646,9 +600,6 @@ input:disabled {
     transform: rotate(-145deg);
 }
   
-/* =========================
-    HOME PAGE FEATURE CARDS
-    ========================= */
 .feature-cards {
     margin-top: 52px;
     display: grid;
@@ -701,10 +652,6 @@ input:disabled {
 
 
 /* SHARED ITEMS ------------------------------------------------------------- */
-/* =========================
-    SHARED INNER PAGE TOPBAR
-    Used on mood/project/reflection pages
-    ========================= */
 .page-topbar {
     display: grid;
     grid-template-columns: 1fr auto 1fr auto;
@@ -729,10 +676,6 @@ input:disabled {
     font-weight: 500;
 }
 
-/* =========================
-   AUTH STATUS WIDGET
-   Shown in headers via #authStatus
-   ========================= */
 .auth-status {
     justify-self: end;
     display: flex;
@@ -761,9 +704,6 @@ input:disabled {
     text-decoration: underline;
 }
 
-/* =========================
-   LOGIN / SIGNUP PAGE
-   ========================= */
 .auth-layout {
     width: min(420px, 100%);
     margin: 0 auto;
@@ -799,9 +739,6 @@ input:disabled {
 
 
 /* MOOD STYLING ------------------------------------------------------------- */
-/* =========================
-    MOOD PAGE
-    ========================= */
   .mood-page {
     width: min(1360px, calc(100% - 48px));
     min-height: calc(100vh - 48px);
@@ -903,9 +840,6 @@ input:disabled {
   
 
   /* PROJECT STYLING ------------------------------------------------------------- */
-  /* =========================
-     PROJECT PAGE
-     ========================= */
   .project-page {
     width: min(1360px, calc(100% - 48px));
     min-height: calc(100vh - 48px);
@@ -929,6 +863,7 @@ input:disabled {
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
+    min-width: 0;
   }
   .project-info-card {
     padding: var(--space-7) 42px;
@@ -958,35 +893,26 @@ input:disabled {
     width: min(330px, 100%);
   }
   
-  /* =========================
-     PROJECT PAGE DYNAMIC SIMULATOR
-     JS injects either breathing preview or thought sorter preview
-     ========================= */
   .mini-preview {
-    width: min(330px, 100%);
+    width: min(420px, 100%);
     margin: var(--space-6) auto 22px;
     padding: var(--space-5);
     background: linear-gradient(135deg, #e7f1ee, #ffffff);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
+    overflow: hidden;
+    max-width: 100%;
   }
-
-  /* =========================
-     GENERALIZED MINI PREVIEW IFRAME
-     Renders any build's live demo, regardless of mood
-     ========================= */
+  
   .mini-preview-frame {
     width: 100%;
-    height: 320px;
+    min-height: 200px;
     border: none;
     border-radius: var(--radius-sm);
     background: white;
+    display: block;
   }
   
-  /* =========================
-     BREATHING SIMULATOR
-     Used for Anxious mood
-     ========================= */ 
   .breathing-circle {
     width: 150px;
     height: 150px;
@@ -1031,7 +957,6 @@ input:disabled {
     border-color: #6f97c1;
     color: #ffffff;
   }
-  /* Breathing animation states added/removed by JavaScript */
   .expand {
     animation: breatheIn 4s ease-in-out forwards;
   }
@@ -1039,27 +964,14 @@ input:disabled {
     animation: breatheOut 4s ease-in-out forwards;
   }
   @keyframes breatheIn {
-    from {
-      transform: scale(1);
-    }
-    to {
-      transform: scale(1.6);
-    }
+    from { transform: scale(1); }
+    to { transform: scale(1.6); }
   }
   @keyframes breatheOut {
-    from {
-      transform: scale(1.6);
-    }
-  
-    to {
-      transform: scale(1);
-    }
+    from { transform: scale(1.6); }
+    to { transform: scale(1); }
   }
   
-  /* =========================
-     THOUGHT SORTER SIMULATOR
-     Used for Overthinking mood
-     ========================= */
   .thought-preview {
     display: flex;
     flex-direction: column;
@@ -1095,10 +1007,6 @@ input:disabled {
     text-align: left;
   }
 
-  /* =========================
-   TINY WINS SIMULATOR
-   Used for Unmotivated mood
-   ========================= */
 .wins-preview {
     display: flex;
     flex-direction: column;
@@ -1134,9 +1042,6 @@ input:disabled {
     text-align: left;
   }
   
-  /* =========================
-     PROJECT PAGE STEPS CARD
-     ========================= */
   .steps-card {
     padding: 38px 46px;
   }
@@ -1178,9 +1083,6 @@ input:disabled {
     font-weight: 600;
   }
   
-  /* =========================
-     PROJECT PAGE MOTIVATION NOTE
-     ========================= */
   .project-note {
     width: min(1040px, 100%);
     min-height: 112px;
@@ -1205,10 +1107,6 @@ input:disabled {
     color: var(--text);
   }
   
-  /* =========================
-     BUILT-IN CODING WORKSPACE
-     Hidden until user clicks Start Guided Build
-     ========================= */
   .hidden, .code-workspace.hidden {
     display: none;
   }
@@ -1229,6 +1127,7 @@ input:disabled {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: var(--space-6);
+    min-width: 0;
   }
   .workspace-left h2 {
     margin: var(--space-2) 0 var(--space-3);
@@ -1288,14 +1187,6 @@ input:disabled {
   }
 
   /* REFLECTION STYLING ------------------------------------------------------------- */
-
-  /* =========================
-     MOOD RATING SCALE
-     Before/after emotion picker on the reflection form.
-     Kept visually distinct from .choice-card chips on purpose —
-     these are a circular rating scale, a different UI role from
-     a selectable pill, so they don't share the chip tokens.
-     ========================= */
   .mood-field {
     display: flex;
     flex-direction: column;
@@ -1351,10 +1242,6 @@ input:disabled {
     transform: translateY(-2px) scale(1.08);
   }
 
-  /* =========================
-     MOOD SHIFT SUMMARY
-     Before -> after readout shown on each journal entry
-     ========================= */
   .mood-shift {
     display: flex;
     align-items: center;
@@ -1372,10 +1259,6 @@ input:disabled {
     color: var(--accent);
     font-size: 16px;
   }
-
-  /* ============================================================
-     REFLECTION STATUS
-     ============================================================ */
 
   .reflection-message {
     padding: var(--space-4) var(--space-5);
@@ -1397,22 +1280,12 @@ input:disabled {
     color: #8a3a2f;
   }
 
-
-  /* ============================================================
-     REFLECTION PRIVACY NOTE
-     ============================================================ */
-
   .reflection-privacy-note {
     margin-top: var(--space-3);
     font-size: var(--text-sm);
     color: var(--muted);
     text-align: center;
   }
-
-
-  /* ============================================================
-     JOURNAL ENTRIES
-     ============================================================ */
 
   .journal-loading,
   .journal-error {
@@ -1474,9 +1347,6 @@ input:disabled {
     color: var(--text);
   }
 
-  /* =========================
-     REFLECTION PAGE
-     ========================= */
   .reflection-page {
     width: min(1360px, calc(100% - 48px));
     min-height: calc(100vh - 48px);
@@ -1562,9 +1432,6 @@ input:disabled {
     cursor: pointer;
   }
   
-  /* =========================
-     REFLECTION JOURNAL PANEL
-     ========================= */
   .journal-panel {
     padding: var(--space-6) var(--space-4);
     background: rgba(255, 255, 255, 0.72);
@@ -1640,10 +1507,6 @@ input:disabled {
     color: var(--text);
   }
   
-  /* =========================
-   MOOD TREND PANEL
-   Chart + summary shown above the journal list
-   ========================= */
 .mood-trend-panel {
   margin-bottom: var(--space-5);
   padding-bottom: var(--space-4);
@@ -1670,10 +1533,6 @@ input:disabled {
   max-height: 160px;
 }
 
-/* =========================
-   SUPPORT / RESOURCE BANNER
-   Gentle nudge shown for sustained low mood, not a diagnosis
-   ========================= */
    .support-banner {
     margin-bottom: var(--space-5);
     padding: var(--space-4);
@@ -1733,9 +1592,6 @@ input:disabled {
     background: rgba(255, 255, 255, 0.9);
   }
 
-  /* =========================
-   ONBOARDING — CHOICE CARDS
-   ========================= */
 .onboarding-form {
   display: block;
 }
@@ -1758,18 +1614,12 @@ input:disabled {
   gap: var(--space-3);
 }
 
-/* =========================
-   ONBOARDING — WELCOME PAGE
-   ========================= */
 .onboarding-welcome-header {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* =========================
-   ONBOARDING — RESULTS PAGE
-   ========================= */
 .onboarding-results-card #profileName {
   margin-top: var(--space-2);
   font-family: "Playfair Display", serif;
@@ -1807,9 +1657,6 @@ input:disabled {
 }
 
   /* RESPONSIVE STYLING ------------------------------------------------------------- */
-  /* =========================
-     RESPONSIVE DESIGN
-     ========================= */
   @media (max-width: 950px) {
     .navbar {
       height: auto;
@@ -1904,10 +1751,6 @@ input:disabled {
     }
   }
 
-/* =========================
-   SITE FOOTER
-   Crisis resources + disclaimer + legal links, shown on every page
-   ========================= */
 .site-footer {
   width: min(1360px, calc(100% - 48px));
   margin: 0 auto var(--space-7);
@@ -1944,9 +1787,6 @@ input:disabled {
   text-decoration: underline;
 }
 
-/* =========================
-   LEGAL PAGES (privacy.html, terms.html)
-   ========================= */
 .legal-content {
   max-width: 760px;
   margin: var(--space-8) auto 0;
@@ -1985,18 +1825,12 @@ input:disabled {
   color: #6f4a2f;
 }
 
-/* =========================
-   FORGOT PASSWORD LINK (login page)
-   ========================= */
 .auth-forgot {
   text-align: right;
   margin-top: -6px;
   font-size: var(--text-sm);
 }
 
-/* =========================
-   ACCOUNT SETTINGS PAGE
-   ========================= */
 .account-section-title {
   font-family: "Playfair Display", serif;
   font-size: var(--h3-size);
@@ -2053,11 +1887,6 @@ input:disabled {
   flex: 1;
 }
 
-
-
-/* =========================
-   PROJECT LIBRARY PAGE
-   ========================= */
 .library-content {
   max-width: 1100px;
   margin: var(--space-8) auto 0;
@@ -2110,9 +1939,6 @@ input:disabled {
   align-self: flex-start;
 }
 
-/* =========================
-   CODE EDITOR — SYNTAX HIGHLIGHTING + ERRORS
-   ========================= */
    .CodeMirror {
     height: auto;
     min-height: 180px;
@@ -2140,9 +1966,6 @@ input:disabled {
     line-height: 1.5;
   }
 
-  /* =========================
-   RESUME BUILD BANNER
-   ========================= */
 .resume-banner {
   margin: var(--space-5) auto 0;
   padding: var(--space-4) var(--space-5);
@@ -2171,9 +1994,6 @@ input:disabled {
   gap: var(--space-3);
 }
 
-/* =========================
-   VIEW TOGGLE (Mood ↔ Library)
-   ========================= */
    .view-toggle {
     display: flex;
     gap: var(--space-3);
@@ -2186,9 +2006,6 @@ input:disabled {
     flex: 1;
   }
   
-  /* =========================
-     PRICING PAGE
-     ========================= */
   .pricing-page {
     margin-top: var(--space-6);
   }
@@ -2232,18 +2049,11 @@ input:disabled {
     border-radius: var(--radius-sm);
   }
 
-  /* =========================
-   STANDALONE JOURNAL PAGE
-   Wraps the journal panel without the two-column form layout
-   ========================= */
 .journal-standalone {
   max-width: 700px;
   margin: var(--space-7) auto 0;
 }
 
-/* =========================
-   JOURNAL — DELETE BUILD
-   ========================= */
    .journal-entry-header-right {
     display: flex;
     align-items: center;
@@ -2267,9 +2077,6 @@ input:disabled {
     background: #fbe9e4;
   }
 
-  /* =========================
-   MOBILE — CODE WORKSPACE & GUIDED BUILD
-   ========================= */
 @media (max-width: 600px) {
   .code-workspace {
     padding: var(--space-4);
@@ -2301,22 +2108,12 @@ input:disabled {
   .guided-actions button {
     width: 100%;
   }
-
-  .mini-preview-frame {
-    height: 240px;
-  }
 }
 
-/* =========================
-   MOBILE — DIFFICULTY FILTER WRAPPING
-   ========================= */
 .difficulty-filter {
   flex-wrap: wrap;
 }
 
-/* =========================
-   LOADING STATES — shared spinner
-   ========================= */
    @keyframes spin {
     to { transform: rotate(360deg); }
   }
@@ -2342,9 +2139,6 @@ input:disabled {
     justify-content: center;
   }
   
-  /* =========================
-     NAV — loading skeleton
-     ========================= */
   .nav-links-skeleton {
     display: flex;
     gap: var(--space-5);
@@ -2358,9 +2152,6 @@ input:disabled {
     background: rgba(0, 0, 0, 0.08);
   }
   
-  /* =========================
-     PROJECT — build loading state
-     ========================= */
   .build-loading {
     display: flex;
     align-items: center;
@@ -2371,9 +2162,6 @@ input:disabled {
     font-size: var(--text-md);
   }
 
-  /* =========================
-   LIBRARY — EMPTY FILTER STATE
-   ========================= */
 .library-empty-state {
   grid-column: 1 / -1;
 }
@@ -2382,9 +2170,6 @@ input:disabled {
   margin-top: var(--space-4);
 }
 
-/* =========================
-   ACCESSIBILITY — SKIP LINK
-   ========================= */
    .skip-link {
     position: absolute;
     top: -50px;
@@ -2403,9 +2188,6 @@ input:disabled {
     top: var(--space-3);
   }
   
-  /* =========================
-     ACCESSIBILITY — VISIBLE FOCUS STATES
-     ========================= */
   a:focus-visible,
   button:focus-visible,
   input:focus-visible,
@@ -2419,9 +2201,6 @@ input:disabled {
     outline-offset: 2px;
   }
   
-  /* =========================
-     ACCESSIBILITY — REDUCED MOTION
-     ========================= */
   @media (prefers-reduced-motion: reduce) {
     .mood-card,
     .choice-card,
@@ -2441,9 +2220,6 @@ input:disabled {
     }
   }
 
-  /* =========================
-   FORM VALIDATION — live inline hints
-   ========================= */
 .field-hint {
   display: block;
   margin-top: var(--space-1);
@@ -2468,9 +2244,6 @@ input.field-valid {
   border-color: #b9dec3;
 }
 
-/* =========================
-   ONBOARDING — INTRO FORM (Name/Age)
-   ========================= */
 .onboarding-intro-form {
   width: min(420px, 100%);
   margin: var(--space-6) auto 0;
@@ -2517,10 +2290,6 @@ input.field-valid {
   margin-top: var(--space-2);
 }
 
-/* =========================
-   ONBOARDING — FUN FACT BANNER
-   Rotates a general fact while the user fills out onboarding.
-   ========================= */
 .fun-fact-banner {
   width: min(420px, 100%);
   margin: var(--space-6) auto 0;
@@ -2548,9 +2317,6 @@ input.field-valid {
   transition: opacity 0.3s ease;
 }
 
-/* =========================
-   PREVIEW FRAMES — more headroom before scaling kicks in
-   ========================= */
    .mini-preview-frame {
     height: 420px;
   }

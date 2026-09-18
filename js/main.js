@@ -39,6 +39,23 @@ function renderDoc(state) {
     <!DOCTYPE html>
     <html>
       <head>
+        <style>
+          /* Safety net applied to every one of the 79 builds, since
+             they all render through this one function. Browsers
+             don't break in the middle of a single long word by
+             default — a heading like "Postponement" can be wider
+             than a small phone's available space and simply
+             overflow past the edge instead of wrapping. This makes
+             long words wrap instead, without changing how any
+             build looks on a normal-sized screen. */
+          html, body {
+            overflow-x: hidden;
+          }
+          body {
+            overflow-wrap: break-word;
+            word-break: break-word;
+          }
+        </style>
         <style>${state.css}</style>
         <script>
           window.onerror = function (message) {

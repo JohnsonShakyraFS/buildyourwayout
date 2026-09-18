@@ -133,51 +133,70 @@ function renderMoodTrend(data) {
     }
   }
 
-  if (moodTrendChartInstance) {
-    moodTrendChartInstance.destroy();
-  }
+  /* ------------------------------------------------------------
+     Chart.js loads from an external CDN (cdnjs.cloudflare.com).
+     That request can fail for reasons that have nothing to do
+     with this app — a browser extension blocking it, a network
+     hiccup, a CDN outage. If it does, `Chart` is simply undefined
+     here. Previously this threw an uncaught error that stopped
+     the rest of loadJournal() from running at all, which meant
+     the actual journal entries below never rendered either — the
+     page would look stuck on "Loading your journal..." forever,
+     even though the entries themselves have nothing to do with
+     the chart. Now: the chart is skipped gracefully (canvas
+     hidden, trend summary text still shows), and everything else
+     on the page keeps working normally.
+     ------------------------------------------------------------ */
+  if (typeof Chart === "undefined") {
+    console.warn("Chart.js failed to load — skipping the trend chart, journal entries will still render.");
+    canvas.style.display = "none";
+  } else {
+    if (moodTrendChartInstance) {
+      moodTrendChartInstance.destroy();
+    }
 
-  moodTrendChartInstance = new Chart(canvas, {
-    type: "line",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: "Before",
-          data: beforeValues,
-          borderColor: "#c8bda9",
-          backgroundColor: "transparent",
-          tension: 0.3,
-          pointRadius: 3
-        },
-        {
-          label: "After",
-          data: afterValues,
-          borderColor: "#c8a96a",
-          backgroundColor: "transparent",
-          tension: 0.3,
-          pointRadius: 3
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        y: {
-          min: 1,
-          max: 5,
-          ticks: { stepSize: 1 }
-        }
+    moodTrendChartInstance = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "Before",
+            data: beforeValues,
+            borderColor: "#c8bda9",
+            backgroundColor: "transparent",
+            tension: 0.3,
+            pointRadius: 3
+          },
+          {
+            label: "After",
+            data: afterValues,
+            borderColor: "#c8a96a",
+            backgroundColor: "transparent",
+            tension: 0.3,
+            pointRadius: 3
+          }
+        ]
       },
-      plugins: {
-        legend: {
-          position: "bottom",
-          labels: { boxWidth: 10, font: { size: 11 } }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            min: 1,
+            max: 5,
+            ticks: { stepSize: 1 }
+          }
+        },
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: { boxWidth: 10, font: { size: 11 } }
+          }
         }
       }
-    }
-  });
+    });
+  }
 }
 
 /* ============================================================
@@ -221,7 +240,16 @@ async function loadJournal(user) {
     return;
   }
 
-  renderMoodTrend(data || []);
+  /* renderMoodTrend can no longer throw (Chart.js failures are
+     handled internally above), but it's wrapped here too as a
+     last line of defense — nothing about the trend chart should
+     ever be able to prevent the actual entries below from
+     rendering. */
+  try {
+    renderMoodTrend(data || []);
+  } catch (err) {
+    console.error("Error rendering mood trend chart:", err);
+  }
 
   if (!data || data.length === 0) {
     journalEntries.innerHTML = `

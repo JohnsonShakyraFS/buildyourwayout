@@ -1432,6 +1432,7 @@ input:disabled {
     margin: var(--space-7) auto 0;
     border: none;
     cursor: pointer;
+    max-width: 100%;
   }
   
   .journal-panel {

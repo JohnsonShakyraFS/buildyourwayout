@@ -6,9 +6,18 @@ import { redirectAfterAuth } from "./onboarding.js";
 initAuthStatus();
 registerServiceWorker();
 
+/* The "← Back" link only makes sense on the web version, where it
+   returns to the marketing homepage. Inside the native app, this
+   login screen has nothing to go "back" to, so hide it there. */
+if (window.Capacitor?.isNativePlatform?.()) {
+  document.querySelector(".back-link")?.style.setProperty("display", "none");
+}
+
 const authForm = document.getElementById("authForm");
 const emailInput = document.getElementById("authEmail");
 const passwordInput = document.getElementById("authPassword");
+const emailHint = document.getElementById("emailHint");
+const passwordHint = document.getElementById("passwordHint");
 const errorEl = document.getElementById("authError");
 const noticeEl = document.getElementById("authNotice");
 const submitBtn = document.getElementById("authSubmitBtn");
@@ -18,7 +27,7 @@ const toggleText = document.getElementById("authToggleText");
 const toggleBtn = document.getElementById("authToggleBtn");
 const forgotRow = document.getElementById("authForgotRow");
 
-let mode = "signin"; // or "signup"
+let mode = "signup"; // or "signin" — signup is the default first-open experience
 
 /* If already logged in, no need to be here */
 getCurrentUser().then(user => {
@@ -78,9 +87,9 @@ function setMode(newMode) {
     forgotRow.hidden = false;
     passwordInput.setAttribute("autocomplete", "current-password");
   } else {
-    heading.textContent = "Let's get you set up.";
-    subheading.textContent = "Create an account to save your journal.";
-    submitBtn.textContent = "♡ Sign Up";
+    heading.textContent = "Welcome to Build Your Way Out.";
+    subheading.textContent = "Create your account to start turning how you feel into something you can build.";
+    submitBtn.textContent = "♡ Create Account";
     toggleText.textContent = "Already have an account?";
     toggleBtn.textContent = "Log In";
     forgotRow.hidden = true;
@@ -119,7 +128,7 @@ authForm.addEventListener("submit", async (event) => {
 
   const originalLabel = submitBtn.textContent;
   submitBtn.disabled = true;
-  submitBtn.textContent = mode === "signin" ? "Logging in..." : "Signing up...";
+  submitBtn.textContent = mode === "signin" ? "Logging in..." : "Creating account...";
 
   const { data, error } =
     mode === "signin"
@@ -137,7 +146,7 @@ authForm.addEventListener("submit", async (event) => {
 
   if (mode === "signup" && !data.session) {
     // Email confirmation is on — no session yet
-    noticeEl.textContent = "Check your email to confirm your account, then log in.";
+    noticeEl.textContent = "You're almost there! Check your inbox for a confirmation email, then come back and log in.";
     noticeEl.hidden = false;
     setMode("signin");
     return;
@@ -146,4 +155,4 @@ authForm.addEventListener("submit", async (event) => {
   await redirectAfterAuth(data.user);
 });
 
-setMode("signin");
+setMode("signup");

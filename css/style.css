@@ -1307,8 +1307,19 @@ input:disabled {
   .journal-entry-header {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     gap: var(--space-4);
     margin-bottom: var(--space-4);
+  }
+
+  .journal-entry-header > div {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .journal-entry-header time {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .journal-entry-header h3 {
@@ -1388,6 +1399,7 @@ input:disabled {
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
+    min-width: 0;
   }
   .form-row {
     display: grid;
@@ -1429,10 +1441,10 @@ input:disabled {
   .save-btn {
     display: flex;
     width: 250px;
+    max-width: 100%;
     margin: var(--space-7) auto 0;
     border: none;
     cursor: pointer;
-    max-width: 100%;
   }
   
   .journal-panel {
@@ -1441,6 +1453,8 @@ input:disabled {
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow);
+    min-width: 0;
+    max-width: 100%;
   }
   .journal-panel h2 {
     margin-bottom: var(--space-4);
@@ -1658,65 +1672,6 @@ input:disabled {
   font-size: var(--text-base);
   color: var(--text);
 }
-
-/* =========================
-   ONBOARDING — TRANSITION MESSAGE (step 3 of welcome)
-   ========================= */
-   .onboarding-transition {
-    text-align: center;
-  }
-  
-  .onboarding-transition-text {
-    font-size: var(--text-xl);
-    line-height: 1.6;
-    color: var(--text);
-    margin-bottom: var(--space-5);
-  }
-  
-  /* =========================
-     ONBOARDING — UPGRADE BANNER (shown after results)
-     ========================= */
-  .upgrade-banner {
-    position: relative;
-    text-align: center;
-  }
-  
-  .upgrade-banner-close {
-    position: absolute;
-    top: var(--space-4);
-    right: var(--space-4);
-    width: 36px;
-    height: 36px;
-    border: 1px solid var(--border);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.6);
-    color: var(--muted);
-    font-size: var(--text-base);
-    cursor: pointer;
-  }
-  
-  .upgrade-banner-close:hover {
-    border-color: var(--accent);
-    color: var(--text);
-  }
-  
-  .upgrade-banner-intro {
-    max-width: 480px;
-    margin: var(--space-3) auto var(--space-6);
-    color: var(--muted);
-    font-size: var(--text-md);
-    line-height: 1.6;
-  }
-  
-  .upgrade-plan-grid {
-    text-align: left;
-  }
-  
-  @media (max-width: 900px) {
-    .upgrade-plan-grid {
-      grid-template-columns: 1fr;
-    }
-  }
 
   /* RESPONSIVE STYLING ------------------------------------------------------------- */
   @media (max-width: 950px) {
@@ -2132,6 +2087,8 @@ input:disabled {
     display: flex;
     align-items: center;
     gap: var(--space-3);
+    flex-shrink: 0;
+    white-space: nowrap;
   }
   
   .journal-delete-btn {
@@ -2431,4 +2388,63 @@ input.field-valid {
 .mini-preview,
 .workspace-right {
   position: relative;
+}
+
+/* =========================
+   ONBOARDING — TRANSITION MESSAGE (step 3 of welcome)
+   ========================= */
+.onboarding-transition {
+  text-align: center;
+}
+
+.onboarding-transition-text {
+  font-size: var(--text-xl);
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: var(--space-5);
+}
+
+/* =========================
+   ONBOARDING — UPGRADE BANNER (shown after results)
+   ========================= */
+.upgrade-banner {
+  position: relative;
+  text-align: center;
+}
+
+.upgrade-banner-close {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  color: var(--muted);
+  font-size: var(--text-base);
+  cursor: pointer;
+}
+
+.upgrade-banner-close:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.upgrade-banner-intro {
+  max-width: 480px;
+  margin: var(--space-3) auto var(--space-6);
+  color: var(--muted);
+  font-size: var(--text-md);
+  line-height: 1.6;
+}
+
+.upgrade-plan-grid {
+  text-align: left;
+}
+
+@media (max-width: 900px) {
+  .upgrade-plan-grid {
+    grid-template-columns: 1fr;
+  }
 }

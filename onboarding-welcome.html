@@ -33,34 +33,45 @@
 </header>
 
 <section class="mood-header onboarding-welcome-header">
-  <h1>Welcome. Let's get to know you.</h1>
-  <p>
-    A couple of quick questions, then a few more, so we can point you
-    toward builds that actually fit where you're at right now.
-  </p>
+  <h1 id="welcomeHeading">Hello! What's your name?</h1>
+  <p id="welcomeSubheading">Let's get to know each other before we dive in.</p>
 </section>
 
-<form id="introForm" class="onboarding-intro-form">
+<!-- Step 1: Name -->
+<form id="nameForm" class="onboarding-intro-form">
   <div class="form-row">
     <label>
-      What's your name?
-      <input id="nameInput" type="text" placeholder="Your first name" required />
+      Your name
+      <input id="nameInput" type="text" placeholder="Your first name" required autofocus />
     </label>
   </div>
-
-  <div class="form-row">
-    <label>
-      How old are you?
-      <input id="ageInput" type="number" min="13" max="120" placeholder="Your age" required />
-    </label>
-  </div>
-
-  <p id="introError" class="auth-error" aria-live="polite" hidden></p>
-
-  <button type="submit" class="btn primary-btn" id="startOnboardingBtn">
+  <p id="nameError" class="auth-error" aria-live="polite" hidden></p>
+  <button type="submit" class="btn primary-btn" id="nameSubmitBtn">
     Continue
   </button>
 </form>
+
+<!-- Step 2: Age, personalized with their name via JS -->
+<form id="ageForm" class="onboarding-intro-form hidden">
+  <div class="form-row">
+    <label>
+      Your age
+      <input id="ageInput" type="number" min="13" max="120" placeholder="Your age" required />
+    </label>
+  </div>
+  <p id="ageError" class="auth-error" aria-live="polite" hidden></p>
+  <button type="submit" class="btn primary-btn" id="ageSubmitBtn">
+    Continue
+  </button>
+</form>
+
+<!-- Step 3: Transition message before heading into the questionnaire -->
+<div id="transitionStep" class="onboarding-intro-form onboarding-transition hidden">
+  <p id="transitionMessage" class="onboarding-transition-text"></p>
+  <button type="button" class="btn secondary-btn" id="transitionContinueBtn">
+    Continue
+  </button>
+</div>
 
 <div class="fun-fact-banner">
   <p class="fun-fact-label">Did you know?</p>

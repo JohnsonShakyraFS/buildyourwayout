@@ -19,34 +19,85 @@
 <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
 </head>
 <body>
-  <a href="#mainContent" class="skip-link">Skip to main content</a>
+<a href="#mainContent" class="skip-link">Skip to main content</a>
 <main class="project-page onboarding-results-page" id="mainContent">
 
 <header class="page-topbar">
-  <span></span>
-  <a href="index.html" class="logo mood-logo">
-    <span class="logo-icon">❧</span>
+<span></span>
+<a href="index.html" class="logo mood-logo">
+<span class="logo-icon">❧</span>
     Build Your Way Out
-  </a>
-  <span></span>
-  <span id="authStatus" class="auth-status"></span>
+</a>
+<span></span>
+<span id="authStatus" class="auth-status"></span>
 </header>
 
-<section class="project-info-card onboarding-results-card">
-  <p class="eyebrow">Here's what we learned about you.</p>
-  <h1 id="profileName">—</h1>
-  <p id="profileBlurb"></p>
+<section class="project-info-card onboarding-results-card" id="resultsCard">
+<p class="eyebrow">Awesome! You're classified as a</p>
+<h1 id="profileName">—</h1>
+<p id="profileBlurb"></p>
 
-  <div class="starting-path">
-    <h3>Your starting path</h3>
-    <ul id="profileTags" class="starting-path-tags"></ul>
-  </div>
+<div class="starting-path">
+<h3>Your starting path</h3>
+<ul id="profileTags" class="starting-path-tags"></ul>
+</div>
 
-  <p id="onboardingSaveError" class="auth-error" hidden></p>
+<p id="onboardingSaveError" class="auth-error" hidden></p>
 
-  <button type="button" id="startBuildingBtn" class="btn primary-btn project-btn">
+<button type="button" id="startBuildingBtn" class="btn primary-btn project-btn">
     Ready to build your way out? →
-  </button>
+</button>
+</section>
+
+<!-- Shown after tapping the button above, instead of navigating
+     away immediately. Free/dismiss goes straight to your builds;
+     picking a plan heads to the subscription setup on Account. -->
+<section class="project-info-card upgrade-banner hidden" id="upgradeBanner">
+  <button type="button" class="upgrade-banner-close" id="upgradeBannerClose" aria-label="Close and go to my builds">✕</button>
+  <p class="eyebrow">One more thing</p>
+  <h2>Want more out of your builds?</h2>
+  <p class="upgrade-banner-intro">
+    You can keep using every beginner build for free, or unlock more with a plan.
+    You can always decide later from your account.
+  </p>
+
+  <div class="plan-grid upgrade-plan-grid">
+    <div class="plan-card" data-plan="free">
+      <h3>Free</h3>
+      <p class="plan-price">$0<span>/mo</span></p>
+      <ul class="plan-features">
+        <li>All beginner builds</li>
+        <li>Mood journal &amp; trends</li>
+      </ul>
+      <button type="button" class="btn secondary-btn upgrade-plan-btn" data-plan="free">
+        Continue Free
+      </button>
+    </div>
+
+    <div class="plan-card" data-plan="plus">
+      <h3>Plus</h3>
+      <p class="plan-price">$5<span>/mo</span></p>
+      <ul class="plan-features">
+        <li>Everything in Free</li>
+        <li>Intermediate builds unlocked</li>
+      </ul>
+      <button type="button" class="btn secondary-btn upgrade-plan-btn" data-plan="plus">
+        Choose Plus
+      </button>
+    </div>
+
+    <div class="plan-card" data-plan="premium">
+      <h3>Premium</h3>
+      <p class="plan-price">$12<span>/mo</span></p>
+      <ul class="plan-features">
+        <li>Everything in Plus</li>
+        <li>All builds unlocked</li>
+      </ul>
+      <button type="button" class="btn primary-btn upgrade-plan-btn" data-plan="premium">
+        Choose Premium
+      </button>
+    </div>
+  </div>
 </section>
 
 </main>

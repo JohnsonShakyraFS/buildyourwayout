@@ -1658,6 +1658,65 @@ input:disabled {
   color: var(--text);
 }
 
+/* =========================
+   ONBOARDING — TRANSITION MESSAGE (step 3 of welcome)
+   ========================= */
+   .onboarding-transition {
+    text-align: center;
+  }
+  
+  .onboarding-transition-text {
+    font-size: var(--text-xl);
+    line-height: 1.6;
+    color: var(--text);
+    margin-bottom: var(--space-5);
+  }
+  
+  /* =========================
+     ONBOARDING — UPGRADE BANNER (shown after results)
+     ========================= */
+  .upgrade-banner {
+    position: relative;
+    text-align: center;
+  }
+  
+  .upgrade-banner-close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    color: var(--muted);
+    font-size: var(--text-base);
+    cursor: pointer;
+  }
+  
+  .upgrade-banner-close:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  
+  .upgrade-banner-intro {
+    max-width: 480px;
+    margin: var(--space-3) auto var(--space-6);
+    color: var(--muted);
+    font-size: var(--text-md);
+    line-height: 1.6;
+  }
+  
+  .upgrade-plan-grid {
+    text-align: left;
+  }
+  
+  @media (max-width: 900px) {
+    .upgrade-plan-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* RESPONSIVE STYLING ------------------------------------------------------------- */
   @media (max-width: 950px) {
     .navbar {

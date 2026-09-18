@@ -522,7 +522,13 @@ async function saveReflection(event) {
     submitButton.textContent = "♡ Save Reflection";
   }
 
-  await loadJournal(user);
+  /* Give them a moment to actually see the success message, then
+     transition to the full journal page instead of staying here.
+     The inline journal panel on this page would otherwise just
+     re-render the same info a second time in a smaller space. */
+  setTimeout(() => {
+    window.location.href = "journal.html";
+  }, 1800);
 }
 
 /* ============================================================

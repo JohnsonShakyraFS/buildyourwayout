@@ -42,7 +42,7 @@ async function loadUserPlan() {
   userPlan = data?.plan || "free";
 }
 
-const PLAN_RANK = { free: 0, plus: 1, premium: 2 };
+const PLAN_RANK = { free: 0, plus: 1 };
 
 function planUnlocks(requiredPlan) {
   return PLAN_RANK[userPlan] >= PLAN_RANK[requiredPlan];

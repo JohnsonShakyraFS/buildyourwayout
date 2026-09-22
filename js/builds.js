@@ -9,7 +9,7 @@
    No other file needs to change.
 
    difficulty: "beginner" | "intermediate" | "advanced"
-   requiredPlan: "free" | "plus" | "premium" — currently every
+   requiredPlan: "free" | "plus" — beginner builds are free,
    build is set to "free" as a placeholder until real billing
    exists. Bumping this later is a one-word change per build.
 
@@ -1385,7 +1385,7 @@
     "decision-weigher": {
       mood: "overthinking",
       difficulty: "intermediate",
-      requiredPlan: "free",
+      requiredPlan: "plus",
       title: "Clarity Scale",
       description: "Build a tool that turns three honest sliders into a single clarity score.",
       steps: [
@@ -1847,7 +1847,7 @@
     "companion-note-wall": {
       mood: "lonely",
       difficulty: "intermediate",
-      requiredPlan: "free",
+      requiredPlan: "plus",
       title: "Comfort Board",
       description: "Build a board of comforting notes you can drag around and arrange however feels right.",
       steps: [
@@ -1977,7 +1977,7 @@
     "habit-streak-tracker": {
       mood: "unmotivated",
       difficulty: "intermediate",
-      requiredPlan: "free",
+      requiredPlan: "plus",
       title: "Habit Streak Tracker",
       description: "Build a tracker that counts consecutive days for a habit and resets if you miss a day.",
       steps: [
@@ -2108,7 +2108,7 @@
   "worry-postponement-box": {
     mood: "anxious",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Worry Postponement Box",
     description: "Set a worry aside on purpose, and come back to it once some time has passed.",
     steps: [
@@ -2302,7 +2302,7 @@
   "steady-hands-trace": {
     mood: "anxious",
     difficulty: "advanced",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Steady Hands",
     description: "Build a tracing tool that measures how steady your hand is against a straight line.",
     steps: [
@@ -2429,7 +2429,7 @@
   "anxiety-thermometer-log": {
     mood: "anxious",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Anxiety Thermometer",
     description: "Build a tool that logs how intense things feel right now, and watch your session build a little history.",
     steps: [
@@ -2628,7 +2628,7 @@
   "box-breathing-counter": {
     mood: "anxious",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Box Breathing",
     description: "Build a guided cycle through inhale, hold, exhale, hold — four seconds each.",
     steps: [
@@ -2922,7 +2922,7 @@
   "calm-routine-builder": {
     mood: "anxious",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Calm Routine Builder",
     description: "Build a short routine of calming steps, put them in order, then walk through it one at a time.",
     steps: [
@@ -3064,7 +3064,7 @@
   "hold-to-release": {
     mood: "anxious",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Hold to Release",
     description: "Build a button that asks you to press and hold steadily before it lets go.",
     steps: [
@@ -3176,7 +3176,7 @@
   "loop-breaker": {
     mood: "overthinking",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Loop Breaker",
     description: "Build a tool that notices when you keep circling back to the exact same thought.",
     steps: [
@@ -3277,7 +3277,7 @@
   "base-rate-check": {
     mood: "overthinking",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Base Rate Check",
     description: "Build a tool that compares your feared prediction against what typically happens.",
     steps: [
@@ -3380,7 +3380,7 @@
   "elimination-bracket": {
     mood: "overthinking",
     difficulty: "advanced",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Elimination Bracket",
     description: "Build a tournament-style tool that narrows a list of options down to one, one head-to-head choice at a time.",
     steps: [
@@ -3531,7 +3531,7 @@
   "confidence-decay-meter": {
     mood: "overthinking",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Confidence Decay",
     description: "Build a meter that fades over time unless you actively reaffirm it.",
     steps: [
@@ -3835,7 +3835,7 @@
   "certainty-contract": {
     mood: "overthinking",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Certainty Contract",
     description: "Build a tool that locks in how certain you need to be, then checks your real decision against it.",
     steps: [
@@ -4217,7 +4217,7 @@
   "task-breakdown-chunker": {
     mood: "unmotivated",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Task Breakdown",
     description: "Build a tool that turns one big, overwhelming task into a few tiny starter steps.",
     steps: [
@@ -4319,7 +4319,7 @@
   "momentum-ball": {
     mood: "unmotivated",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Momentum Ball",
     description: "Build a ball that speeds up with every small action, and slowly loses speed if you stop.",
     steps: [
@@ -4425,7 +4425,7 @@
   "excuse-buster": {
     mood: "unmotivated",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Excuse Buster",
     description: "Build a tool that recognizes common excuses and gives you a real response back.",
     steps: [
@@ -4624,7 +4624,7 @@
   "task-roulette-wheel": {
     mood: "unmotivated",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Task Roulette",
     description: "Build a spinning wheel that picks one of your tasks for you, so you don't have to decide.",
     steps: [
@@ -4823,7 +4823,7 @@
   "domino-chain": {
     mood: "unmotivated",
     difficulty: "advanced",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Domino Chain",
     description: "Build a row of dominoes where clicking the first one starts a chain reaction through all the rest.",
     steps: [
@@ -5025,7 +5025,7 @@
   "accountability-ping": {
     mood: "unmotivated",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Accountability Ping",
     description: "Build a tool that schedules a reminder for future you, and lets it show up unprompted.",
     steps: [
@@ -5217,7 +5217,7 @@
   "self-compassion-rewriter": {
     mood: "sad",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Kinder Words",
     description: "Build a tool that takes a harsh thought about yourself and rewrites it a little kinder.",
     steps: [
@@ -5317,7 +5317,7 @@
   "comfort-memory-match": {
     mood: "sad",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Memory Match",
     description: "Build a matching game with a small deck of comforting symbols.",
     steps: [
@@ -5719,7 +5719,7 @@
   "warm-light-dimmer": {
     mood: "sad",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Warm Light",
     description: "Build a light panel that blends from cool to warm as you slide, in real time.",
     steps: [
@@ -5919,7 +5919,7 @@
   "cumulative-hug-timer": {
     mood: "sad",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Self Hug Timer",
     description: "Build a button you hold like a hug, adding up total time across as many holds as you need.",
     steps: [
@@ -6010,7 +6010,7 @@
   "comfort-object-builder": {
     mood: "sad",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Comfort Object Builder",
     description: "Build a tool that combines a few small choices into your own imaginary comfort object.",
     steps: [
@@ -6113,7 +6113,7 @@
   "wave-of-grief": {
     mood: "sad",
     difficulty: "advanced",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Wave of Grief",
     description: "Build a visual wave that rises and falls each time you click, then gently resets after a few waves.",
     steps: [
@@ -6214,7 +6214,7 @@
   "punch-counter": {
     mood: "angry",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Punch Counter",
     description: "Build a counter where each punch needs a little more patience than the last before it counts.",
     steps: [
@@ -6317,7 +6317,7 @@
   "shred-it": {
     mood: "angry",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Shred It",
     description: "Build a tool that lets you type something out, then watch it get torn apart.",
     steps: [
@@ -6428,7 +6428,7 @@
   "volume-knob": {
     mood: "angry",
     difficulty: "advanced",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Volume Knob",
     description: "Build a rotary knob you drag around in a circle to crank up how loud you'd yell, silently.",
     steps: [
@@ -6544,7 +6544,7 @@
   "rage-journal": {
     mood: "angry",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Rage Journal",
     description: "Build a journal where each entry disappears on its own after a little while.",
     steps: [
@@ -6644,7 +6644,7 @@
   "durability-wall": {
     mood: "angry",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Durability Wall",
     description: "Build a wall of tiles that each take more than one hit to break, and track it per tile.",
     steps: [
@@ -6935,7 +6935,7 @@
   "combo-clicker": {
     mood: "angry",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Combo Release",
     description: "Build a combo counter that keeps climbing as long as you keep clicking quickly.",
     steps: [
@@ -7236,7 +7236,7 @@
   "branching-dialogue-companion": {
     mood: "lonely",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "A Quiet Chat",
     description: "Build a small branching conversation with a companion who's just checking in.",
     steps: [
@@ -7461,7 +7461,7 @@
   "window-lights": {
     mood: "lonely",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Window Lights",
     description: "Build a row of windows you can light up, where sometimes another one lights up on its own.",
     steps: [
@@ -7654,7 +7654,7 @@
   "echo-chamber": {
     mood: "lonely",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Echo Chamber",
     description: "Build a tool that sends your words out and echoes them back to you, fading each time.",
     steps: [
@@ -7850,7 +7850,7 @@
   "orbit-companion": {
     mood: "lonely",
     difficulty: "advanced",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Orbit Companion",
     description: "Build a small moon that orbits a center point, and bring it closer, orbit by orbit.",
     steps: [
@@ -8048,7 +8048,7 @@
   "companion-breathing-sync": {
     mood: "lonely",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Breathe Together",
     description: "Build two pulsing circles — yours and a companion's — breathing in gentle offset from each other.",
     steps: [
@@ -8144,7 +8144,7 @@
   "compliment-ping-pong": {
     mood: "lonely",
     difficulty: "intermediate",
-    requiredPlan: "free",
+    requiredPlan: "plus",
     title: "Compliment Ping-Pong",
     description: "Build a back-and-forth exchange where every kind word you send gets one back.",
     steps: [

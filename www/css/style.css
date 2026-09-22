@@ -1777,6 +1777,31 @@ input:disabled {
   
     .mood-card {
       width: 100%;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+
+    /* The icon and the h2/p wrapper are siblings inside .mood-card.
+       display: contents makes the wrapper disappear from the box
+       model, so its children (h2, p) become direct flex items
+       alongside the icon — letting us freely reorder all three
+       with `order`, regardless of how they're nested in the HTML. */
+    .mood-card > div {
+      display: contents;
+    }
+
+    .mood-card h2 {
+      order: 1;
+    }
+
+    .mood-icon {
+      order: 2;
+      margin: var(--space-2) 0;
+    }
+
+    .mood-card p {
+      order: 3;
     }
   }
 

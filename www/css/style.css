@@ -2519,3 +2519,35 @@ input.field-valid {
   color: var(--muted);
   line-height: 1.5;
 }
+
+/* =========================
+   ONBOARDING — PURPOSE WALKTHROUGH
+   Shown once, after the questionnaire results, before landing
+   on Mood Builds. Explains the mood -> build -> reflect loop.
+   ========================= */
+.onboarding-walkthrough-step {
+  text-align: center;
+}
+
+.walkthrough-eyebrow {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-hover);
+  margin-bottom: var(--space-3);
+}
+
+.walkthrough-title {
+  font-family: "Playfair Display", serif;
+  font-size: var(--h2-size);
+  font-weight: 600;
+  margin-bottom: var(--space-4);
+}
+
+.walkthrough-text {
+  font-size: var(--text-md);
+  line-height: 1.65;
+  color: var(--muted);
+  margin-bottom: var(--space-6);
+}

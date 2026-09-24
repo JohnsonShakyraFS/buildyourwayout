@@ -18,92 +18,97 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 </head>
 <body>
-  <a href="#mainContent" class="skip-link">Skip to main content</a>
-  <main class="reflection-page" id="mainContent">
 
-  <header>
-  <a href="index.html" class="logo">
-  <span class="logo-icon">❧</span>
-          Build Your Way Out
-  </a>
-  <nav class="navbar">
-  <div class="nav-links" id="navLinks"></div>
-  <span id="authStatus" class="auth-status"></span>
-  </nav>
-  </header>
+<main class="reflection-page">
 
-  <section class="reflection-header">
-  <h1>Your Build Journal.</h1>
-  <p>Every build you've completed, and how your mood has moved over time.</p>
-  <p id="journalActionError" class="auth-error" aria-live="polite" hidden></p>
-  </section>
+<header>
+<a href="index.html" class="logo">
+<span class="logo-icon">❧</span>
+        Build Your Way Out
+</a>
+<nav class="navbar">
+<div class="nav-links" id="navLinks"></div>
+<span id="authStatus" class="auth-status"></span>
+</nav>
+</header>
 
-  <div class="journal-standalone">
-    <section class="journal-panel">
-      <h2>Emotional Trend</h2>
+<section class="reflection-header">
+<h1>Your Build Journal.</h1>
+<p>Every build you've completed, and how your mood has moved over time.</p>
+<p id="journalActionError" class="auth-error" hidden></p>
+</section>
 
-      <section class="mood-trend-panel">
-        <h3 class="mood-trend-heading">Your emotional trend</h3>
-        <p id="moodTrendSummary" class="mood-trend-summary"></p>
-        <canvas id="moodTrendChart" height="160" aria-hidden="true"></canvas>
-      </section>
+<div class="journal-standalone">
+  <section class="journal-panel">
+    <h2>Emotional Trend</h2>
 
-      <div id="supportBanner" class="support-banner hidden" role="status">
-        <p class="support-banner-text">
-          Your recent check-ins have been on the lower end for a little while.
-          That doesn't mean anything is wrong with you — just that it might help
-          to talk to someone.
-        </p>
-        <div class="support-banner-links">
-          <a href="tel:988">Call or text 988</a>
-          <span aria-hidden="true">·</span>
-          <a href="tel:18006624357">Call 1-800-662-4357</a>
-          <span aria-hidden="true">·</span>
-          <a href="https://www.samhsa.gov/find-help/helplines/national-helpline" target="_blank" rel="noopener">
-            SAMHSA National Helpline
-          </a>
-        </div>
-        <p class="support-banner-disclaimer">
-          Build Your Way Out doesn't diagnose or provide therapy — it's a
-          self-reflection tool. If you're not in the U.S., please search for
-          your local crisis or support line.
-        </p>
-        <button type="button" id="dismissSupportBanner" class="support-banner-dismiss">
-          Dismiss
-        </button>
-      </div>
-
-      <p id="journalScopeNote" class="journal-scope-note"></p>
-
-      <div id="journalEntries" class="journal-list">
-        <!-- JavaScript renders past reflections here -->
-      </div>
+    <section class="mood-trend-panel">
+      <h3 class="mood-trend-heading">Your emotional trend</h3>
+      <p id="moodTrendSummary" class="mood-trend-summary"></p>
+      <canvas id="moodTrendChart" height="160"></canvas>
     </section>
-  </div>
 
-  </main>
+    <div id="supportBanner" class="support-banner hidden" role="status">
+      <p class="support-banner-text">
+        Your recent check-ins have been on the lower end for a little while.
+        That doesn't mean anything is wrong with you — just that it might help
+        to talk to someone.
+      </p>
+      <div class="support-banner-links">
+        <a href="tel:988">Call or text 988</a>
+        <span aria-hidden="true">·</span>
+        <a href="sms:741741">Text HOME to 741741</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://www.samhsa.gov/find-help/national-helpline" target="_blank" rel="noopener">
+          SAMHSA National Helpline
+        </a>
+      </div>
+      <p class="support-banner-disclaimer">
+        Build Your Way Out doesn't diagnose or provide therapy — it's a
+        self-reflection tool. If you're not in the U.S., please search for
+        your local crisis or support line.
+      </p>
+      <button type="button" id="dismissSupportBanner" class="support-banner-dismiss">
+        Dismiss
+      </button>
+    </div>
 
-  <script type="module" src="js/journal.js"></script>
+    <div class="journal-scope-row">
+      <p id="journalScopeNote" class="journal-scope-note"></p>
+      <button type="button" id="exportJournalBtn" class="btn secondary-btn journal-export-btn">
+        Export My Journal
+      </button>
+    </div>
 
-  <footer class="site-footer">
-  <p class="crisis-note">
-  <strong>If you're in crisis:</strong> in the U.S., call or text
-  <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
-  <strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
-        both free, confidential, and available 24/7. Outside the U.S., please search
-        for your local emergency or crisis line.
-  </p>
-  <p class="footer-disclaimer">
-        Build Your Way Out is a self-reflection and skill-building tool. It is not
-        therapy, medical advice, or a crisis service.
-  </p>
-  <p class="footer-links">
-  <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
-  </p>
-  </footer>
+    <div id="journalEntries" class="journal-list">
+      <!-- JavaScript renders past reflections here -->
+    </div>
+  </section>
+</div>
+
+</main>
+
+<script type="module" src="js/journal.js"></script>
+
+<footer class="site-footer">
+<p class="crisis-note">
+<strong>If you're in crisis:</strong> in the U.S., call or text
+<a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+<strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+      both free, confidential, and available 24/7. Outside the U.S., please search
+      for your local emergency or crisis line.
+</p>
+<p class="footer-disclaimer">
+      Build Your Way Out is a self-reflection and skill-building tool. It is not
+      therapy, medical advice, or a crisis service.
+</p>
+<p class="footer-links">
+<a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+</p>
+</footer>
 
 </body>
 </html>

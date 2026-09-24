@@ -2473,3 +2473,33 @@ input.field-valid {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================
+   JOURNAL — EXPORT BUTTON
+   ========================= */
+.journal-scope-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.journal-export-btn {
+  min-height: 40px;
+  padding: 0 var(--space-5);
+  font-size: var(--text-sm);
+  flex-shrink: 0;
+}
+
+@media (max-width: 500px) {
+  .journal-scope-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .journal-export-btn {
+    width: 100%;
+  }
+}

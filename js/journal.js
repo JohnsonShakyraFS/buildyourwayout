@@ -200,6 +200,114 @@ function renderMoodTrend(data) {
 }
 
 /* ============================================================
+   EXPORT JOURNAL
+   Builds a plain Markdown file of every reflection and triggers
+   a download — no external library, so nothing here can fail
+   the way Chart.js loading from a CDN did. This directly
+   fulfills what the Privacy Policy already promises ("you can
+   access and export your reflections").
+   ============================================================ */
+
+function formatReflectionAsMarkdown(reflection) {
+  const date = new Date(reflection.created_at).toLocaleDateString(undefined, {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
+
+  const beforeLabel = MOOD_LABELS[reflection.mood_before] || "—";
+  const afterLabel = MOOD_LABELS[reflection.mood_after] || "—";
+
+  let entry = `## ${reflection.project || "Build Reflection"}\n`;
+  entry += `**Date:** ${date}\n\n`;
+  entry += `**Mood:** ${beforeLabel} → ${afterLabel}\n\n`;
+
+  if (reflection.mood_note) {
+    entry += `**In their own words:** ${reflection.mood_note}\n\n`;
+  }
+
+  entry += `**What I learned:** ${reflection.lesson || "—"}\n\n`;
+  entry += `---\n\n`;
+
+  return entry;
+}
+
+async function exportJournal(user) {
+  const exportBtn = document.getElementById("exportJournalBtn");
+  if (exportBtn) {
+    exportBtn.disabled = true;
+    exportBtn.textContent = "Preparing your export...";
+  }
+
+  const { data, error } = await supabase
+    .from("reflections")
+    .select(`
+      id,
+      project,
+      mood_before,
+      mood_after,
+      mood_note,
+      lesson,
+      created_at
+    `)
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: true });
+
+  if (exportBtn) {
+    exportBtn.disabled = false;
+    exportBtn.textContent = "Export My Journal";
+  }
+
+  if (error) {
+    console.error("Error exporting journal:", error);
+    alert("We couldn't export your journal right now. Please try again.");
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    alert("You don't have any reflections saved yet — nothing to export.");
+    return;
+  }
+
+  const exportDate = new Date().toLocaleDateString(undefined, {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  });
+
+  let markdown = `# Your Build Journal\n\n`;
+  markdown += `Exported from Build Your Way Out on ${exportDate}\n\n`;
+  markdown += `${data.length} reflection${data.length === 1 ? "" : "s"}\n\n`;
+  markdown += `---\n\n`;
+  markdown += data.map(formatReflectionAsMarkdown).join("");
+
+  const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `build-your-way-out-journal-${new Date().toISOString().slice(0, 10)}.md`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+}
+
+function setupExportButton() {
+  const exportBtn = document.getElementById("exportJournalBtn");
+  if (!exportBtn) return;
+
+  exportBtn.addEventListener("click", async () => {
+    const user = await getCurrentUser();
+    if (!user) return;
+    await exportJournal(user);
+  });
+}
+
+setupExportButton();
+
+/* ============================================================
    LOAD PAST REFLECTIONS
    ============================================================ */
 

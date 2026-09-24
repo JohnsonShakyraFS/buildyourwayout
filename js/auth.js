@@ -5,14 +5,25 @@ import { supabase } from "./supabaseClient.js";
    by default — you can turn that off in Supabase under
    Authentication → Providers → Email → "Confirm email" while
    you're testing, and turn it back on before launch.
+
+   captchaToken is optional so this stays backward-compatible —
+   only login.js's Turnstile widget actually supplies one.
    ------------------------------------------------------------ */
-export async function signUp(email, password) {
-  const { data, error } = await supabase.auth.signUp({ email, password });
+export async function signUp(email, password, captchaToken) {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: captchaToken ? { captchaToken } : undefined
+  });
   return { data, error };
 }
 
-export async function signIn(email, password) {
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+export async function signIn(email, password, captchaToken) {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+    options: captchaToken ? { captchaToken } : undefined
+  });
   return { data, error };
 }
 

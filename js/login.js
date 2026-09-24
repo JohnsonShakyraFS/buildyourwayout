@@ -27,6 +27,29 @@ const toggleText = document.getElementById("authToggleText");
 const toggleBtn = document.getElementById("authToggleBtn");
 const forgotRow = document.getElementById("authForgotRow");
 
+/* ------------------------------------------------------------
+   Turnstile (Cloudflare's CAPTCHA). The widget itself renders
+   automatically from the data-sitekey div in login.html; these
+   two globals are the callbacks it calls directly, since that's
+   how Turnstile's own script expects to report a token.
+   ------------------------------------------------------------ */
+let turnstileToken = null;
+
+window.onTurnstileSuccess = function (token) {
+  turnstileToken = token;
+};
+
+window.onTurnstileExpired = function () {
+  turnstileToken = null;
+};
+
+function resetTurnstile() {
+  turnstileToken = null;
+  if (window.turnstile) {
+    window.turnstile.reset();
+  }
+}
+
 let mode = "signup"; // or "signin" — signup is the default first-open experience
 
 /* If already logged in, no need to be here */
@@ -123,6 +146,12 @@ authForm.addEventListener("submit", async (event) => {
   errorEl.hidden = true;
   noticeEl.hidden = true;
 
+  if (!turnstileToken) {
+    errorEl.textContent = "Please complete the verification check before continuing.";
+    errorEl.hidden = false;
+    return;
+  }
+
   const email = emailInput.value.trim();
   const password = passwordInput.value;
 
@@ -132,11 +161,16 @@ authForm.addEventListener("submit", async (event) => {
 
   const { data, error } =
     mode === "signin"
-      ? await signIn(email, password)
-      : await signUp(email, password);
+      ? await signIn(email, password, turnstileToken)
+      : await signUp(email, password, turnstileToken);
 
   submitBtn.disabled = false;
   submitBtn.textContent = originalLabel;
+
+  // Turnstile tokens are single-use — reset the widget after every
+  // attempt, whether it succeeded or failed, so the next submit
+  // (or a retry after an error) always has a fresh token.
+  resetTurnstile();
 
   if (error) {
     errorEl.textContent = friendlyAuthError(error.message);

@@ -5,8 +5,14 @@ function renderLinks(user) {
   if (!el) return;
 
   if (user) {
+    // Inside the native app, "Home" points to the marketing
+    // homepage — not useful once someone's already signed in and
+    // using the app. The website keeps it, since there it's a
+    // normal, reachable page in the same navigation.
+    const isNativeApp = window.Capacitor?.isNativePlatform?.();
+
     el.innerHTML = `
-      <a href="index.html">Home</a>
+      ${isNativeApp ? "" : '<a href="index.html">Home</a>'}
       <a href="mood.html">Mood Builds</a>
       <a href="journal.html">Journal</a>
       <a href="account.html">Account</a>

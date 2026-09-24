@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Before You Begin | Build Your Way Out</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+</head>
+<body>
+
+<main class="mood-page onboarding-page" id="mainContent">
+
+<header class="page-topbar">
+  <span></span>
+  <a href="index.html" class="logo mood-logo">
+    <span class="logo-icon">❧</span>
+    Build Your Way Out
+  </a>
+  <span></span>
+  <span id="authStatus" class="auth-status"></span>
+</header>
+
+<section class="mood-header onboarding-welcome-header">
+  <h1>Here's how this works.</h1>
+  <p>Three quick things before you dive in.</p>
+</section>
+
+<!-- Step 1 -->
+<div id="walkStep1" class="onboarding-intro-form onboarding-walkthrough-step">
+  <p class="walkthrough-eyebrow">Step 1 of 3</p>
+  <h2 class="walkthrough-title">Pick how you're feeling.</h2>
+  <p class="walkthrough-text">
+    Every build is matched to a mood. Anxious, overthinking, unmotivated —
+    whatever it is, we'll hand you something built specifically for that
+    feeling.
+  </p>
+  <button type="button" class="btn primary-btn walkthrough-next-btn">Next</button>
+</div>
+
+<!-- Step 2 -->
+<div id="walkStep2" class="onboarding-intro-form onboarding-walkthrough-step hidden">
+  <p class="walkthrough-eyebrow">Step 2 of 3</p>
+  <h2 class="walkthrough-title">Build something small, step by step.</h2>
+  <p class="walkthrough-text">
+    You don't need to know how to code. Each build walks you through simple,
+    guided edits — one small change at a time — until you've made something
+    real.
+  </p>
+  <button type="button" class="btn primary-btn walkthrough-next-btn">Next</button>
+</div>
+
+<!-- Step 3 -->
+<div id="walkStep3" class="onboarding-intro-form onboarding-walkthrough-step hidden">
+  <p class="walkthrough-eyebrow">Step 3 of 3</p>
+  <h2 class="walkthrough-title">Check back in with yourself.</h2>
+  <p class="walkthrough-text">
+    Once you're done building, you'll reflect for a moment on how you feel
+    now compared to before. That's the whole point — turning what you're
+    feeling into something you made, and noticing the shift.
+  </p>
+  <button type="button" class="btn primary-btn" id="finishWalkthroughBtn">
+    Let's Start Building →
+  </button>
+</div>
+
+</main>
+
+<script type="module" src="js/onboarding-walkthrough.js"></script>
+
+<footer class="site-footer">
+<p class="crisis-note">
+<strong>If you're in crisis:</strong> in the U.S., call or text
+<a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+<strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+  both free, confidential, and available 24/7. Outside the U.S., please search
+  for your local emergency or crisis line.
+</p>
+<p class="footer-disclaimer">
+  Build Your Way Out is a self-reflection and skill-building tool. It is not
+  therapy, medical advice, or a crisis service.
+</p>
+<p class="footer-links">
+<a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+</p>
+<p class="footer-links">Questions or feedback? <a href="mailto:shakyrajohnson800@gmail.com">shakyrajohnson800@gmail.com</a></p>
+</footer>
+</body>
+</html>

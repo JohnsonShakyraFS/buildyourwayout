@@ -84,10 +84,11 @@ startBtn.addEventListener("click", async () => {
   upgradeBanner.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-/* Closing the banner (the X) means "not right now" — go straight
-   to builds on the free plan, same as picking "Continue Free". */
+/* Closing the banner (the X) means "not right now" — go through
+   the same one-time purpose walkthrough as everyone else, then
+   straight to builds. */
 upgradeBannerClose.addEventListener("click", () => {
-  window.location.href = "mood.html";
+  window.location.href = "onboarding-walkthrough.html?next=mood.html";
 });
 
 document.querySelectorAll(".upgrade-plan-btn").forEach((btn) => {
@@ -95,15 +96,15 @@ document.querySelectorAll(".upgrade-plan-btn").forEach((btn) => {
     const plan = btn.dataset.plan;
 
     if (plan === "free") {
-      window.location.href = "mood.html";
+      window.location.href = "onboarding-walkthrough.html?next=mood.html";
       return;
     }
 
-    // Plus/Premium: billing isn't connected yet, so this heads to
-    // the Subscription section already sitting on the Account page
-    // — once Stripe is wired up in Phase 9, only this destination
-    // needs to change, nothing else in this flow does.
-    window.location.href = "account.html";
+    // Plus/Premium: billing isn't connected yet, so after the
+    // walkthrough this heads to the Subscription section already
+    // sitting on the Account page — once Stripe is wired up in
+    // Phase 9, only this destination needs to change.
+    window.location.href = "onboarding-walkthrough.html?next=account.html";
   });
 });
 

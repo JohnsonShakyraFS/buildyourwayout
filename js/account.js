@@ -10,6 +10,12 @@ const nameForm = document.getElementById("nameForm");
 const displayNameInput = document.getElementById("displayNameInput");
 const nameNotice = document.getElementById("nameNotice");
 
+const emailChangeForm = document.getElementById("emailChangeForm");
+const newEmailInput = document.getElementById("newEmailInput");
+const emailChangeSaveBtn = document.getElementById("emailChangeSaveBtn");
+const emailChangeNotice = document.getElementById("emailChangeNotice");
+const emailChangeError = document.getElementById("emailChangeError");
+
 const prefEmailReminders = document.getElementById("prefEmailReminders");
 const prefShowMoodNotes = document.getElementById("prefShowMoodNotes");
 const prefsSaveBtn = document.getElementById("prefsSaveBtn");
@@ -27,9 +33,6 @@ const newPasswordConfirmInput = document.getElementById("newPasswordConfirm");
 const passwordError = document.getElementById("passwordError");
 const passwordNotice = document.getElementById("passwordNotice");
 const passwordSubmitBtn = document.getElementById("passwordSubmitBtn");
-
-const newPasswordHint = document.getElementById("newPasswordHint");
-const passwordMatchHint = document.getElementById("passwordMatchHint");
 
 const showDeleteBtn = document.getElementById("showDeleteBtn");
 const deleteConfirmBlock = document.getElementById("deleteConfirmBlock");
@@ -59,10 +62,53 @@ getCurrentUser().then(async (user) => {
 
   currentUserId = user.id;
   emailLine.textContent = `Signed in as ${user.email}`;
+  newEmailInput.value = user.email;
 
   await loadProfile(user.id);
   await loadAccountDetails(user.id);
   await loadProgressAndHistory(user.id);
+});
+
+/* ============================================================
+   CHANGE EMAIL
+   Supabase's default "Secure email change" sends a confirmation
+   link to BOTH the current and new address — the change only
+   commits once both are clicked. This matches Supabase's own
+   documented default behavior, so the in-app copy sets that
+   expectation up front rather than surprising anyone.
+   ============================================================ */
+
+emailChangeForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  emailChangeNotice.hidden = true;
+  emailChangeError.hidden = true;
+
+  const newEmail = newEmailInput.value.trim();
+
+  if (!newEmail) {
+    emailChangeError.textContent = "Please enter an email address.";
+    emailChangeError.hidden = false;
+    return;
+  }
+
+  emailChangeSaveBtn.disabled = true;
+  emailChangeSaveBtn.textContent = "Sending confirmation...";
+
+  const { error } = await supabase.auth.updateUser({ email: newEmail });
+
+  emailChangeSaveBtn.disabled = false;
+  emailChangeSaveBtn.textContent = "Update Email";
+
+  if (error) {
+    console.error("Error updating email:", error);
+    emailChangeError.textContent = error.message || "We couldn't start that email change. Please try again.";
+    emailChangeError.hidden = false;
+    return;
+  }
+
+  emailChangeNotice.textContent =
+    "Check both your current and new email inboxes — click the confirmation link in each to finish changing your email.";
+  emailChangeNotice.hidden = false;
 });
 
 /* ============================================================
@@ -345,46 +391,7 @@ function escapeHtml(value) {
 /* ============================================================
    CHANGE PASSWORD
    ============================================================ */
-   function validateNewPasswordLive() {
-    if (newPasswordInput.value === "") {
-      newPasswordHint.textContent = "";
-      newPasswordHint.className = "field-hint";
-      newPasswordInput.classList.remove("field-invalid", "field-valid");
-      return;
-    }
-  
-    const remaining = 6 - newPasswordInput.value.length;
-    const longEnough = remaining <= 0;
-  
-    newPasswordHint.textContent = longEnough
-      ? "Good length."
-      : `${remaining} more character${remaining === 1 ? "" : "s"} needed.`;
-    newPasswordHint.className = "field-hint" + (longEnough ? " valid" : " invalid");
-    newPasswordInput.classList.toggle("field-invalid", !longEnough);
-    newPasswordInput.classList.toggle("field-valid", longEnough);
-  }
-  
-  function validatePasswordMatchLive() {
-    if (newPasswordConfirmInput.value === "") {
-      passwordMatchHint.textContent = "";
-      passwordMatchHint.className = "field-hint";
-      newPasswordConfirmInput.classList.remove("field-invalid", "field-valid");
-      return;
-    }
-  
-    const match = newPasswordInput.value === newPasswordConfirmInput.value;
-    passwordMatchHint.textContent = match ? "Passwords match." : "Passwords don't match yet.";
-    passwordMatchHint.className = "field-hint" + (match ? " valid" : " invalid");
-    newPasswordConfirmInput.classList.toggle("field-invalid", !match);
-    newPasswordConfirmInput.classList.toggle("field-valid", match);
-  }
-  
-  newPasswordInput.addEventListener("input", () => {
-    validateNewPasswordLive();
-    validatePasswordMatchLive();
-  });
-  newPasswordConfirmInput.addEventListener("input", validatePasswordMatchLive);
-  
+
 passwordForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   passwordError.hidden = true;

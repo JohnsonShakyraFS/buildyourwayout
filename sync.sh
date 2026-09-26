@@ -13,8 +13,12 @@
 
 set -e  # stop immediately if any command fails, instead of continuing with a half-finished sync
 
-echo "Copying HTML files..."
-cp *.html www/
+echo "Copying HTML files (except index.html, which stays app-specific in www/)..."
+for f in *.html; do
+  if [ "$f" != "index.html" ]; then
+    cp "$f" www/
+  fi
+done
 
 echo "Copying css/, js/, and icons/..."
 cp -r css www/

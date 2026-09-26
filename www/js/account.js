@@ -226,6 +226,27 @@ planGrid.addEventListener("click", async (event) => {
   const card = btn.closest(".plan-card");
   const plan = card.dataset.plan;
 
+  // Plus is a real paid subscription — this has to go through
+  // Stripe Checkout, never a direct database write, since nothing
+  // client-side can be trusted to say "I actually paid."
+  if (plan === "plus") {
+    btn.disabled = true;
+    btn.textContent = "Redirecting to checkout...";
+
+    const { data, error } = await supabase.functions.invoke("create-checkout");
+
+    if (error || !data?.url) {
+      console.error("Error creating checkout session:", error);
+      btn.disabled = false;
+      btn.textContent = "Select";
+      alert("We couldn't start checkout. Please try again.");
+      return;
+    }
+
+    window.location.href = data.url;
+    return;
+  }
+
   btn.disabled = true;
   btn.textContent = "Saving...";
 

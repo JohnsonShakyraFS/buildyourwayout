@@ -2551,3 +2551,22 @@ input.field-valid {
   color: var(--muted);
   margin-bottom: var(--space-6);
 }
+
+/* =========================
+   TURNSTILE — hard containment
+   Turnstile's success/error status banners appear to ignore
+   data-size and render their own wide layout regardless. Force
+   the widget and whatever iframe Cloudflare injects inside it
+   to respect the actual available width, same defensive pattern
+   used everywhere else in this app for fixed-width elements.
+   ========================= */
+.cf-turnstile {
+  max-width: 100%;
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}
+
+.cf-turnstile iframe {
+  max-width: 100% !important;
+  width: 100% !important;
+}

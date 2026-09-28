@@ -17,13 +17,30 @@ const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY")!, {
 
 const PLUS_PRICE_ID = "price_1UK1uXCwFWZ22mSi3cN5CYlZ";
 
+// Required for any Edge Function called directly from browser code
+// (via supabase.functions.invoke()). Without these, the browser
+// either blocks the request before it completes, or blocks reading
+// the response even after the function ran successfully — which is
+// exactly why no invocation ever showed up in the function's logs.
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type"
+};
+
 Deno.serve(async (req) => {
+  // The browser sends a preflight OPTIONS request before the real
+  // one, specifically to check whether CORS is allowed. It must
+  // get an immediate, empty, 200 response with these headers.
+  if (req.method === "OPTIONS") {
+    return new Response(null, { status: 200, headers: corsHeaders });
+  }
+
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Missing Authorization header" }), {
         status: 401,
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -40,7 +57,7 @@ Deno.serve(async (req) => {
     if (userError || !userData?.user) {
       return new Response(JSON.stringify({ error: "Not authenticated" }), {
         status: 401,
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -64,7 +81,7 @@ Deno.serve(async (req) => {
       console.error("Error loading profile:", profileError);
       return new Response(JSON.stringify({ error: "Could not load profile" }), {
         status: 500,
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
       });
     }
 
@@ -106,13 +123,13 @@ Deno.serve(async (req) => {
 
     return new Response(JSON.stringify({ url: session.url }), {
       status: 200,
-      headers: { "Content-Type": "application/json" }
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
   } catch (err) {
     console.error("create-checkout error:", err);
     return new Response(JSON.stringify({ error: "Something went wrong creating checkout" }), {
       status: 500,
-      headers: { "Content-Type": "application/json" }
+      headers: { ...corsHeaders, "Content-Type": "application/json" }
     });
   }
 });

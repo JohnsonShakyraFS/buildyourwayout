@@ -118,10 +118,17 @@
     
     <section class="account-subscription-card">
       <h2 class="account-section-title">Subscription</h2>
-      <p class="subscription-placeholder-note">
-        Payment processing isn't connected yet — selecting a plan below just
-        updates your account for now. Real billing is coming soon.
+      <p class="subscription-placeholder-note" id="subscriptionNote">
+        Choosing Plus takes you to Stripe's secure checkout to complete payment.
       </p>
+
+      <div id="managePlanBlock" class="manage-plan-block hidden">
+        <p>You're on Plus. Manage your billing, payment method, or cancel anytime.</p>
+        <button type="button" class="btn secondary-btn" id="managePlanBtn">
+          Manage Subscription
+        </button>
+        <p id="managePlanError" class="auth-error" hidden></p>
+      </div>
     
       <div class="plan-grid" id="planGrid">
         <article class="plan-card" data-plan="free">

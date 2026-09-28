@@ -2570,3 +2570,18 @@ input.field-valid {
   max-width: 100% !important;
   width: 100% !important;
 }
+
+/* =========================
+   ACCOUNT — MANAGE SUBSCRIPTION
+   ========================= */
+.manage-plan-block {
+  padding: var(--space-5);
+  margin-bottom: var(--space-5);
+  background: rgba(79, 148, 144, 0.08);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.manage-plan-block p {
+  margin-bottom: var(--space-3);
+}

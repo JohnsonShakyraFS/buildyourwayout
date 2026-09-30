@@ -82,11 +82,17 @@ function validatePasswordLive() {
     return;
   }
 
-  const remaining = 6 - passwordInput.value.length;
+  const MIN_PASSWORD_LENGTH = 8;
+  const length = passwordInput.value.length;
+  const remaining = MIN_PASSWORD_LENGTH - length;
   const longEnough = remaining <= 0;
 
+  let strengthLabel = "Good length.";
+  if (length >= 16) strengthLabel = "Good length — Strong.";
+  else if (length >= 12) strengthLabel = "Good length — Good.";
+
   passwordHint.textContent = longEnough
-    ? "Good length."
+    ? strengthLabel
     : `${remaining} more character${remaining === 1 ? "" : "s"} needed.`;
   passwordHint.className = "field-hint" + (longEnough ? " valid" : " invalid");
   passwordInput.classList.toggle("field-invalid", !longEnough);

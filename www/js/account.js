@@ -30,6 +30,8 @@ const emailLine = document.getElementById("accountEmailLine");
 const passwordForm = document.getElementById("passwordForm");
 const newPasswordInput = document.getElementById("newPassword");
 const newPasswordConfirmInput = document.getElementById("newPasswordConfirm");
+const newPasswordHint = document.getElementById("newPasswordHint");
+const passwordMatchHint = document.getElementById("passwordMatchHint");
 const passwordError = document.getElementById("passwordError");
 const passwordNotice = document.getElementById("passwordNotice");
 const passwordSubmitBtn = document.getElementById("passwordSubmitBtn");
@@ -442,10 +444,70 @@ function escapeHtml(value) {
    CHANGE PASSWORD
    ============================================================ */
 
+const MIN_PASSWORD_LENGTH = 8;
+
+function passwordStrengthLabel(length) {
+  if (length < MIN_PASSWORD_LENGTH) return null;
+  if (length >= 16) return "Strong";
+  if (length >= 12) return "Good";
+  return "Okay";
+}
+
+function validateNewPasswordLive() {
+  if (newPasswordInput.value === "") {
+    newPasswordHint.textContent = "";
+    newPasswordHint.className = "field-hint";
+    newPasswordInput.classList.remove("field-invalid", "field-valid");
+    return;
+  }
+
+  const length = newPasswordInput.value.length;
+  const remaining = MIN_PASSWORD_LENGTH - length;
+  const longEnough = remaining <= 0;
+
+  if (!longEnough) {
+    newPasswordHint.textContent = `${remaining} more character${remaining === 1 ? "" : "s"} needed.`;
+  } else {
+    const strength = passwordStrengthLabel(length);
+    newPasswordHint.textContent = `Good length${strength && strength !== "Okay" ? ` — ${strength}` : ""}.`;
+  }
+
+  newPasswordHint.className = "field-hint" + (longEnough ? " valid" : " invalid");
+  newPasswordInput.classList.toggle("field-invalid", !longEnough);
+  newPasswordInput.classList.toggle("field-valid", longEnough);
+}
+
+function validatePasswordMatchLive() {
+  if (newPasswordConfirmInput.value === "") {
+    passwordMatchHint.textContent = "";
+    passwordMatchHint.className = "field-hint";
+    newPasswordConfirmInput.classList.remove("field-invalid", "field-valid");
+    return;
+  }
+
+  const match = newPasswordInput.value === newPasswordConfirmInput.value;
+  passwordMatchHint.textContent = match ? "Passwords match." : "Passwords don't match yet.";
+  passwordMatchHint.className = "field-hint" + (match ? " valid" : " invalid");
+  newPasswordConfirmInput.classList.toggle("field-invalid", !match);
+  newPasswordConfirmInput.classList.toggle("field-valid", match);
+}
+
+newPasswordInput.addEventListener("input", () => {
+  validateNewPasswordLive();
+  validatePasswordMatchLive();
+});
+newPasswordConfirmInput.addEventListener("input", validatePasswordMatchLive);
+
 passwordForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   passwordError.hidden = true;
   passwordNotice.hidden = true;
+
+  if (newPasswordInput.value.length < MIN_PASSWORD_LENGTH) {
+    passwordError.textContent = `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`;
+    passwordError.hidden = false;
+    return;
+  }
 
   if (newPasswordInput.value !== newPasswordConfirmInput.value) {
     passwordError.textContent = "Passwords don't match.";

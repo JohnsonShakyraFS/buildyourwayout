@@ -2585,3 +2585,41 @@ input.field-valid {
 .manage-plan-block p {
   margin-bottom: var(--space-3);
 }
+
+/* =========================
+   PROJECT — PERSISTENT PURPOSE REMINDER
+   Stays visible the whole time someone is in the actual code
+   editor, not just before they start. Addresses the part of
+   Theresa's feedback the pre-build walkthrough doesn't reach:
+   the "why am I doing this" question going quiet exactly when
+   someone's staring at code.
+   ========================= */
+.purpose-reminder {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-5);
+  background: rgba(79, 148, 144, 0.08);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.purpose-reminder span {
+  flex-shrink: 0;
+  color: var(--accent);
+  font-size: var(--text-md);
+}
+
+/* =========================
+   CODE EDITOR — DE-EMPHASIZE STRUCTURAL SYNTAX
+   ========================= */
+.CodeMirror .cm-tag,
+.CodeMirror .cm-bracket,
+.CodeMirror .cm-attribute {
+  color: #b8bcc2 !important;
+  opacity: 0.7;
+}

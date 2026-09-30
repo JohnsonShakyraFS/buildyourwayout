@@ -217,7 +217,36 @@ function highlightSelectedPlan(plan) {
     btn.textContent = card.dataset.plan === plan ? "Current Plan" : "Select";
     btn.disabled = card.dataset.plan === plan;
   });
+
+  // Only someone actually on Plus needs a way to manage/cancel a
+  // real subscription — Free has nothing to manage.
+  const managePlanBlock = document.getElementById("managePlanBlock");
+  if (managePlanBlock) {
+    managePlanBlock.classList.toggle("hidden", plan !== "plus");
+  }
 }
+
+document.getElementById("managePlanBtn")?.addEventListener("click", async () => {
+  const btn = document.getElementById("managePlanBtn");
+  const errorEl = document.getElementById("managePlanError");
+  errorEl.hidden = true;
+
+  btn.disabled = true;
+  btn.textContent = "Opening billing portal...";
+
+  const { data, error } = await supabase.functions.invoke("create-portal-session");
+
+  if (error || !data?.url) {
+    console.error("Error opening billing portal:", error);
+    btn.disabled = false;
+    btn.textContent = "Manage Subscription";
+    errorEl.textContent = "We couldn't open the billing portal. Please try again.";
+    errorEl.hidden = false;
+    return;
+  }
+
+  window.location.href = data.url;
+});
 
 planGrid.addEventListener("click", async (event) => {
   const btn = event.target.closest(".plan-select-btn");

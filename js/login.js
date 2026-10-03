@@ -59,6 +59,17 @@ window.onTurnstileError = function () {
   turnstileFailed = true;
 };
 
+/* Backup detection: the specific Cloudflare-side failure we hit
+   (error 400020) throws as an UNCAUGHT exception rather than
+   cleanly invoking data-error-callback above — so we also listen
+   globally for it, to make sure the fallback activates either way. */
+window.addEventListener("error", (event) => {
+  if (event.message && event.message.includes("TurnstileError")) {
+    console.warn("Caught uncaught TurnstileError — allowing signup to proceed without it.");
+    turnstileFailed = true;
+  }
+});
+
 function resetTurnstile() {
   turnstileToken = null;
   if (window.turnstile) {

@@ -30,17 +30,33 @@ const forgotRow = document.getElementById("authForgotRow");
 /* ------------------------------------------------------------
    Turnstile (Cloudflare's CAPTCHA). The widget itself renders
    automatically from the data-sitekey div in login.html; these
-   two globals are the callbacks it calls directly, since that's
-   how Turnstile's own script expects to report a token.
+   globals are the callbacks it calls directly, since that's how
+   Turnstile's own script expects to report a token.
    ------------------------------------------------------------ */
 let turnstileToken = null;
+let turnstileFailed = false;
 
 window.onTurnstileSuccess = function (token) {
   turnstileToken = token;
+  turnstileFailed = false;
 };
 
 window.onTurnstileExpired = function () {
   turnstileToken = null;
+};
+
+/* ------------------------------------------------------------
+   If Turnstile itself fails to load or render (a Cloudflare-side
+   outage, not something in our control — this has genuinely
+   happened account-wide across many unrelated sites, confirmed
+   via Cloudflare's own community reports), we don't want that to
+   permanently block every real signup. Once this fires, the
+   submit handler below allows proceeding without a token rather
+   than leaving people stuck indefinitely on a third-party issue.
+   ------------------------------------------------------------ */
+window.onTurnstileError = function () {
+  console.warn("Turnstile failed to load — allowing signup to proceed without it.");
+  turnstileFailed = true;
 };
 
 function resetTurnstile() {
@@ -152,7 +168,7 @@ authForm.addEventListener("submit", async (event) => {
   errorEl.hidden = true;
   noticeEl.hidden = true;
 
-  if (!turnstileToken) {
+  if (!turnstileToken && !turnstileFailed) {
     errorEl.textContent = "Please complete the verification check before continuing.";
     errorEl.hidden = false;
     return;

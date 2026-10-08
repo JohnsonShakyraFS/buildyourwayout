@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>My Builds | Build Your Way Out</title>
+<title>Sandbox | Build Your Way Out</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
 
 <link rel="stylesheet" href="css/style.css" />
 <link rel="manifest" href="manifest.json" />
@@ -43,23 +44,66 @@
     </header>
 
     <section class="reflection-header">
-      <h1>My Builds.</h1>
-      <p>Everything you've made, kept in one place.</p>
-      <p id="savedBuildsError" class="auth-error" aria-live="polite" hidden></p>
-      <a href="sandbox.html" class="btn primary-btn">✎ New in Sandbox</a>
+      <h1>Sandbox.</h1>
+      <p>A blank canvas. Build whatever you like — it's yours to keep.</p>
     </section>
 
-    <section class="saved-builds-section">
-      <p id="savedBuildsNote" class="saved-builds-note"></p>
+    <!-- Shown to Free accounts instead of the editor -->
+    <section id="sandboxLocked" class="sandbox-locked hidden">
+      <h2>Sandbox is part of Plus.</h2>
+      <p>
+        Open a blank editor, build anything you want in HTML, CSS and
+        JavaScript, remix the builds you've finished, and keep everything
+        in My Builds.
+      </p>
+      <a href="account.html" class="btn primary-btn">See Plus</a>
+    </section>
 
-      <div id="savedBuildsList" class="saved-builds-list">
-        <p class="journal-loading"><span class="spinner"></span> Loading your builds...</p>
+    <section id="sandboxApp" class="code-workspace hidden">
+
+      <div class="workspace-left">
+
+        <div class="sandbox-title-row">
+          <label for="sandboxTitle">Name your creation</label>
+          <input id="sandboxTitle" type="text" maxlength="80" placeholder="Untitled sandbox" />
+        </div>
+
+        <div class="sandbox-tabs" role="tablist" aria-label="Code language">
+          <button type="button" class="sandbox-tab active" data-lang="html" role="tab" aria-selected="true">HTML</button>
+          <button type="button" class="sandbox-tab" data-lang="css" role="tab" aria-selected="false">CSS</button>
+          <button type="button" class="sandbox-tab" data-lang="js" role="tab" aria-selected="false">JavaScript</button>
+        </div>
+
+        <div class="sandbox-pane" id="pane-html"><textarea id="editor-html" aria-label="HTML code"></textarea></div>
+        <div class="sandbox-pane" id="pane-css" hidden><textarea id="editor-css" aria-label="CSS code"></textarea></div>
+        <div class="sandbox-pane" id="pane-js" hidden><textarea id="editor-js" aria-label="JavaScript code"></textarea></div>
+
+        <p class="editor-tip">Tip: press Cmd/Ctrl + Enter to run your code.</p>
+        <p class="editor-error" id="sandboxError" hidden></p>
+
+        <div class="guided-actions">
+          <button type="button" class="btn secondary-btn" id="sandboxRun">▶ Run Code</button>
+          <button type="button" class="btn primary-btn" id="sandboxSave">♡ Save to My Builds</button>
+        </div>
+
+        <p id="sandboxStatus" class="sandbox-status" aria-live="polite"></p>
       </div>
+
+      <div class="workspace-right">
+        <h3>Live Preview</h3>
+        <iframe id="previewFrame" title="Live preview" sandbox="allow-scripts"></iframe>
+      </div>
+
     </section>
 
   </main>
 
-  <script type="module" src="js/myBuilds.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script type="module" src="js/sandbox.js"></script>
 
   <footer class="site-footer">
     <p class="crisis-note">

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>My Builds | Build Your Way Out</title>
+<title>Insights | Build Your Way Out</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,23 +43,74 @@
     </header>
 
     <section class="reflection-header">
-      <h1>My Builds.</h1>
-      <p>Everything you've made, kept in one place.</p>
-      <p id="savedBuildsError" class="auth-error" aria-live="polite" hidden></p>
-      <a href="sandbox.html" class="btn primary-btn">✎ New in Sandbox</a>
+      <h1>Insights.</h1>
+      <p>Patterns in your own check-ins.</p>
+      <p id="insightsError" class="auth-error" aria-live="polite" hidden></p>
     </section>
 
-    <section class="saved-builds-section">
-      <p id="savedBuildsNote" class="saved-builds-note"></p>
+    <!-- Free accounts -->
+    <section id="insightsLocked" class="sandbox-locked hidden">
+      <h2>Insights are part of Plus.</h2>
+      <p>
+        See which moods and builds tend to lift you most, and what times of
+        day and week you feel the biggest shift — all drawn from the
+        check-ins you've already made.
+      </p>
+      <a href="account.html" class="btn primary-btn">See Plus</a>
+      <p class="insights-back"><a href="journal.html">← Back to your journal</a></p>
+    </section>
 
-      <div id="savedBuildsList" class="saved-builds-list">
-        <p class="journal-loading"><span class="spinner"></span> Loading your builds...</p>
+    <!-- Plus accounts without enough check-ins yet -->
+    <section id="insightsEmpty" class="sandbox-locked hidden">
+      <h2>Not enough yet.</h2>
+      <p id="insightsEmptyText"></p>
+      <a href="mood.html" class="btn primary-btn">Start a build</a>
+      <p class="insights-back"><a href="journal.html">← Back to your journal</a></p>
+    </section>
+
+    <!-- Plus accounts with enough data -->
+    <section id="insightsContent" class="insights-wrap hidden">
+
+      <div class="insights-card">
+        <h2>Highlights</h2>
+        <ul id="insightsHighlights" class="insights-highlights"></ul>
       </div>
+
+      <div class="insight-cards" id="insightsSummary"></div>
+
+      <div class="insights-card">
+        <h2>By mood</h2>
+        <p class="insights-sub">Average shift in how you felt after building, for each mood.</p>
+        <div id="insightsByMood" class="insight-rows"></div>
+      </div>
+
+      <div class="insights-card">
+        <h2>Builds that lift you</h2>
+        <p class="insights-sub">The builds with the biggest average lift so far.</p>
+        <div id="insightsTopBuilds" class="insight-rows"></div>
+      </div>
+
+      <div class="insights-card">
+        <h2>Time of day</h2>
+        <div id="insightsByTime" class="insight-rows"></div>
+      </div>
+
+      <div class="insights-card">
+        <h2>Day of the week</h2>
+        <div id="insightsByDay" class="insight-rows"></div>
+      </div>
+
+      <p class="insights-note">
+        These are patterns in your own check-ins, not medical advice or a
+        diagnosis. A small number of check-ins can point in misleading
+        directions, so treat early results as curiosity, not conclusions.
+      </p>
+      <p class="insights-back"><a href="journal.html">← Back to your journal</a></p>
     </section>
 
   </main>
 
-  <script type="module" src="js/myBuilds.js"></script>
+  <script type="module" src="js/insights.js"></script>
 
   <footer class="site-footer">
     <p class="crisis-note">

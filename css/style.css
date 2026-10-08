@@ -2851,3 +2851,178 @@ input.field-valid {
   color: #0000cc !important;
   opacity: 1;
 }
+
+
+/* =========================
+   INSIGHTS
+   Plain HTML/CSS bars — no charting library, so there's no
+   external script that can fail to load.
+   ========================= */
+.journal-row-actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 500px) {
+  .journal-row-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.insights-wrap {
+  width: min(900px, 100%);
+  margin: var(--space-6) auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.insights-card {
+  padding: var(--space-6);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+
+.insights-card h2 {
+  margin-bottom: var(--space-2);
+}
+
+.insights-sub {
+  margin-bottom: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.insights-highlights {
+  margin: var(--space-3) 0 0;
+  padding-left: var(--space-5);
+  line-height: 1.7;
+}
+
+.insights-highlights li + li {
+  margin-top: var(--space-2);
+}
+
+.insight-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.insight-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-5);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  min-width: 0;
+}
+
+.insight-card-number {
+  font-family: "Playfair Display", serif;
+  font-size: var(--h2-size);
+  color: var(--accent-hover);
+}
+
+.insight-card-label {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.insight-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.insight-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  grid-template-areas:
+    "label track"
+    ".     value";
+  align-items: center;
+  column-gap: var(--space-4);
+  row-gap: var(--space-1);
+}
+
+.insight-label {
+  grid-area: label;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.insight-track {
+  grid-area: track;
+  position: relative;
+  height: 12px;
+  background: rgba(79, 148, 144, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/* center line = "no change" */
+.insight-track::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(33, 44, 41, 0.25);
+}
+
+.insight-fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+}
+
+.insight-fill.pos {
+  background: var(--accent);
+}
+
+.insight-fill.neg {
+  background: #b8bcc2;
+}
+
+.insight-value {
+  grid-area: value;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.insights-note {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.insights-back {
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 600px) {
+  .insight-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .insight-row {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "label"
+      "track"
+      "value";
+  }
+}

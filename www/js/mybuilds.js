@@ -138,16 +138,12 @@ function makeButton(label, className, onClick) {
   return btn;
 }
 
-function makeLink(label, href) {
+function makeUpgradeLink(label) {
   const link = document.createElement("a");
-  link.href = href;
+  link.href = "account.html";
   link.className = "btn secondary-btn saved-build-btn";
   link.textContent = label;
   return link;
-}
-
-function makeUpgradeLink(label) {
-  return makeLink(label, "account.html");
 }
 
 function renderCard(build, locked) {
@@ -231,15 +227,6 @@ function renderCard(build, locked) {
 
     if (isPlus) {
       actions.appendChild(makeButton("Download", "", () => downloadBuild(build)));
-
-      // Sandbox creations are edited in place; finished guided
-      // builds are remixed (copied) so the original stays intact.
-      actions.appendChild(
-        makeLink(
-          build.source === "sandbox" ? "Edit in Sandbox" : "Remix in Sandbox",
-          `sandbox.html?id=${build.id}`
-        )
-      );
     } else {
       actions.appendChild(makeUpgradeLink("Download (Plus)"));
     }

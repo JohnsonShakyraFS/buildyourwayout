@@ -2754,3 +2754,100 @@ input.field-valid {
     flex: 1 1 100%;
   }
 }
+
+
+/* =========================
+   SANDBOX
+   ========================= */
+.sandbox-locked {
+  width: min(640px, 100%);
+  margin: var(--space-7) auto 0;
+  padding: var(--space-7);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+}
+
+.sandbox-locked h2 {
+  margin-bottom: var(--space-3);
+}
+
+.sandbox-locked p {
+  margin-bottom: var(--space-5);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.sandbox-title-row {
+  margin-bottom: var(--space-4);
+}
+
+.sandbox-title-row label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.sandbox-title-row input {
+  width: 100%;
+}
+
+.sandbox-tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.sandbox-tab {
+  min-height: 38px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.sandbox-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.sandbox-pane[hidden] {
+  display: none;
+}
+
+.sandbox-pane textarea {
+  width: 100%;
+  min-height: 260px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.sandbox-status {
+  margin-top: var(--space-3);
+  min-height: 1.4em;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+/* The guided builds dim HTML tag syntax to show what's safe to
+   edit. In a free-form editor everything is editable, so Sandbox
+   restores CodeMirror's normal tag colors. */
+.sandbox-pane .CodeMirror .cm-tag {
+  color: #117700 !important;
+  opacity: 1;
+}
+.sandbox-pane .CodeMirror .cm-bracket {
+  color: #997700 !important;
+  opacity: 1;
+}
+.sandbox-pane .CodeMirror .cm-attribute {
+  color: #0000cc !important;
+  opacity: 1;
+}

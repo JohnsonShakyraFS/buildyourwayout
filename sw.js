@@ -1,4 +1,4 @@
-const CACHE_NAME = "build-your-way-out-v3";
+const CACHE_NAME = "build-your-way-out-v4";
 
 const STATIC_ASSETS = [
   "/",
@@ -9,6 +9,7 @@ const STATIC_ASSETS = [
   "/reflection.html",
   "/journal.html",
   "/my-builds.html",
+  "/sandbox.html",
   "/login.html",
   "/account.html",
   "/pricing.html",
@@ -26,6 +27,7 @@ const STATIC_ASSETS = [
   "/js/reflection.js",
   "/js/journal.js",
   "/js/myBuilds.js",
+  "/js/sandbox.js",
   "/js/auth.js",
   "/js/authStatus.js",
   "/js/mainNav.js",

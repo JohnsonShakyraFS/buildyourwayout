@@ -26,6 +26,7 @@
 <meta name="twitter:title" content="Build Your Way Out" />
 <meta name="twitter:description" content="A calming coding space that helps you transform emotions into small, meaningful projects." />
 <meta name="twitter:image" content="https://buildyourwayout.app/icons/og-image.png" />
+<script src="js/themeInit.js"></script>
 </head>
 <body>
   <a href="#mainContent" class="skip-link">Skip to main content</a>
@@ -116,6 +117,33 @@
     
     </section>
     
+    <section class="account-appearance-card">
+      <h2 class="account-section-title">Appearance</h2>
+      <p class="appearance-note" id="appearanceNote"></p>
+
+      <div class="appearance-group">
+        <span class="appearance-label" id="modeLabel">Mode</span>
+        <div class="theme-options" role="radiogroup" aria-labelledby="modeLabel">
+          <button type="button" class="theme-option" data-mode="light" role="radio" aria-checked="false">Light</button>
+          <button type="button" class="theme-option" data-mode="dark" role="radio" aria-checked="false">
+            Dark <span class="plus-badge">Plus</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="appearance-group">
+        <span class="appearance-label" id="accentLabel">Accent color</span>
+        <div class="theme-options" role="radiogroup" aria-labelledby="accentLabel">
+          <button type="button" class="accent-swatch" data-accent="teal" style="--swatch: #4f9490" role="radio" aria-checked="false" aria-label="Teal"></button>
+          <button type="button" class="accent-swatch" data-accent="lavender" style="--swatch: #8d80c0" role="radio" aria-checked="false" aria-label="Lavender (Plus)"></button>
+          <button type="button" class="accent-swatch" data-accent="rose" style="--swatch: #c46e88" role="radio" aria-checked="false" aria-label="Rose (Plus)"></button>
+          <button type="button" class="accent-swatch" data-accent="sunrise" style="--swatch: #c5752e" role="radio" aria-checked="false" aria-label="Sunrise (Plus)"></button>
+        </div>
+      </div>
+
+      <p id="appearanceStatus" class="appearance-status" aria-live="polite"></p>
+    </section>
+
     <section class="account-subscription-card">
       <h2 class="account-section-title">Subscription</h2>
       <p class="subscription-placeholder-note" id="subscriptionNote">
@@ -138,6 +166,7 @@
             <li>All beginner builds</li>
             <li>Mood check-ins + journal</li>
             <li>Emotional trend chart</li>
+            <li>Your 3 newest builds saved</li>
           </ul>
           <button type="button" class="btn secondary-btn plan-select-btn">Select</button>
         </article>
@@ -148,6 +177,10 @@
           <ul class="plan-features">
             <li>Everything in Free</li>
             <li>Intermediate &amp; advanced builds unlocked</li>
+            <li>Keep every build, with downloads</li>
+            <li>Sandbox for free-form building</li>
+            <li>Insights on what lifts your mood</li>
+            <li>Dark mode &amp; accent colors</li>
             <li>Priority support</li>
           </ul>
           <button type="button" class="btn secondary-btn plan-select-btn">Select</button>
@@ -160,7 +193,7 @@
       <div id="buildHistoryList" class="build-history-list">
         <!-- filled by JS -->
       </div>
-    </section> <br><br>
+    </section>
 
     <section class="auth-layout">
 

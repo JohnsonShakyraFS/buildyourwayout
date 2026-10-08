@@ -1,4 +1,5 @@
 import { signUp, signIn, getCurrentUser } from "./auth.js";
+import { syncThemeFromProfile } from "./theme.js";
 import { initAuthStatus } from "./authStatus.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import { redirectAfterAuth } from "./onboarding.js";
@@ -210,6 +211,7 @@ authForm.addEventListener("submit", async (event) => {
     return;
   }
 
+  await syncThemeFromProfile(data.user.id);
   await redirectAfterAuth(data.user);
 });
 

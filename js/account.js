@@ -2,6 +2,10 @@ import { getCurrentUser, updatePassword, deleteAccount } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
 import { initAuthStatus } from "./authStatus.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
+import {
+  getStoredTheme, storeTheme, applyTheme, persistTheme, normalizeTheme,
+  themeNeedsPlus, modeNeedsPlus, accentNeedsPlus, DEFAULT_THEME
+} from "./theme.js";
 
 initAuthStatus();
 registerServiceWorker();
@@ -24,6 +28,7 @@ const prefsNotice = document.getElementById("prefsNotice");
 const planGrid = document.getElementById("planGrid");
 
 let currentUserId = null;
+let currentPrefs = {};
 
 const emailLine = document.getElementById("accountEmailLine");
 
@@ -158,6 +163,7 @@ async function loadAccountDetails(userId) {
   displayNameInput.value = data?.display_name || "";
 
   const prefs = data?.preferences || {};
+  currentPrefs = prefs;
   prefEmailReminders.checked = Boolean(prefs.email_reminders);
   prefShowMoodNotes.checked = prefs.show_mood_notes !== false; // default on
 
@@ -189,7 +195,10 @@ nameForm.addEventListener("submit", async (event) => {
 prefsSaveBtn.addEventListener("click", async () => {
   prefsNotice.hidden = true;
 
+  // Merge into what's already stored: this column also holds the
+  // chosen theme, and replacing the whole object would erase it.
   const preferences = {
+    ...currentPrefs,
     email_reminders: prefEmailReminders.checked,
     show_mood_notes: prefShowMoodNotes.checked
   };
@@ -207,9 +216,115 @@ prefsSaveBtn.addEventListener("click", async () => {
     return;
   }
 
+  currentPrefs = preferences;
   prefsNotice.textContent = "Preferences saved.";
   prefsNotice.className = "auth-notice";
   prefsNotice.hidden = false;
+});
+
+
+/* ============================================================
+   APPEARANCE
+   Light + teal are free. Dark mode and the other accent colors are
+   Plus. Choosing a Plus option on a Free account explains that
+   instead of applying it; the plan check in theme.js also resets a
+   stored Plus theme on any page load if the account isn't Plus.
+   ============================================================ */
+
+const appearanceNote = document.getElementById("appearanceNote");
+const appearanceStatus = document.getElementById("appearanceStatus");
+const modeButtons = document.querySelectorAll(".theme-option[data-mode]");
+const accentButtons = document.querySelectorAll(".accent-swatch");
+
+let accountPlan = "free";
+let currentTheme = getStoredTheme();
+
+function setAppearanceStatus(message, withPlusLink) {
+  appearanceStatus.textContent = message;
+
+  if (withPlusLink) {
+    const link = document.createElement("a");
+    link.href = "#planGrid";
+    link.textContent = " See Plus";
+    appearanceStatus.appendChild(link);
+  }
+}
+
+function renderAppearance() {
+  const isPlus = accountPlan === "plus";
+
+  modeButtons.forEach((btn) => {
+    const selected = btn.dataset.mode === currentTheme.mode;
+    btn.classList.toggle("selected", selected);
+    btn.setAttribute("aria-checked", String(selected));
+  });
+
+  accentButtons.forEach((btn) => {
+    const selected = btn.dataset.accent === currentTheme.accent;
+    btn.classList.toggle("selected", selected);
+    btn.classList.toggle("locked", !isPlus && accentNeedsPlus(btn.dataset.accent));
+    btn.setAttribute("aria-checked", String(selected));
+  });
+
+  appearanceNote.textContent = isPlus
+    ? "Choose how the app looks. Your choice follows you to other devices."
+    : "Light and teal are included. Dark mode and extra accent colors come with Plus.";
+}
+
+async function chooseTheme(next) {
+  const isPlus = accountPlan === "plus";
+  const theme = normalizeTheme(next);
+
+  if (themeNeedsPlus(theme) && !isPlus) {
+    setAppearanceStatus("Dark mode and extra accent colors are part of Plus.", true);
+    return;
+  }
+
+  currentTheme = theme;
+  storeTheme(theme);
+  applyTheme(theme);
+  renderAppearance();
+
+  if (!isPlus) {
+    setAppearanceStatus("");
+    return;
+  }
+
+  setAppearanceStatus("Saving...");
+  const ok = await persistTheme(currentUserId, theme);
+
+  if (ok) {
+    currentPrefs = { ...currentPrefs, theme };
+    setAppearanceStatus("Saved.");
+  } else {
+    setAppearanceStatus("Applied on this device, but we couldn't save it to your account.");
+  }
+}
+
+function initAppearance(plan) {
+  accountPlan = plan;
+
+  // A stored Plus theme on a non-Plus account (e.g. after a
+  // subscription ended) goes back to the default.
+  if (plan !== "plus" && themeNeedsPlus(getStoredTheme())) {
+    storeTheme(DEFAULT_THEME);
+    applyTheme(DEFAULT_THEME);
+  }
+
+  currentTheme = getStoredTheme();
+  renderAppearance();
+}
+
+modeButtons.forEach((btn) => {
+  btn.addEventListener("click", () =>
+    chooseTheme({ ...currentTheme, mode: btn.dataset.mode })
+  );
+});
+
+accentButtons.forEach((btn) => {
+  btn.addEventListener("click", () =>
+    chooseTheme({ ...currentTheme, accent: btn.dataset.accent })
+  );
 });
 
 function highlightSelectedPlan(plan) {
@@ -226,6 +341,8 @@ function highlightSelectedPlan(plan) {
   if (managePlanBlock) {
     managePlanBlock.classList.toggle("hidden", plan !== "plus");
   }
+
+  initAppearance(plan);
 }
 
 document.getElementById("managePlanBtn")?.addEventListener("click", async () => {

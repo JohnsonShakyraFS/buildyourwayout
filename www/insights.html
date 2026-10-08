@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Insights | Build Your Way Out</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+<meta property="og:title" content="Build Your Way Out" />
+<meta property="og:description" content="A calming coding space that helps you transform emotions into small, meaningful projects." />
+<meta property="og:image" content="https://buildyourwayout.app/icons/og-image.png" />
+<meta property="og:url" content="https://buildyourwayout.app/" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Build Your Way Out" />
+<meta name="twitter:description" content="A calming coding space that helps you transform emotions into small, meaningful projects." />
+<meta name="twitter:image" content="https://buildyourwayout.app/icons/og-image.png" />
+</head>
+<body>
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+  <main class="reflection-page" id="mainContent">
+
+    <header>
+      <a href="index.html" class="logo">
+        <img src="icons/icon-192.png" alt="" class="logo-icon" />
+        Build Your Way Out
+      </a>
+      <nav class="navbar">
+        <div class="nav-links" id="navLinks"></div>
+        <span id="authStatus" class="auth-status"></span>
+      </nav>
+    </header>
+
+    <section class="reflection-header">
+      <h1>Insights.</h1>
+      <p>Patterns in your own check-ins.</p>
+      <p id="insightsError" class="auth-error" aria-live="polite" hidden></p>
+    </section>
+
+    <!-- Free accounts -->
+    <section id="insightsLocked" class="sandbox-locked hidden">
+      <h2>Insights are part of Plus.</h2>
+      <p>
+        See which moods and builds tend to lift you most, and what times of
+        day and week you feel the biggest shift — all drawn from the
+        check-ins you've already made.
+      </p>
+      <a href="account.html" class="btn primary-btn">See Plus</a>
+      <p class="insights-back"><a href="journal.html">← Back to your journal</a></p>
+    </section>
+
+    <!-- Plus accounts without enough check-ins yet -->
+    <section id="insightsEmpty" class="sandbox-locked hidden">
+      <h2>Not enough yet.</h2>
+      <p id="insightsEmptyText"></p>
+      <a href="mood.html" class="btn primary-btn">Start a build</a>
+      <p class="insights-back"><a href="journal.html">← Back to your journal</a></p>
+    </section>
+
+    <!-- Plus accounts with enough data -->
+    <section id="insightsContent" class="insights-wrap hidden">
+
+      <div class="insights-card">
+        <h2>Highlights</h2>
+        <ul id="insightsHighlights" class="insights-highlights"></ul>
+      </div>
+
+      <div class="insight-cards" id="insightsSummary"></div>
+
+      <div class="insights-card">
+        <h2>By mood</h2>
+        <p class="insights-sub">Average shift in how you felt after building, for each mood.</p>
+        <div id="insightsByMood" class="insight-rows"></div>
+      </div>
+
+      <div class="insights-card">
+        <h2>Builds that lift you</h2>
+        <p class="insights-sub">The builds with the biggest average lift so far.</p>
+        <div id="insightsTopBuilds" class="insight-rows"></div>
+      </div>
+
+      <div class="insights-card">
+        <h2>Time of day</h2>
+        <div id="insightsByTime" class="insight-rows"></div>
+      </div>
+
+      <div class="insights-card">
+        <h2>Day of the week</h2>
+        <div id="insightsByDay" class="insight-rows"></div>
+      </div>
+
+      <p class="insights-note">
+        These are patterns in your own check-ins, not medical advice or a
+        diagnosis. A small number of check-ins can point in misleading
+        directions, so treat early results as curiosity, not conclusions.
+      </p>
+      <p class="insights-back"><a href="journal.html">← Back to your journal</a></p>
+    </section>
+
+  </main>
+
+  <script type="module" src="js/insights.js"></script>
+
+  <footer class="site-footer">
+    <p class="crisis-note">
+      <strong>If you're in crisis:</strong> in the U.S., call or text
+      <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+      <strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+      both free, confidential, and available 24/7. Outside the U.S., please search
+      for your local emergency or crisis line.
+    </p>
+    <p class="footer-disclaimer">
+      Build Your Way Out is a self-reflection and skill-building tool. It is not
+      therapy, medical advice, or a crisis service.
+    </p>
+    <p class="footer-links">
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+    </p>
+    <p class="footer-links">Questions or feedback? <a href="mailto:shakyrajohnson800@gmail.com">shakyrajohnson800@gmail.com</a></p>
+  </footer>
+</body>
+</html>

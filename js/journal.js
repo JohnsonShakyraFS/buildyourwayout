@@ -90,6 +90,15 @@ function setupSupportBanner() {
 
 setupSupportBanner();
 
+
+/* Chart colors come from the active theme (accent + dark/light), so
+   the chart matches whichever theme is on. (They used to be fixed
+   hex values left over from the app's original gold palette.) */
+function themeColor(name, fallback) {
+  const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return value || fallback;
+}
+
 function renderMoodTrend(data) {
   const canvas = document.getElementById("moodTrendChart");
   const summaryEl = document.getElementById("moodTrendSummary");
@@ -163,7 +172,7 @@ function renderMoodTrend(data) {
           {
             label: "Before",
             data: beforeValues,
-            borderColor: "#c8bda9",
+            borderColor: themeColor("--muted", "#5f766e"),
             backgroundColor: "transparent",
             tension: 0.3,
             pointRadius: 3
@@ -171,7 +180,7 @@ function renderMoodTrend(data) {
           {
             label: "After",
             data: afterValues,
-            borderColor: "#c8a96a",
+            borderColor: themeColor("--accent", "#4f9490"),
             backgroundColor: "transparent",
             tension: 0.3,
             pointRadius: 3
@@ -185,13 +194,18 @@ function renderMoodTrend(data) {
           y: {
             min: 1,
             max: 5,
-            ticks: { stepSize: 1 }
+            ticks: { stepSize: 1, color: themeColor("--muted", "#5f766e") },
+            grid: { color: themeColor("--border", "#c7d9d3") }
+          },
+          x: {
+            ticks: { color: themeColor("--muted", "#5f766e") },
+            grid: { color: themeColor("--border", "#c7d9d3") }
           }
         },
         plugins: {
           legend: {
             position: "bottom",
-            labels: { boxWidth: 10, font: { size: 11 } }
+            labels: { boxWidth: 10, font: { size: 11 }, color: themeColor("--muted", "#5f766e") }
           }
         }
       }

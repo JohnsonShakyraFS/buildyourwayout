@@ -1,4 +1,5 @@
 import { getCurrentUser, onAuthChange } from "./auth.js";
+import { validateThemeForPlan } from "./theme.js";
 
 function renderLinks(user) {
   const el = document.getElementById("navLinks");
@@ -40,6 +41,10 @@ function renderSkeleton() {
 
 export function initMainNav() {
   renderSkeleton();
-  getCurrentUser().then(renderLinks);
+  getCurrentUser().then((user) => {
+    renderLinks(user);
+    // Only does network work if a non-default theme is stored
+    if (user) validateThemeForPlan(user.id);
+  });
   onAuthChange(renderLinks);
 }

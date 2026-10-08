@@ -28,52 +28,43 @@ const toggleBtn = document.getElementById("authToggleBtn");
 const forgotRow = document.getElementById("authForgotRow");
 
 /* ------------------------------------------------------------
-   Turnstile (Cloudflare's CAPTCHA). The widget itself renders
-   automatically from the data-sitekey div in login.html; these
-   globals are the callbacks it calls directly, since that's how
-   Turnstile's own script expects to report a token.
+   hCaptcha. The widget renders automatically from the .h-captcha
+   div in login.html; these globals are the callbacks it calls
+   directly to report a token.
+
+   (Switched from Cloudflare Turnstile after a Cloudflare-side
+   account bug — error 400020 on our real sitekey — that we
+   couldn't fix from our end. Supabase supports both providers the
+   same way: the token goes in as options.captchaToken, so
+   nothing in auth.js had to change.)
    ------------------------------------------------------------ */
-let turnstileToken = null;
-let turnstileFailed = false;
+let captchaToken = null;
+let captchaFailed = false;
 
-window.onTurnstileSuccess = function (token) {
-  turnstileToken = token;
-  turnstileFailed = false;
+window.onCaptchaSuccess = function (token) {
+  captchaToken = token;
+  captchaFailed = false;
 };
 
-window.onTurnstileExpired = function () {
-  turnstileToken = null;
+window.onCaptchaExpired = function () {
+  captchaToken = null;
 };
 
-/* ------------------------------------------------------------
-   If Turnstile itself fails to load or render (a Cloudflare-side
-   outage, not something in our control — this has genuinely
-   happened account-wide across many unrelated sites, confirmed
-   via Cloudflare's own community reports), we don't want that to
-   permanently block every real signup. Once this fires, the
-   submit handler below allows proceeding without a token rather
-   than leaving people stuck indefinitely on a third-party issue.
-   ------------------------------------------------------------ */
-window.onTurnstileError = function () {
-  console.warn("Turnstile failed to load — allowing signup to proceed without it.");
-  turnstileFailed = true;
+/* If the widget itself fails to load or render (a third-party
+   outage, not something in our control), we don't want that to
+   permanently block every real signup on the client side. Note
+   this only relaxes OUR OWN check — if CAPTCHA protection is
+   switched on in Supabase, Supabase still enforces it server-side
+   and will reject a signup that arrives without a valid token. */
+window.onCaptchaError = function () {
+  console.warn("hCaptcha failed to load — allowing signup to proceed without it.");
+  captchaFailed = true;
 };
 
-/* Backup detection: the specific Cloudflare-side failure we hit
-   (error 400020) throws as an UNCAUGHT exception rather than
-   cleanly invoking data-error-callback above — so we also listen
-   globally for it, to make sure the fallback activates either way. */
-window.addEventListener("error", (event) => {
-  if (event.message && event.message.includes("TurnstileError")) {
-    console.warn("Caught uncaught TurnstileError — allowing signup to proceed without it.");
-    turnstileFailed = true;
-  }
-});
-
-function resetTurnstile() {
-  turnstileToken = null;
-  if (window.turnstile) {
-    window.turnstile.reset();
+function resetCaptcha() {
+  captchaToken = null;
+  if (window.hcaptcha) {
+    window.hcaptcha.reset();
   }
 }
 
@@ -179,7 +170,7 @@ authForm.addEventListener("submit", async (event) => {
   errorEl.hidden = true;
   noticeEl.hidden = true;
 
-  if (!turnstileToken && !turnstileFailed) {
+  if (!captchaToken && !captchaFailed) {
     errorEl.textContent = "Please complete the verification check before continuing.";
     errorEl.hidden = false;
     return;
@@ -194,16 +185,16 @@ authForm.addEventListener("submit", async (event) => {
 
   const { data, error } =
     mode === "signin"
-      ? await signIn(email, password, turnstileToken)
-      : await signUp(email, password, turnstileToken);
+      ? await signIn(email, password, captchaToken)
+      : await signUp(email, password, captchaToken);
 
   submitBtn.disabled = false;
   submitBtn.textContent = originalLabel;
 
-  // Turnstile tokens are single-use — reset the widget after every
+  // CAPTCHA tokens are single-use — reset the widget after every
   // attempt, whether it succeeded or failed, so the next submit
   // (or a retry after an error) always has a fresh token.
-  resetTurnstile();
+  resetCaptcha();
 
   if (error) {
     errorEl.textContent = friendlyAuthError(error.message);

@@ -2626,3 +2626,16 @@ input.field-valid {
   color: #b8bcc2 !important;
   opacity: 0.7;
 }
+
+/* =========================
+   hCAPTCHA — containment
+   Same defensive pattern used elsewhere in this app for
+   fixed-width third-party widgets: never let the widget push
+   the form wider than the screen. data-size="compact" keeps the
+   widget itself narrow; this is the safety net on top of that.
+   ========================= */
+.h-captcha {
+  max-width: 100%;
+  overflow: hidden;
+  margin-bottom: var(--space-4);
+}

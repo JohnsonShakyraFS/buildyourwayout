@@ -3353,3 +3353,9 @@ input.field-valid {
   color: var(--muted);
   font-size: var(--text-sm);
 }
+
+/* Accent swatch colors (moved out of inline styles) */
+.accent-swatch[data-accent="teal"]     { --swatch: #4f9490; }
+.accent-swatch[data-accent="lavender"] { --swatch: #8d80c0; }
+.accent-swatch[data-accent="rose"]     { --swatch: #c46e88; }
+.accent-swatch[data-accent="sunrise"]  { --swatch: #c5752e; }

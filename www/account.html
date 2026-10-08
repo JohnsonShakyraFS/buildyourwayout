@@ -78,7 +78,7 @@
             </label>
           </div>
           <button type="submit" class="btn secondary-btn" id="nameSaveBtn">Save Name</button>
-          <p id="nameNotice" class="auth-notice" hidden></p>
+          <p id="nameNotice" class="auth-notice" aria-live="polite" hidden></p>
         </form>
 
         <form id="emailChangeForm" class="email-change-form">
@@ -112,7 +112,7 @@
         </label>
     
         <button type="button" class="btn secondary-btn" id="prefsSaveBtn">Save Preferences</button>
-        <p id="prefsNotice" class="auth-notice" hidden></p>
+        <p id="prefsNotice" class="auth-notice" aria-live="polite" hidden></p>
       </div>
     
     </section>
@@ -134,10 +134,10 @@
       <div class="appearance-group">
         <span class="appearance-label" id="accentLabel">Accent color</span>
         <div class="theme-options" role="radiogroup" aria-labelledby="accentLabel">
-          <button type="button" class="accent-swatch" data-accent="teal" style="--swatch: #4f9490" role="radio" aria-checked="false" aria-label="Teal"></button>
-          <button type="button" class="accent-swatch" data-accent="lavender" style="--swatch: #8d80c0" role="radio" aria-checked="false" aria-label="Lavender (Plus)"></button>
-          <button type="button" class="accent-swatch" data-accent="rose" style="--swatch: #c46e88" role="radio" aria-checked="false" aria-label="Rose (Plus)"></button>
-          <button type="button" class="accent-swatch" data-accent="sunrise" style="--swatch: #c5752e" role="radio" aria-checked="false" aria-label="Sunrise (Plus)"></button>
+          <button type="button" class="accent-swatch" data-accent="teal" role="radio" aria-checked="false" aria-label="Teal"></button>
+          <button type="button" class="accent-swatch" data-accent="lavender" role="radio" aria-checked="false" aria-label="Lavender (Plus)"></button>
+          <button type="button" class="accent-swatch" data-accent="rose" role="radio" aria-checked="false" aria-label="Rose (Plus)"></button>
+          <button type="button" class="accent-swatch" data-accent="sunrise" role="radio" aria-checked="false" aria-label="Sunrise (Plus)"></button>
         </div>
       </div>
 
@@ -218,9 +218,6 @@
 
         <p id="passwordError" class="auth-error" aria-live="polite" hidden></p>
         <p id="passwordNotice" class="auth-notice" aria-live="polite" hidden></p>
-        <p id="nameNotice" class="auth-notice" aria-live="polite" hidden></p>
-        <p id="prefsNotice" class="auth-notice" aria-live="polite" hidden></p>
-        <p id="deleteError" class="auth-error" aria-live="polite" hidden></p>
 
         <button type="submit" class="btn primary-btn save-btn" id="passwordSubmitBtn">
           ♡ Update Password
@@ -239,7 +236,7 @@
         <div id="deleteConfirmBlock" class="delete-confirm-block" hidden>
           <p>Type <strong>DELETE</strong> below to confirm.</p>
           <input id="deleteConfirmInput" type="text" placeholder="Type DELETE" />
-          <p id="deleteError" class="auth-error" hidden></p>
+          <p id="deleteError" class="auth-error" aria-live="polite" hidden></p>
           <div class="delete-confirm-actions">
             <button type="button" class="btn secondary-btn" id="cancelDeleteBtn">Cancel</button>
             <button type="button" class="btn danger-btn" id="confirmDeleteBtn">Permanently Delete</button>

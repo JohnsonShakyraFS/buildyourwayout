@@ -320,6 +320,33 @@ if (window.location.pathname.includes("project.html")) {
       }
     }
 
+    /* ------------------------------------------------------------
+       Keeps the finished build. Before this existed, completing a
+       build threw the code away (progress was cleared and only the
+       reflection survived). A failure here must never block the
+       person from reaching reflection, so errors are logged only.
+       ------------------------------------------------------------ */
+    async function saveFinishedBuild() {
+      if (!gateUser) return;
+
+      const { error } = await supabase
+        .from("saved_builds")
+        .insert({
+          user_id: gateUser.id,
+          build_id: buildId,
+          mood_key: moodKey,
+          title: build.title,
+          html: buildState.html || "",
+          css: buildState.css || "",
+          js: buildState.js || "",
+          source: "guided"
+        });
+
+      if (error) {
+        console.error("Error saving finished build:", error);
+      }
+    }
+
     async function checkForSavedProgress() {
       if (!gateUser || !resumeBanner) return;
 
@@ -428,6 +455,7 @@ if (window.location.pathname.includes("project.html")) {
           renderStep();
           saveProgress();
         } else {
+          await saveFinishedBuild();
           await clearProgress();
           window.location.href = "reflection.html";
         }

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Builds | Build Your Way Out</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Build Your Way Out" />
+<meta property="og:title" content="Build Your Way Out" />
+<meta property="og:description" content="A calming coding space that helps you transform emotions into small, meaningful projects." />
+<meta property="og:image" content="https://buildyourwayout.app/icons/og-image.png" />
+<meta property="og:url" content="https://buildyourwayout.app/" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Build Your Way Out" />
+<meta name="twitter:description" content="A calming coding space that helps you transform emotions into small, meaningful projects." />
+<meta name="twitter:image" content="https://buildyourwayout.app/icons/og-image.png" />
+</head>
+<body>
+  <a href="#mainContent" class="skip-link">Skip to main content</a>
+  <main class="reflection-page" id="mainContent">
+
+    <header>
+      <a href="index.html" class="logo">
+        <img src="icons/icon-192.png" alt="" class="logo-icon" />
+        Build Your Way Out
+      </a>
+      <nav class="navbar">
+        <div class="nav-links" id="navLinks"></div>
+        <span id="authStatus" class="auth-status"></span>
+      </nav>
+    </header>
+
+    <section class="reflection-header">
+      <h1>My Builds.</h1>
+      <p>Everything you've made, kept in one place.</p>
+      <p id="savedBuildsError" class="auth-error" aria-live="polite" hidden></p>
+    </section>
+
+    <section class="saved-builds-section">
+      <p id="savedBuildsNote" class="saved-builds-note"></p>
+
+      <div id="savedBuildsList" class="saved-builds-list">
+        <p class="journal-loading"><span class="spinner"></span> Loading your builds...</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="js/myBuilds.js"></script>
+
+  <footer class="site-footer">
+    <p class="crisis-note">
+      <strong>If you're in crisis:</strong> in the U.S., call or text
+      <a href="tel:988">988</a> (Suicide &amp; Crisis Lifeline) or text
+      <strong>HOME</strong> to <a href="sms:741741">741741</a> (Crisis Text Line) —
+      both free, confidential, and available 24/7. Outside the U.S., please search
+      for your local emergency or crisis line.
+    </p>
+    <p class="footer-disclaimer">
+      Build Your Way Out is a self-reflection and skill-building tool. It is not
+      therapy, medical advice, or a crisis service.
+    </p>
+    <p class="footer-links">
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+    </p>
+    <p class="footer-links">Questions or feedback? <a href="mailto:shakyrajohnson800@gmail.com">shakyrajohnson800@gmail.com</a></p>
+  </footer>
+</body>
+</html>

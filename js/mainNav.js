@@ -14,6 +14,7 @@ function renderLinks(user) {
     el.innerHTML = `
       ${isNativeApp ? "" : '<a href="index.html">Home</a>'}
       <a href="mood.html">Mood Builds</a>
+      <a href="my-builds.html">My Builds</a>
       <a href="journal.html">Journal</a>
       <a href="account.html">Account</a>
     `;

@@ -2619,6 +2619,22 @@ input.field-valid {
 
 /* =========================
    CODE EDITOR — DE-EMPHASIZE STRUCTURAL SYNTAX
+   Addresses Theresa's "I didn't know what to touch" confusion
+   generally, across all 79 builds, without needing to hand-mark
+   which characters are editable in each one individually.
+
+   CodeMirror's htmlmixed mode already tags tag names, brackets,
+   and attributes with these classes — the plain text CONTENT
+   between tags gets no special class at all, since it isn't a
+   recognized syntax token. So dimming just these classes visually
+   de-emphasizes "the scaffolding" while leaving the actual words
+   someone should edit at full, normal contrast.
+
+   This is a heuristic, not a guarantee: it works well specifically
+   for "change the words between the tags" steps (the majority
+   pattern), but a step asking someone to edit a CSS value or a JS
+   string won't be specially highlighted by this — those modes keep
+   their normal full-contrast syntax highlighting untouched.
    ========================= */
 .CodeMirror .cm-tag,
 .CodeMirror .cm-bracket,
@@ -2638,4 +2654,103 @@ input.field-valid {
   max-width: 100%;
   overflow: hidden;
   margin-bottom: var(--space-4);
+}
+
+
+/* =========================
+   MY BUILDS
+   ========================= */
+.saved-builds-section {
+  width: min(900px, 100%);
+  margin: var(--space-6) auto 0;
+}
+
+.saved-builds-note {
+  margin-bottom: var(--space-5);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.saved-builds-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.saved-build-card {
+  padding: var(--space-5);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+
+.saved-build-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.saved-build-titlewrap {
+  min-width: 0;
+  flex: 1;
+}
+
+.saved-build-titlewrap h3 {
+  margin: var(--space-1) 0 0;
+  overflow-wrap: anywhere;
+}
+
+.saved-build-header time {
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.saved-build-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.saved-build-btn {
+  min-height: 40px;
+  padding: 0 var(--space-5);
+  font-size: var(--text-sm);
+}
+
+.saved-build-preview {
+  margin-top: var(--space-4);
+}
+
+.saved-build-frame {
+  display: block;
+  width: 100%;
+  height: 320px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: #fff;
+}
+
+.saved-build-locked {
+  opacity: 0.8;
+}
+
+.saved-build-lock-note {
+  margin-bottom: var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 500px) {
+  .saved-build-header {
+    flex-direction: column;
+  }
+  .saved-build-actions .btn {
+    flex: 1 1 100%;
+  }
 }

@@ -236,7 +236,7 @@ input:disabled {
    ========================= */
    .account-overview {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-6);
     margin-top: var(--space-6);
   }
@@ -266,7 +266,7 @@ input:disabled {
   .progress-stats-grid {
     margin-top: var(--space-3);
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--space-4);
   }
   
@@ -330,11 +330,11 @@ input:disabled {
   
   @media (max-width: 750px) {
     .account-overview {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   
     .progress-stats-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
 
@@ -343,7 +343,7 @@ input:disabled {
    ========================= */
    .account-details-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: var(--space-6);
     margin-top: var(--space-6);
   }
@@ -3367,7 +3367,6 @@ input.field-valid {
   margin-bottom: var(--space-3);
   overflow-x: auto;
   padding-bottom: 4px;
-  -webkit-overflow-scrolling: touch;
 }
 
 .snippet-btn {
@@ -3583,5 +3582,78 @@ body > header > .logo {
 @media (max-width: 950px) {
   body > header > .logo {
     padding: 0 var(--space-6);
+  }
+}
+
+
+/* Account: keep the profile and progress cards inside the page on phones */
+.account-overview > *,
+.account-details-grid > * {
+  min-width: 0;
+}
+
+.account-profile-card #profileTypeLine,
+.progress-stat-label {
+  overflow-wrap: anywhere;
+}
+
+.account-profile-card .btn {
+  max-width: 100%;
+  white-space: normal;
+}
+
+@media (max-width: 480px) {
+  .account-profile-card,
+  .account-progress-card,
+  .account-details-card,
+  .account-history-card,
+  .account-subscription-card {
+    padding: var(--space-5);
+  }
+
+  /* Three narrow boxes don't fit a phone: stack them as rows. */
+  .progress-stats-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  .progress-stat {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+  }
+
+  .progress-stat-number {
+    font-size: 24px;
+  }
+
+  .progress-stat-label {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Sandbox: show "JS" instead of "JavaScript" when space is tight */
+.sandbox-tab .lang-short {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .sandbox-tab .lang-full {
+    display: none;
+  }
+
+  .sandbox-tab .lang-short {
+    display: inline;
+  }
+
+  .sandbox-tabs {
+    gap: var(--space-1);
+  }
+
+  .sandbox-tab {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 var(--space-2);
   }
 }

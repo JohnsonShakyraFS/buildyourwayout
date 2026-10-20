@@ -3367,6 +3367,7 @@ input.field-valid {
   margin-bottom: var(--space-3);
   overflow-x: auto;
   padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
 }
 
 .snippet-btn {
@@ -3567,4 +3568,20 @@ select.snippet-control {
   margin: 0 0 var(--space-3);
   font-size: var(--text-sm);
   color: var(--muted);
+}
+
+/* Logo on pages where <header> sits directly under <body> (home,
+   pricing): inset it to line up with the nav bar's content, the same
+   way it sits inside the card on the other pages. */
+body > header > .logo {
+  width: min(1360px, calc(100% - 48px));
+  margin: var(--space-6) auto 0;
+  padding: 0 var(--space-8);
+  box-sizing: border-box;
+}
+
+@media (max-width: 950px) {
+  body > header > .logo {
+    padding: 0 var(--space-6);
+  }
 }

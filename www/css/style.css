@@ -3453,3 +3453,77 @@ input.field-valid {
   line-height: 1.5;
   color: var(--text);
 }
+
+/* Sandbox: value controls and "heads up" notes */
+.snippet-control {
+  min-height: 36px;
+  font: inherit;
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+.snippet-control-color {
+  width: 56px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.snippet-control-range {
+  flex: 1 1 140px;
+  min-width: 0;
+  accent-color: var(--accent);
+}
+
+.snippet-control-text,
+select.snippet-control {
+  flex: 1 1 160px;
+  min-width: 0;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+}
+
+.snippet-readout {
+  min-width: 3.5em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.snippet-chip-add {
+  background: var(--accent);
+  color: #fff;
+}
+
+.sandbox-hints[hidden] {
+  display: none;
+}
+
+.sandbox-hints {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-left: 3px solid var(--border);
+  border-radius: 4px;
+  background: rgba(var(--glass-rgb), 0.5);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.sandbox-hints p {
+  margin: 0 0 var(--space-1);
+}
+
+.sandbox-hints p:last-child {
+  margin-bottom: 0;
+}
+
+.sandbox-hints p::before {
+  content: "Heads up: ";
+  font-weight: 600;
+  color: var(--text);
+}

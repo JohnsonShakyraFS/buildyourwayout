@@ -3,6 +3,7 @@ import { getCurrentUser } from "./auth.js";
 import { initAuthStatus } from "./authStatus.js";
 import { initMainNav } from "./mainNav.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
+import { SNIPPETS } from "./sandboxSnippets.js";
 
 initAuthStatus();
 initMainNav();
@@ -54,6 +55,7 @@ const errorEl = document.getElementById("sandboxError");
 const statusEl = document.getElementById("sandboxStatus");
 const runBtn = document.getElementById("sandboxRun");
 const saveBtn = document.getElementById("sandboxSave");
+const snippetBar = document.getElementById("snippetBar");
 
 const textareas = {
   html: document.getElementById("editor-html"),
@@ -66,6 +68,7 @@ const editors = { html: null, css: null, js: null };
 let currentUser = null;
 let currentSavedId = null;
 let draftTimer = null;
+let activeLang = "html";
 
 /* ------------------------------------------------------------
    Editor helpers (CodeMirror when it loaded, plain textarea if
@@ -100,7 +103,74 @@ function initEditors() {
   });
 }
 
+/* ------------------------------------------------------------
+   Snippet buttons: insert ready-made code at the cursor and
+   highlight the part to change. Works with CodeMirror or the
+   plain-textarea fallback.
+   ------------------------------------------------------------ */
+
+function renderSnippetBar(lang) {
+  snippetBar.textContent = "";
+  (SNIPPETS[lang] || []).forEach((snippet) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "snippet-btn";
+    btn.textContent = snippet.label;
+    btn.title = snippet.title;
+    btn.addEventListener("click", () => insertSnippet(lang, snippet));
+    snippetBar.appendChild(btn);
+  });
+}
+
+function insertSnippet(lang, snippet) {
+  const offset = Math.max(0, snippet.code.indexOf(snippet.select));
+  const selectLen = snippet.select.length;
+  const cm = editors[lang];
+
+  if (cm) {
+    const cursor = cm.getCursor();
+    const lineText = cm.getLine(cursor.line);
+    // Start on a fresh line so snippets never land mid-sentence.
+    let from = cursor;
+    let prefix = "";
+    if (lineText.trim() !== "") {
+      from = { line: cursor.line, ch: lineText.length };
+      prefix = "\n";
+    }
+    cm.replaceRange(prefix + snippet.code, from);
+
+    // Work out where the placeholder landed (it may be on a later line).
+    const before = prefix + snippet.code.slice(0, offset);
+    const lines = before.split("\n");
+    const startLine = from.line + lines.length - 1;
+    const startCh = lines.length === 1 ? from.ch + lines[0].length : lines[lines.length - 1].length;
+    cm.focus();
+    cm.setSelection(
+      { line: startLine, ch: startCh },
+      { line: startLine, ch: startCh + selectLen }
+    );
+  } else {
+    const ta = textareas[lang];
+    const pos = ta.selectionStart ?? ta.value.length;
+    const lineStart = ta.value.lastIndexOf("\n", pos - 1) + 1;
+    let lineEnd = ta.value.indexOf("\n", pos);
+    if (lineEnd === -1) lineEnd = ta.value.length;
+    const needsBreak = ta.value.slice(lineStart, lineEnd).trim() !== "";
+    const insertAt = needsBreak ? lineEnd : pos;
+    const text = (needsBreak ? "\n" : "") + snippet.code;
+    ta.value = ta.value.slice(0, insertAt) + text + ta.value.slice(insertAt);
+    const start = insertAt + (needsBreak ? 1 : 0) + offset;
+    ta.focus();
+    ta.setSelectionRange(start, start + selectLen);
+    ta.dispatchEvent(new Event("input"));
+  }
+
+  scheduleDraftSave();
+}
+
 function switchTab(lang) {
+  activeLang = lang;
+  renderSnippetBar(lang);
   document.querySelectorAll(".sandbox-tab").forEach((tab) => {
     const active = tab.dataset.lang === lang;
     tab.classList.toggle("active", active);
@@ -352,6 +422,7 @@ async function init() {
 
   appPanel.classList.remove("hidden");
   initEditors();
+  renderSnippetBar(activeLang);
 
   const id = new URLSearchParams(window.location.search).get("id");
   let loaded = false;

@@ -3359,3 +3359,32 @@ input.field-valid {
 .accent-swatch[data-accent="lavender"] { --swatch: #8d80c0; }
 .accent-swatch[data-accent="rose"]     { --swatch: #c46e88; }
 .accent-swatch[data-accent="sunrise"]  { --swatch: #c5752e; }
+
+/* Sandbox snippet buttons */
+.snippet-bar {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.snippet-btn {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.snippet-btn:hover,
+.snippet-btn:focus-visible {
+  border-style: solid;
+  border-color: var(--accent);
+  color: var(--accent);
+}

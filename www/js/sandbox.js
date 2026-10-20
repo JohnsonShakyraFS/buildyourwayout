@@ -56,6 +56,8 @@ const statusEl = document.getElementById("sandboxStatus");
 const runBtn = document.getElementById("sandboxRun");
 const saveBtn = document.getElementById("sandboxSave");
 const snippetBar = document.getElementById("snippetBar");
+const snippetPicker = document.getElementById("snippetPicker");
+const snippetHelp = document.getElementById("snippetHelp");
 
 const textareas = {
   html: document.getElementById("editor-html"),
@@ -111,19 +113,118 @@ function initEditors() {
 
 function renderSnippetBar(lang) {
   snippetBar.textContent = "";
+  hideSnippetPicker();
+  hideSnippetHelp();
   (SNIPPETS[lang] || []).forEach((snippet) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "snippet-btn";
     btn.textContent = snippet.label;
     btn.title = snippet.title;
-    btn.addEventListener("click", () => insertSnippet(lang, snippet));
+    btn.addEventListener("click", () => handleSnippetClick(lang, snippet));
     snippetBar.appendChild(btn);
   });
 }
 
-function insertSnippet(lang, snippet) {
-  const offset = Math.max(0, snippet.code.indexOf(snippet.select));
+function hideSnippetPicker() {
+  snippetPicker.hidden = true;
+  snippetPicker.textContent = "";
+}
+
+function hideSnippetHelp() {
+  snippetHelp.hidden = true;
+  snippetHelp.textContent = "";
+}
+
+function showSnippetHelp(text) {
+  snippetHelp.textContent = text;
+  snippetHelp.hidden = false;
+}
+
+/* What can a CSS or JavaScript snippet point at? Read the HTML tab:
+   every id, plus every kind of element that's actually there. */
+const IGNORED_TAGS = new Set(["html", "head", "body", "script", "style", "meta", "link", "title", "br"]);
+
+function getTargetChoices({ noBody }) {
+  const choices = [];
+  const seen = new Set();
+  const add = (selector, hint) => {
+    if (seen.has(selector)) return;
+    seen.add(selector);
+    choices.push({ selector, hint });
+  };
+
+  try {
+    const doc = new DOMParser().parseFromString(getCode("html"), "text/html");
+    doc.body.querySelectorAll("*").forEach((el) => {
+      const tag = el.tagName.toLowerCase();
+      if (IGNORED_TAGS.has(tag)) return;
+      if (el.id) add("#" + el.id, `the <${tag}> with id “${el.id}”`);
+      add(tag, `every <${tag}> on the page`);
+    });
+  } catch (err) {
+    // An unreadable HTML tab just means fewer choices.
+  }
+
+  if (!noBody) add("body", "the whole page");
+  return choices.slice(0, 12);
+}
+
+function handleSnippetClick(lang, snippet) {
+  hideSnippetPicker();
+
+  if (!snippet.target) {
+    insertSnippet(lang, snippet, snippet.code);
+    showSnippetHelp(snippet.explain);
+    return;
+  }
+
+  const choices = getTargetChoices(snippet);
+
+  // Nothing in the HTML to point at yet: use the default, and say so.
+  if (choices.length === 0) {
+    insertSnippet(lang, snippet, snippet.code.split("{target}").join(snippet.target));
+    showSnippetHelp(
+      snippet.explain.split("{target}").join(snippet.target) +
+      " Your HTML tab doesn't have this yet. Add it there so this has something to change."
+    );
+    return;
+  }
+
+  const label = document.createElement("p");
+  label.className = "snippet-picker-label";
+  label.textContent = "Which part of your page?";
+  snippetPicker.appendChild(label);
+
+  const row = document.createElement("div");
+  row.className = "snippet-picker-choices";
+  choices.forEach(({ selector, hint }) => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "snippet-chip";
+    chip.textContent = selector;
+    chip.title = hint;
+    chip.addEventListener("click", () => {
+      hideSnippetPicker();
+      insertSnippet(lang, snippet, snippet.code.split("{target}").join(selector));
+      showSnippetHelp(snippet.explain.split("{target}").join(selector));
+    });
+    row.appendChild(chip);
+  });
+
+  const cancel = document.createElement("button");
+  cancel.type = "button";
+  cancel.className = "snippet-chip snippet-chip-cancel";
+  cancel.textContent = "Cancel";
+  cancel.addEventListener("click", hideSnippetPicker);
+  row.appendChild(cancel);
+
+  snippetPicker.appendChild(row);
+  snippetPicker.hidden = false;
+}
+
+function insertSnippet(lang, snippet, code) {
+  const offset = Math.max(0, code.indexOf(snippet.select));
   const selectLen = snippet.select.length;
   const cm = editors[lang];
 
@@ -137,10 +238,10 @@ function insertSnippet(lang, snippet) {
       from = { line: cursor.line, ch: lineText.length };
       prefix = "\n";
     }
-    cm.replaceRange(prefix + snippet.code, from);
+    cm.replaceRange(prefix + code, from);
 
     // Work out where the placeholder landed (it may be on a later line).
-    const before = prefix + snippet.code.slice(0, offset);
+    const before = prefix + code.slice(0, offset);
     const lines = before.split("\n");
     const startLine = from.line + lines.length - 1;
     const startCh = lines.length === 1 ? from.ch + lines[0].length : lines[lines.length - 1].length;
@@ -157,7 +258,7 @@ function insertSnippet(lang, snippet) {
     if (lineEnd === -1) lineEnd = ta.value.length;
     const needsBreak = ta.value.slice(lineStart, lineEnd).trim() !== "";
     const insertAt = needsBreak ? lineEnd : pos;
-    const text = (needsBreak ? "\n" : "") + snippet.code;
+    const text = (needsBreak ? "\n" : "") + code;
     ta.value = ta.value.slice(0, insertAt) + text + ta.value.slice(insertAt);
     const start = insertAt + (needsBreak ? 1 : 0) + offset;
     ta.focus();

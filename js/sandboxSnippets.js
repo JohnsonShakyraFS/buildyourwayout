@@ -9,6 +9,11 @@
                  as h1 or #myButton). The value here is the fallback
                  used when the HTML tab has nothing to pick from.
    - `noBody`  : don't offer "the whole page" as a choice.
+   - `control` : if present, the user picks the value before inserting.
+                 `{value}` in `code`, `select` and `explain` is replaced
+                 with their pick. Types: color, range (min/max/step/unit),
+                 choice (options), text (jsString escapes it for a quoted
+                 JavaScript string).
    - `explain` : the one-line, plain-language note shown after insert.
    ============================================================ */
 
@@ -33,28 +38,37 @@
     ],
     css: [
       { label: "Text color", title: "Change the color of text", target: "h1",
-        code: "{target} {\n  color: #4f9490;\n}", select: "#4f9490",
-        explain: "Changes the text color of {target}. Replace the color code with any color you like, or a name such as tomato." },
+        control: { type: "color", label: "Pick a color", value: "#4f9490" },
+        code: "{target} {\n  color: {value};\n}", select: "{value}",
+        explain: "Changes the text color of {target}. Change the color code, or swap it for a color name such as tomato." },
       { label: "Background", title: "Change a background color", target: "body",
-        code: "{target} {\n  background: #eef3f1;\n}", select: "#eef3f1",
+        control: { type: "color", label: "Pick a background color", value: "#eef3f1" },
+        code: "{target} {\n  background: {value};\n}", select: "{value}",
         explain: "Changes the background color of {target}. Try a color name like lavender or a code like #ffe8d6." },
       { label: "Font size", title: "Make text bigger or smaller", target: "p",
-        code: "{target} {\n  font-size: 18px;\n}", select: "18px",
+        control: { type: "range", label: "How big?", min: 12, max: 64, step: 1, unit: "px", value: 18 },
+        code: "{target} {\n  font-size: {value};\n}", select: "{value}",
         explain: "Sets how big the text in {target} is. Bigger number, bigger text." },
       { label: "Font", title: "Change the font", target: "body",
-        code: "{target} {\n  font-family: Georgia, serif;\n}", select: "Georgia, serif",
-        explain: "Changes the font for {target}. Try Arial, sans-serif or “Courier New”, monospace." },
+        control: { type: "choice", label: "Pick a font", value: "Georgia, serif",
+          options: ["Georgia, serif", "Arial, sans-serif", "'Courier New', monospace", "'Trebuchet MS', sans-serif", "'Times New Roman', serif"] },
+        code: "{target} {\n  font-family: {value};\n}", select: "{value}",
+        explain: "Changes the font for {target}. Swap in any other font name you know." },
       { label: "Center", title: "Center the text", target: "h1",
-        code: "{target} {\n  text-align: center;\n}", select: "center",
-        explain: "Centers the text in {target}. Try left or right instead." },
+        control: { type: "choice", label: "Line up the text", value: "center", options: ["left", "center", "right"] },
+        code: "{target} {\n  text-align: {value};\n}", select: "{value}",
+        explain: "Lines up the text in {target}. Try left, center or right." },
       { label: "Spacing", title: "Add space inside an element", target: "button",
-        code: "{target} {\n  padding: 12px 20px;\n}", select: "12px 20px",
-        explain: "Adds breathing room inside {target}. The first number is top and bottom, the second is left and right." },
+        control: { type: "range", label: "How much space?", min: 0, max: 60, step: 2, unit: "px", value: 12 },
+        code: "{target} {\n  padding: {value};\n}", select: "{value}",
+        explain: "Adds breathing room inside {target}. Bigger number, more space. Two numbers like 12px 20px mean top and bottom, then left and right." },
       { label: "Border", title: "A border with rounded corners", target: "button",
-        code: "{target} {\n  border: 2px solid #4f9490;\n  border-radius: 12px;\n}", select: "#4f9490",
+        control: { type: "color", label: "Pick a border color", value: "#4f9490" },
+        code: "{target} {\n  border: 2px solid {value};\n  border-radius: 12px;\n}", select: "{value}",
         explain: "Draws a border around {target} and rounds the corners. A bigger border-radius makes rounder corners." },
       { label: "Hover", title: "What happens when the mouse is over it", target: "button",
-        code: "{target}:hover {\n  opacity: 0.8;\n}", select: "0.8",
+        control: { type: "range", label: "How faint on hover?", min: 0.2, max: 1, step: 0.1, unit: "", value: 0.8 },
+        code: "{target}:hover {\n  opacity: {value};\n}", select: "{value}",
         explain: "Changes how {target} looks when the mouse is over it. 1 is normal, lower is fainter." }
     ],
     js: [
@@ -62,14 +76,17 @@
         code: 'document.querySelector("{target}").addEventListener("click", () => {\n  // your code here\n});', select: "// your code here",
         explain: "Waits for {target} to be clicked, then runs whatever you put inside. Try the Alert or Change text buttons, then paste the line in there." },
       { label: "Alert", title: "Pop up a message",
-        code: 'alert("Hello!");', select: "Hello!",
+        control: { type: "text", label: "What should the message say?", value: "Hello!", jsString: true },
+        code: 'alert("{value}");', select: "{value}",
         explain: "Pops up a message box. On its own it runs as soon as the page loads, so put it inside an On click to run it when someone clicks." },
       { label: "Change text", title: "Change what an element says", target: "h1", noBody: true,
-        code: 'document.querySelector("{target}").textContent = "New text";', select: "New text",
+        control: { type: "text", label: "What should it say?", value: "New text", jsString: true },
+        code: 'document.querySelector("{target}").textContent = "{value}";', select: "{value}",
         explain: "Replaces the words in {target} with your new text." },
       { label: "Change color", title: "Change an element's color", target: "h1", noBody: true,
-        code: 'document.querySelector("{target}").style.color = "tomato";', select: "tomato",
-        explain: "Changes the text color of {target}. Use any color name, like teal or purple." },
+        control: { type: "color", label: "Pick a color", value: "#e07a5f" },
+        code: 'document.querySelector("{target}").style.color = "{value}";', select: "{value}",
+        explain: "Changes the text color of {target}. You can also swap in a color name, like teal or purple." },
       { label: "Hide", title: "Hide an element", target: "p", noBody: true,
         code: 'document.querySelector("{target}").style.display = "none";', select: "none",
         explain: "Hides {target}. Change “none” to “block” to show it again." }

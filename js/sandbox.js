@@ -4,6 +4,7 @@ import { initAuthStatus } from "./authStatus.js";
 import { initMainNav } from "./mainNav.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import { SNIPPETS } from "./sandboxSnippets.js";
+import { checkSandboxHints } from "./sandboxHints.js";
 
 initAuthStatus();
 initMainNav();
@@ -58,6 +59,7 @@ const saveBtn = document.getElementById("sandboxSave");
 const snippetBar = document.getElementById("snippetBar");
 const snippetPicker = document.getElementById("snippetPicker");
 const snippetHelp = document.getElementById("snippetHelp");
+const hintsEl = document.getElementById("sandboxHints");
 
 const textareas = {
   html: document.getElementById("editor-html"),
@@ -170,12 +172,119 @@ function getTargetChoices({ noBody }) {
   return choices.slice(0, 12);
 }
 
-function handleSnippetClick(lang, snippet) {
+/* Fill in {target} and {value}, escaping text for quoted JavaScript. */
+function escapeForJsString(text) {
+  return text.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\s*\n\s*/g, " ");
+}
+
+function resolveSnippet(snippet, target, rawValue) {
+  const control = snippet.control;
+  let value = rawValue;
+  if (control) {
+    if (value === undefined || value === "") value = String(control.value);
+    if (control.type === "range") value = value + (control.unit || "");
+    if (control.jsString) value = escapeForJsString(value);
+  }
+  const fill = (text) =>
+    text.split("{target}").join(target || "").split("{value}").join(value === undefined ? "" : value);
+  return { code: fill(snippet.code), select: fill(snippet.select), explain: fill(snippet.explain) };
+}
+
+function finishSnippet(lang, snippet, target, value, note) {
+  hideSnippetPicker();
+  const { code, select, explain } = resolveSnippet(snippet, target, value);
+  insertSnippet(lang, code, select);
+  showSnippetHelp(note ? explain + " " + note : explain);
+}
+
+function addPickerCancel(row) {
+  const cancel = document.createElement("button");
+  cancel.type = "button";
+  cancel.className = "snippet-chip snippet-chip-cancel";
+  cancel.textContent = "Cancel";
+  cancel.addEventListener("click", hideSnippetPicker);
+  row.appendChild(cancel);
+}
+
+/* Step 2: let the user choose the value (a color, a size, some words). */
+function showValueStep(lang, snippet, target, note) {
+  const control = snippet.control;
   hideSnippetPicker();
 
+  const label = document.createElement("p");
+  label.className = "snippet-picker-label";
+  label.textContent = control.label;
+  snippetPicker.appendChild(label);
+
+  const row = document.createElement("div");
+  row.className = "snippet-picker-choices";
+
+  let input;
+  let readout = null;
+
+  if (control.type === "choice") {
+    input = document.createElement("select");
+    control.options.forEach((option) => {
+      const opt = document.createElement("option");
+      opt.value = option;
+      opt.textContent = option.replace(/'/g, "").split(",")[0];
+      input.appendChild(opt);
+    });
+    input.value = control.value;
+  } else {
+    input = document.createElement("input");
+    input.type = control.type === "color" ? "color" : control.type === "range" ? "range" : "text";
+    if (control.type === "range") {
+      input.min = control.min;
+      input.max = control.max;
+      input.step = control.step;
+    }
+    if (control.type === "text") input.maxLength = 60;
+    input.value = control.value;
+  }
+  input.className = "snippet-control snippet-control-" + control.type;
+  input.setAttribute("aria-label", control.label);
+  row.appendChild(input);
+
+  if (control.type === "range") {
+    readout = document.createElement("span");
+    readout.className = "snippet-readout";
+    const update = () => { readout.textContent = input.value + (control.unit || ""); };
+    input.addEventListener("input", update);
+    update();
+    row.appendChild(readout);
+  }
+
+  const add = document.createElement("button");
+  add.type = "button";
+  add.className = "snippet-chip snippet-chip-add";
+  add.textContent = "Add";
+  add.addEventListener("click", () => finishSnippet(lang, snippet, target, input.value, note));
+  row.appendChild(add);
+
+  if (control.type === "text") {
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        add.click();
+      }
+    });
+  }
+
+  addPickerCancel(row);
+  snippetPicker.appendChild(row);
+  snippetPicker.hidden = false;
+  input.focus();
+}
+
+function handleSnippetClick(lang, snippet) {
+  hideSnippetPicker();
+  hideSnippetHelp();
+
+  // No target to choose: go straight to the value, or just insert.
   if (!snippet.target) {
-    insertSnippet(lang, snippet, snippet.code);
-    showSnippetHelp(snippet.explain);
+    if (snippet.control) showValueStep(lang, snippet, "");
+    else finishSnippet(lang, snippet, "");
     return;
   }
 
@@ -183,11 +292,9 @@ function handleSnippetClick(lang, snippet) {
 
   // Nothing in the HTML to point at yet: use the default, and say so.
   if (choices.length === 0) {
-    insertSnippet(lang, snippet, snippet.code.split("{target}").join(snippet.target));
-    showSnippetHelp(
-      snippet.explain.split("{target}").join(snippet.target) +
-      " Your HTML tab doesn't have this yet. Add it there so this has something to change."
-    );
+    const note = "Your HTML tab doesn't have this yet. Add it there so this has something to change.";
+    if (snippet.control) showValueStep(lang, snippet, snippet.target, note);
+    else finishSnippet(lang, snippet, snippet.target, undefined, note);
     return;
   }
 
@@ -205,27 +312,20 @@ function handleSnippetClick(lang, snippet) {
     chip.textContent = selector;
     chip.title = hint;
     chip.addEventListener("click", () => {
-      hideSnippetPicker();
-      insertSnippet(lang, snippet, snippet.code.split("{target}").join(selector));
-      showSnippetHelp(snippet.explain.split("{target}").join(selector));
+      if (snippet.control) showValueStep(lang, snippet, selector);
+      else finishSnippet(lang, snippet, selector);
     });
     row.appendChild(chip);
   });
-
-  const cancel = document.createElement("button");
-  cancel.type = "button";
-  cancel.className = "snippet-chip snippet-chip-cancel";
-  cancel.textContent = "Cancel";
-  cancel.addEventListener("click", hideSnippetPicker);
-  row.appendChild(cancel);
+  addPickerCancel(row);
 
   snippetPicker.appendChild(row);
   snippetPicker.hidden = false;
 }
 
-function insertSnippet(lang, snippet, code) {
-  const offset = Math.max(0, code.indexOf(snippet.select));
-  const selectLen = snippet.select.length;
+function insertSnippet(lang, code, select) {
+  const offset = Math.max(0, code.indexOf(select));
+  const selectLen = select.length;
   const cm = editors[lang];
 
   if (cm) {
@@ -323,8 +423,25 @@ function renderDoc({ html, css, js }) {
 </html>`;
 }
 
+function renderHints() {
+  const hints = checkSandboxHints({
+    html: getCode("html"),
+    css: getCode("css"),
+    js: getCode("js")
+  });
+
+  hintsEl.textContent = "";
+  hintsEl.hidden = hints.length === 0;
+  hints.forEach((message) => {
+    const p = document.createElement("p");
+    p.textContent = message;
+    hintsEl.appendChild(p);
+  });
+}
+
 function runPreview() {
   hideError();
+  renderHints();
   previewFrame.srcdoc = renderDoc({
     html: getCode("html"),
     css: getCode("css"),

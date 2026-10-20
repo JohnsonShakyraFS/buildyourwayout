@@ -1,3 +1,4 @@
+import { redirectLoggedOut } from "./siteGate.js";
 import { moods } from "./moods.js";
 import { builds } from "./builds.js";
 import { initAuthStatus } from "./authStatus.js";
@@ -12,7 +13,7 @@ registerServiceWorker();
 
 const user = await getCurrentUser();
 if (!user) {
-  window.location.href = "login.html";
+  redirectLoggedOut();
 }
 
 const container = document.getElementById("libraryContent");

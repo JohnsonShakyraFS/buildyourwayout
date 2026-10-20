@@ -1,3 +1,4 @@
+import { redirectLoggedOut } from "./siteGate.js";
 import { moods, pickBuildForMood, pickBuildForMoodAccount } from "./moods.js";
 import { builds } from "./builds.js";
 import { initAuthStatus } from "./authStatus.js";
@@ -22,7 +23,7 @@ let gateUser = null;
 if (isGatedPage) {
   gateUser = await getCurrentUser();
   if (!gateUser) {
-    window.location.href = "login.html";
+    redirectLoggedOut();
   }
 }
 

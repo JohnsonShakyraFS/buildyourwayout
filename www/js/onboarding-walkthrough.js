@@ -1,3 +1,4 @@
+import { redirectLoggedOut } from "./siteGate.js";
 import { getCurrentUser } from "./auth.js";
 import { initAuthStatus } from "./authStatus.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
@@ -8,7 +9,7 @@ registerServiceWorker();
 async function requireUser() {
   const user = await getCurrentUser();
   if (!user) {
-    window.location.href = "login.html";
+    redirectLoggedOut();
   }
 }
 

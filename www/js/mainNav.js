@@ -1,19 +1,16 @@
 import { getCurrentUser, onAuthChange } from "./auth.js";
 import { validateThemeForPlan } from "./theme.js";
+import { applySiteGate } from "./siteGate.js";
 
 function renderLinks(user) {
   const el = document.getElementById("navLinks");
   if (!el) return;
 
   if (user) {
-    // Inside the native app, "Home" points to the marketing
-    // homepage — not useful once someone's already signed in and
-    // using the app. The website keeps it, since there it's a
-    // normal, reachable page in the same navigation.
-    const isNativeApp = window.Capacitor?.isNativePlatform?.();
-
+    // Signed-in people go straight to the product, so the marketing
+    // homepage is hidden from their navigation (on the website and
+    // in the app alike).
     el.innerHTML = `
-      ${isNativeApp ? "" : '<a href="index.html">Home</a>'}
       <a href="mood.html">Mood Builds</a>
       <a href="my-builds.html">My Builds</a>
       <a href="journal.html">Journal</a>
@@ -42,9 +39,13 @@ function renderSkeleton() {
 export function initMainNav() {
   renderSkeleton();
   getCurrentUser().then((user) => {
+    applySiteGate(user);
     renderLinks(user);
     // Only does network work if a non-default theme is stored
     if (user) validateThemeForPlan(user.id);
   });
-  onAuthChange(renderLinks);
+  onAuthChange((user) => {
+    renderLinks(user);
+    applySiteGate(user);
+  });
 }

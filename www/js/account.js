@@ -1,3 +1,4 @@
+import { initBillingToggle } from "./billing.js";
 import { getCurrentUser, updatePassword, deleteAccount } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
 import { initAuthStatus } from "./authStatus.js";
@@ -367,6 +368,8 @@ document.getElementById("managePlanBtn")?.addEventListener("click", async () => 
   window.location.href = data.url;
 });
 
+const billing = initBillingToggle();
+
 planGrid.addEventListener("click", async (event) => {
   const btn = event.target.closest(".plan-select-btn");
   if (!btn || btn.disabled) return;
@@ -381,7 +384,9 @@ planGrid.addEventListener("click", async (event) => {
     btn.disabled = true;
     btn.textContent = "Redirecting to checkout...";
 
-    const { data, error } = await supabase.functions.invoke("create-checkout");
+    const { data, error } = await supabase.functions.invoke("create-checkout", {
+      body: { interval: billing.get() }
+    });
 
     if (error || !data?.url) {
       console.error("Error creating checkout session:", error);

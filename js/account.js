@@ -1,7 +1,9 @@
+import { redirectLoggedOut } from "./siteGate.js";
 import { initBillingToggle } from "./billing.js";
 import { getCurrentUser, updatePassword, deleteAccount } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
 import { initAuthStatus } from "./authStatus.js";
+import { initMainNav } from "./mainNav.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import {
   getStoredTheme, storeTheme, applyTheme, persistTheme, normalizeTheme,
@@ -9,6 +11,7 @@ import {
 } from "./theme.js";
 
 initAuthStatus();
+initMainNav();
 registerServiceWorker();
 
 const nameForm = document.getElementById("nameForm");
@@ -64,7 +67,7 @@ const MOOD_LABELS = {
 
 getCurrentUser().then(async (user) => {
   if (!user) {
-    window.location.href = "login.html";
+    redirectLoggedOut();
     return;
   }
 

@@ -63,7 +63,12 @@
 
 <article class="plan-card">
 <h3>Plus</h3>
-<p class="plan-price">$4.99<span>/mo</span></p>
+<p class="plan-price" id="plusPrice">$6.99<span>/mo</span></p>
+<div class="billing-toggle" role="radiogroup" aria-label="Billing period">
+<button type="button" class="billing-option active" data-interval="month" role="radio" aria-checked="true">Monthly</button>
+<button type="button" class="billing-option" data-interval="year" role="radio" aria-checked="false">Yearly <span class="billing-save">Save 30%</span></button>
+</div>
+<p class="plan-price-note" id="plusPriceNote" aria-live="polite">Billed monthly. Cancel anytime.</p>
 <ul class="plan-features">
 <li>Everything in Free</li>
 <li>Intermediate &amp; advanced builds unlocked</li>
@@ -78,13 +83,15 @@
 </div>
 
 <p class="pricing-note">
-  Billing isn't live yet — signing up puts you on the Free plan for now.
-  You can preview plans anytime from your Account page.
+  Plus renews automatically each month or year until you cancel. You can cancel
+  anytime from your Account page and keep access until the end of the period
+  you've paid for.
 </p>
 
 </main>
 
 <script type="module" src="js/main.js"></script>
+<script type="module" src="js/pricingToggle.js"></script>
 
 <footer class="site-footer">
 <p class="crisis-note">

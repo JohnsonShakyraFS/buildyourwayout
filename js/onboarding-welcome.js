@@ -1,3 +1,4 @@
+import { redirectLoggedOut } from "./siteGate.js";
 import { getCurrentUser } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
 import { initAuthStatus } from "./authStatus.js";
@@ -30,7 +31,7 @@ let enteredName = "";
 async function requireUser() {
   const user = await getCurrentUser();
   if (!user) {
-    window.location.href = "login.html";
+    redirectLoggedOut();
     return null;
   }
   return user;

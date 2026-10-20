@@ -173,7 +173,12 @@
     
         <article class="plan-card" data-plan="plus">
           <h3>Plus</h3>
-          <p class="plan-price">$4.99<span>/mo</span></p>
+          <p class="plan-price" id="plusPrice">$6.99<span>/mo</span></p>
+          <div class="billing-toggle" role="radiogroup" aria-label="Billing period">
+            <button type="button" class="billing-option active" data-interval="month" role="radio" aria-checked="true">Monthly</button>
+            <button type="button" class="billing-option" data-interval="year" role="radio" aria-checked="false">Yearly <span class="billing-save">Save 30%</span></button>
+          </div>
+          <p class="plan-price-note" id="plusPriceNote" aria-live="polite">Billed monthly. Cancel anytime.</p>
           <ul class="plan-features">
             <li>Everything in Free</li>
             <li>Intermediate &amp; advanced builds unlocked</li>
@@ -193,7 +198,7 @@
       <div id="buildHistoryList" class="build-history-list">
         <!-- filled by JS -->
       </div>
-    </section><br><br>
+    </section>
 
     <section class="auth-layout">
 

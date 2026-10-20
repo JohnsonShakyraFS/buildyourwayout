@@ -1,3 +1,4 @@
+import { redirectLoggedOut } from "./siteGate.js";
 import { supabase } from "./supabaseClient.js";
 import { getCurrentUser } from "./auth.js";
 import { initAuthStatus } from "./authStatus.js";
@@ -511,7 +512,7 @@ async function initJournalPage() {
   const user = await getCurrentUser();
 
   if (!user) {
-    window.location.href = "login.html";
+    redirectLoggedOut();
     return;
   }
 

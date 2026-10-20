@@ -148,6 +148,8 @@ Deno.serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: "subscription",
+      // Shows an "Add promotion code" box on the Stripe Checkout page.
+      allow_promotion_codes: true,
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${origin}/account.html?checkout=success`,
       cancel_url: `${origin}/account.html?checkout=cancelled`,

@@ -1,4 +1,4 @@
-const CACHE_NAME = "build-your-way-out-v8";
+const CACHE_NAME = "build-your-way-out-v9";
 
 const STATIC_ASSETS = [
   "/",
@@ -31,6 +31,8 @@ const STATIC_ASSETS = [
   "/js/sandbox.js",
   "/js/sandboxSnippets.js",
   "/js/sandboxHints.js",
+  "/js/billing.js",
+  "/js/pricingToggle.js",
   "/js/insights.js",
   "/js/theme.js",
   "/js/themeInit.js",

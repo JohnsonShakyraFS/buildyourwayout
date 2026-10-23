@@ -1,3 +1,5 @@
+import { saveFile } from "./fileSave.js";
+import "./monitoring.js";
 import { redirectLoggedOut } from "./siteGate.js";
 import { supabase } from "./supabaseClient.js";
 import { getCurrentUser } from "./auth.js";
@@ -296,17 +298,11 @@ async function exportJournal(user) {
   markdown += `---\n\n`;
   markdown += data.map(formatReflectionAsMarkdown).join("");
 
-  const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `build-your-way-out-journal-${new Date().toISOString().slice(0, 10)}.md`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  URL.revokeObjectURL(url);
+  await saveFile(
+    `build-your-way-out-journal-${new Date().toISOString().slice(0, 10)}.md`,
+    markdown,
+    "text/markdown;charset=utf-8"
+  );
 }
 
 function setupExportButton() {

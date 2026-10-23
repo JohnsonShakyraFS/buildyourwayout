@@ -1,6 +1,6 @@
 import { getCurrentUser, onAuthChange } from "./auth.js";
 import { validateThemeForPlan } from "./theme.js";
-import { applySiteGate } from "./siteGate.js";
+import { applySiteGate, isNativeApp } from "./siteGate.js";
 
 function renderLinks(user) {
   const el = document.getElementById("navLinks");
@@ -20,7 +20,7 @@ function renderLinks(user) {
     el.innerHTML = `
       <a href="index.html">Home</a>
       <a href="index.html#how-it-works">How It Works</a>
-      <a href="pricing.html">Pricing</a>
+      ${isNativeApp() ? "" : '<a href="pricing.html">Pricing</a>'}
       <a href="login.html" class="nav-button">Log In / Sign Up</a>
     `;
   }

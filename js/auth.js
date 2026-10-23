@@ -44,8 +44,16 @@ export async function getCurrentUser() {
    recovery session already established.
    ------------------------------------------------------------ */
 export async function requestPasswordReset(email) {
+  // In the phone apps, window.location.origin is an app-only address
+  // (capacitor:// or localhost) that an email link can't open, so the
+  // link always points at the real website. It must also be listed under
+  // Supabase > Authentication > URL Configuration > Redirect URLs.
+  const siteUrl = window.Capacitor?.isNativePlatform?.()
+    ? "https://buildyourwayout.app"
+    : window.location.origin;
+
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${window.location.origin}/reset-password.html`
+    redirectTo: `${siteUrl}/reset-password.html`
   });
   return { data, error };
 }

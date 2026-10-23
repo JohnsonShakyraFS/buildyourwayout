@@ -1,3 +1,6 @@
+import { saveFile } from "./fileSave.js";
+import { inNativeApp } from "./siteGate.js";
+import "./monitoring.js";
 import { redirectLoggedOut } from "./siteGate.js";
 import { supabase } from "./supabaseClient.js";
 import { getCurrentUser } from "./auth.js";
@@ -33,6 +36,8 @@ const noteEl = document.getElementById("savedBuildsNote");
 const errorEl = document.getElementById("savedBuildsError");
 
 let isPlus = false;
+// Inside the app, purchases are hidden, so wording stays neutral.
+const inApp = inNativeApp();
 
 /* ------------------------------------------------------------
    Helpers
@@ -111,18 +116,12 @@ ${build.js}
 `;
 }
 
-function downloadBuild(build) {
-  const blob = new Blob([buildStandaloneHtml(build)], { type: "text/html;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = `${slugify(build.title)}.html`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  URL.revokeObjectURL(url);
+async function downloadBuild(build) {
+  await saveFile(
+    `${slugify(build.title)}.html`,
+    buildStandaloneHtml(build),
+    "text/html;charset=utf-8"
+  );
 }
 
 /* ------------------------------------------------------------
@@ -192,9 +191,11 @@ function renderCard(build, locked) {
   if (locked) {
     const msg = document.createElement("p");
     msg.className = "saved-build-lock-note";
-    msg.textContent = "Saved and waiting for you. Unlock all your builds with Plus.";
+    msg.textContent = inApp
+      ? "Saved and waiting for you."
+      : "Saved and waiting for you. Unlock all your builds with Plus.";
     card.appendChild(msg);
-    actions.appendChild(makeUpgradeLink("Unlock with Plus"));
+    if (!inApp) actions.appendChild(makeUpgradeLink("Unlock with Plus"));
   } else {
     /* Previews are created only when opened, and removed when
        closed — a long list of live iframes (each running its own
@@ -242,7 +243,7 @@ function renderCard(build, locked) {
         )
       );
     } else {
-      actions.appendChild(makeUpgradeLink("Download (Plus)"));
+      if (!inApp) actions.appendChild(makeUpgradeLink("Download (Plus)"));
     }
   }
 
@@ -309,7 +310,8 @@ async function loadBuilds() {
   } else if (lockedCount > 0) {
     noteEl.textContent =
       `Your ${FREE_UNLOCKED_COUNT} newest builds are open. ` +
-      `${lockedCount} older build${lockedCount === 1 ? " is" : "s are"} saved and unlock with Plus.`;
+      `${lockedCount} older build${lockedCount === 1 ? " is" : "s are"} saved` +
+      (inApp ? "." : " and unlock with Plus.");
   } else {
     noteEl.textContent = `${data.length} build${data.length === 1 ? "" : "s"} saved`;
   }

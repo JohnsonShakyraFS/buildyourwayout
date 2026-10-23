@@ -1,3 +1,4 @@
+import "./monitoring.js";
 import { supabase } from "./supabaseClient.js";
 import { initAuthStatus } from "./authStatus.js";
 import { initMainNav } from "./mainNav.js";
@@ -510,8 +511,6 @@ async function saveReflection(event) {
 
     return;
   }
-
-  console.log("Reflection saved:", data);
 
   const delta = afterRating - beforeRating;
   let shiftPhrase = "stayed about the same";

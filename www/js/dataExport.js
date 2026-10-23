@@ -10,7 +10,8 @@
    ============================================================ */
 
    import { supabase } from "./supabaseClient.js";
-
+   import { saveFile } from "./fileSave.js";
+   
    const PAGE_SIZE = 1000;
    
    const SECTIONS = [
@@ -68,34 +69,6 @@
    
      if (unavailable.length) result.notIncluded = unavailable;
      return { data: result, unavailable };
-   }
-   
-   /* Saves a text file. On phones, the share sheet is the dependable
-      way to hand a file over; on desktop browsers it's a normal download. */
-   async function saveFile(filename, text, mime) {
-     const blob = new Blob([text], { type: mime });
-   
-     if (window.Capacitor?.isNativePlatform?.() && navigator.canShare && navigator.share) {
-       const file = new File([blob], filename, { type: mime });
-       if (navigator.canShare({ files: [file] })) {
-         try {
-           await navigator.share({ files: [file], title: filename });
-           return;
-         } catch (err) {
-           if (err?.name === "AbortError") return; // they closed the share sheet
-           // Anything else: fall back to a plain download below.
-         }
-       }
-     }
-   
-     const url = URL.createObjectURL(blob);
-     const link = document.createElement("a");
-     link.href = url;
-     link.download = filename;
-     document.body.appendChild(link);
-     link.click();
-     link.remove();
-     setTimeout(() => URL.revokeObjectURL(url), 1000);
    }
    
    export async function exportAllData(user) {

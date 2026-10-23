@@ -90,6 +90,7 @@ html, body {
 }
 body {
     min-height: 100vh;
+    min-height: 100dvh;
     font-family: "Inter", sans-serif;
     background: var(--bg);
     color: var(--text);
@@ -779,6 +780,7 @@ input:disabled {
   .mood-page {
     width: min(1360px, calc(100% - 48px));
     min-height: calc(100vh - 48px);
+    min-height: calc(100dvh - 48px);
     margin: var(--space-6) auto;
     padding: var(--space-7) var(--space-8) 56px;
     background: rgba(var(--glass-rgb), 0.45);
@@ -880,6 +882,7 @@ input:disabled {
   .project-page {
     width: min(1360px, calc(100% - 48px));
     min-height: calc(100vh - 48px);
+    min-height: calc(100dvh - 48px);
     margin: var(--space-6) auto;
     padding: var(--space-7) var(--space-8) 28px;
     background: rgba(var(--glass-rgb), 0.45);
@@ -1396,6 +1399,7 @@ input:disabled {
   .reflection-page {
     width: min(1360px, calc(100% - 48px));
     min-height: calc(100vh - 48px);
+    min-height: calc(100dvh - 48px);
     margin: var(--space-6) auto;
     padding: var(--space-7) var(--space-8) 36px;
     background: rgba(var(--glass-rgb), 0.45);
@@ -3670,4 +3674,45 @@ body > header > .logo {
 
 .account-data-card .auth-notice {
   margin: var(--space-3) 0 0;
+}
+
+/* ------------------------------------------------------------
+   Phone apps
+   ------------------------------------------------------------ */
+
+/* iPhone notch and home indicator: keep content clear of them. */
+html.is-ios body {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+/* iOS zooms the page when a field under 16px is tapped. */
+@supports (-webkit-touch-callout: none) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* No purchases inside the app. Remove "html.is-native" from a line
+   below to allow purchases again on that platform. */
+html.is-native [data-purchase],
+html.is-native .plan-select-btn,
+html.is-native .billing-toggle,
+html.is-native .plan-price,
+html.is-native .plan-price-note,
+html.is-native #managePlanBlock {
+  display: none !important;
+}
+
+html.is-native .plan-card.current-plan::after {
+  content: "Your plan";
+  display: block;
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--accent);
 }

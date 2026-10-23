@@ -37,6 +37,8 @@
   
   /* Pure decision: where (if anywhere) should this visitor be sent? */
   export function gateDecision({ page, loggedIn, native }) {
+    // The app never shows the pricing page (no purchases inside the app).
+    if (native && page === "pricing") return loggedIn ? "mood.html" : "login.html";
     if (native) return null;
     if (loggedIn && page === "index") return "mood.html";
     if (!loggedIn && PROTECTED_PAGES.includes(page)) return "index.html";
@@ -55,4 +57,10 @@
   /* Used by each page's own "must be signed in" check. */
   export function redirectLoggedOut() {
     window.location.replace(isNativeApp() ? "login.html" : "index.html");
+  }
+  
+  /* True inside the app. Purchases are hidden there (see style.css,
+     html.is-native), and pages use this to word things neutrally. */
+  export function inNativeApp() {
+    return document.documentElement.classList.contains("is-native") || isNativeApp();
   }

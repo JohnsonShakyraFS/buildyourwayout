@@ -76,7 +76,17 @@ export async function updatePassword(newPassword) {
    ------------------------------------------------------------ */
 export async function deleteAccount() {
   const { data, error } = await supabase.functions.invoke("delete-account");
-  if (!error) {
+
+  if (error) {
+    // The function explains what went wrong in its response body; the
+    // default error text only says "non-2xx status code".
+    try {
+      const body = await error.context?.json?.();
+      if (body?.error) error.message = body.error;
+    } catch (err) {
+      // Keep the default message.
+    }
+  } else {
     await supabase.auth.signOut();
   }
   return { data, error };

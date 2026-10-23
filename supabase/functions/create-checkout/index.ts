@@ -26,6 +26,42 @@ const PRICE_IDS: Record<string, string | undefined> = {
   year: Deno.env.get("STRIPE_PRICE_YEARLY")
 };
 
+
+/* ------------------------------------------------------------
+   Error reporting to Sentry (optional).
+   Does nothing unless the SENTRY_DSN secret is set:
+     supabase secrets set SENTRY_DSN=https://...@....ingest.sentry.io/...
+   A failure here is swallowed: monitoring must never break the
+   function it is watching. Only the error text goes out (emails
+   scrubbed), never request bodies or user data.
+   ------------------------------------------------------------ */
+async function reportToSentry(err: unknown, tags: Record<string, string> = {}) {
+  const dsn = Deno.env.get("SENTRY_DSN");
+  if (!dsn) return;
+  try {
+    const url = new URL(dsn);
+    const projectId = url.pathname.replace("/", "");
+    const message = (err instanceof Error ? err.message : String(err))
+      .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, "[email]");
+    const event = {
+      event_id: crypto.randomUUID().replaceAll("-", ""),
+      timestamp: Date.now() / 1000,
+      platform: "javascript",
+      level: "error",
+      server_name: "supabase-edge-function",
+      environment: Deno.env.get("SENTRY_ENV") ?? "production",
+      tags,
+      exception: { values: [{ type: err instanceof Error ? err.name : "Error", value: message }] }
+    };
+    await fetch(
+      `${url.protocol}//${url.host}/api/${projectId}/store/?sentry_key=${url.username}&sentry_version=7`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(event) }
+    );
+  } catch (_e) {
+    // Never let reporting cause a second failure.
+  }
+}
+
 // Required for any Edge Function called directly from browser code
 // (via supabase.functions.invoke()). Without these, the browser
 // either blocks the request before it completes, or blocks reading
@@ -92,6 +128,7 @@ Deno.serve(async (req) => {
     }
     if (!priceId) {
       console.error(`Missing price secret for interval "${interval}"`);
+      await reportToSentry(new Error(`Missing price secret for interval ${interval}`), { function: "create-checkout" });
       return new Response(JSON.stringify({ error: "Pricing is not configured" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" }
@@ -143,7 +180,10 @@ Deno.serve(async (req) => {
       }
     }
 
-    const origin = req.headers.get("origin") || "https://buildyourwayout.netlify.app";
+    // Always send people back to the real website. The request's own
+    // origin can't be trusted here: the apps load from addresses
+    // (capacitor://, localhost) that Stripe won't redirect to.
+    const siteUrl = Deno.env.get("SITE_URL") || "https://buildyourwayout.app";
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
@@ -151,8 +191,8 @@ Deno.serve(async (req) => {
       // Shows an "Add promotion code" box on the Stripe Checkout page.
       allow_promotion_codes: true,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${origin}/account.html?checkout=success`,
-      cancel_url: `${origin}/account.html?checkout=cancelled`,
+      success_url: `${siteUrl}/account.html?checkout=success`,
+      cancel_url: `${siteUrl}/account.html?checkout=cancelled`,
       // Also stamped directly on the session as a second, redundant
       // way to identify the user in the webhook handler later.
       client_reference_id: user.id
@@ -164,6 +204,7 @@ Deno.serve(async (req) => {
     });
   } catch (err) {
     console.error("create-checkout error:", err);
+    await reportToSentry(err, { function: "create-checkout" });
     return new Response(JSON.stringify({ error: "Something went wrong creating checkout" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" }

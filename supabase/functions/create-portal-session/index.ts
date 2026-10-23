@@ -24,6 +24,42 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type"
 };
 
+
+/* ------------------------------------------------------------
+   Error reporting to Sentry (optional).
+   Does nothing unless the SENTRY_DSN secret is set:
+     supabase secrets set SENTRY_DSN=https://...@....ingest.sentry.io/...
+   A failure here is swallowed: monitoring must never break the
+   function it is watching. Only the error text goes out (emails
+   scrubbed), never request bodies or user data.
+   ------------------------------------------------------------ */
+async function reportToSentry(err: unknown, tags: Record<string, string> = {}) {
+  const dsn = Deno.env.get("SENTRY_DSN");
+  if (!dsn) return;
+  try {
+    const url = new URL(dsn);
+    const projectId = url.pathname.replace("/", "");
+    const message = (err instanceof Error ? err.message : String(err))
+      .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, "[email]");
+    const event = {
+      event_id: crypto.randomUUID().replaceAll("-", ""),
+      timestamp: Date.now() / 1000,
+      platform: "javascript",
+      level: "error",
+      server_name: "supabase-edge-function",
+      environment: Deno.env.get("SENTRY_ENV") ?? "production",
+      tags,
+      exception: { values: [{ type: err instanceof Error ? err.name : "Error", value: message }] }
+    };
+    await fetch(
+      `${url.protocol}//${url.host}/api/${projectId}/store/?sentry_key=${url.username}&sentry_version=7`,
+      { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(event) }
+    );
+  } catch (_e) {
+    // Never let reporting cause a second failure.
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 200, headers: corsHeaders });
@@ -70,11 +106,12 @@ Deno.serve(async (req) => {
       );
     }
 
-    const origin = req.headers.get("origin") || "https://buildyourwayout.netlify.app";
+    // Always return to the real website; see create-checkout.
+    const siteUrl = Deno.env.get("SITE_URL") || "https://buildyourwayout.app";
 
     const session = await stripe.billingPortal.sessions.create({
       customer: profile.stripe_customer_id,
-      return_url: `${origin}/account.html`
+      return_url: `${siteUrl}/account.html`
     });
 
     return new Response(JSON.stringify({ url: session.url }), {
@@ -83,6 +120,7 @@ Deno.serve(async (req) => {
     });
   } catch (err) {
     console.error("create-portal-session error:", err);
+    await reportToSentry(err, { function: "create-portal-session" });
     return new Response(
       JSON.stringify({ error: "Something went wrong opening the billing portal" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }

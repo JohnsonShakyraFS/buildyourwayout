@@ -1,5 +1,6 @@
 import { redirectLoggedOut } from "./siteGate.js";
 import { initBillingToggle } from "./billing.js";
+import { exportAllData } from "./dataExport.js";
 import { getCurrentUser, updatePassword, deleteAccount } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
 import { initAuthStatus } from "./authStatus.js";
@@ -372,6 +373,32 @@ document.getElementById("managePlanBtn")?.addEventListener("click", async () => 
 });
 
 const billing = initBillingToggle();
+
+/* Export all my data (free for everyone) */
+document.getElementById("exportAllDataBtn")?.addEventListener("click", async () => {
+  const btn = document.getElementById("exportAllDataBtn");
+  const notice = document.getElementById("exportAllDataNotice");
+  notice.hidden = true;
+  btn.disabled = true;
+  btn.textContent = "Preparing your data...";
+
+  try {
+    const user = await getCurrentUser();
+    if (!user) throw new Error("Not signed in");
+
+    const { unavailable } = await exportAllData(user);
+    notice.textContent = unavailable.length
+      ? `Your data was downloaded, but these parts couldn't be included: ${unavailable.join(", ")}. Try again later, or contact support.`
+      : "Your data has been downloaded.";
+  } catch (err) {
+    console.error("Error exporting data:", err);
+    notice.textContent = "We couldn't prepare your data right now. Please try again.";
+  }
+
+  notice.hidden = false;
+  btn.disabled = false;
+  btn.textContent = "Download All My Data";
+});
 
 planGrid.addEventListener("click", async (event) => {
   const btn = event.target.closest(".plan-select-btn");

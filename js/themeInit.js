@@ -9,6 +9,21 @@
    picker) lives in theme.js.
    ============================================================ */
    (function () {
+    // Mark the native app (and which platform) before first paint, so
+    // purchase buttons never flash and iOS-only styles apply at once.
+    try {
+      var cap = window.Capacitor;
+      if (cap && cap.isNativePlatform && cap.isNativePlatform()) {
+        var cls = document.documentElement.classList;
+        cls.add("is-native");
+        cls.add("is-" + (cap.getPlatform ? cap.getPlatform() : "native"));
+      }
+    } catch (err) {
+      // No Capacitor: this is the website.
+    }
+  })();
+  
+  (function () {
     try {
       var saved = JSON.parse(localStorage.getItem("byo-theme") || "null");
       if (!saved) return;

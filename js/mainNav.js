@@ -1,6 +1,7 @@
 import { getCurrentUser, onAuthChange } from "./auth.js";
 import { validateThemeForPlan } from "./theme.js";
 import { applySiteGate, isNativeApp } from "./siteGate.js";
+import { syncStatusBar } from "./nativeShell.js";
 
 function renderLinks(user) {
   const el = document.getElementById("navLinks");
@@ -37,6 +38,7 @@ function renderSkeleton() {
 }
 
 export function initMainNav() {
+  syncStatusBar();
   renderSkeleton();
   getCurrentUser().then((user) => {
     applySiteGate(user);

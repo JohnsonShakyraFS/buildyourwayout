@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Privacy Policy | Build Your Way Out</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,65 +37,64 @@
       <a href="index.html" class="logo mood-logo">
         <img src="icons/icon-192.png" alt="" class="logo-icon" />
         Build Your Way Out
-</a>
+      </a>
       <span id="authStatus" class="auth-status"></span>
     </header>
 
     <section class="reflection-header">
       <h1>Privacy Policy</h1>
-      <p class="legal-updated">Last updated: September 22, 2026</p>
+      <p class="legal-updated">Last updated: October 23, 2026</p>
     </section>
 
     <section class="legal-content">
-
-      <p class="legal-notice">
-        This is a draft policy written to give you a solid starting point. It has
-        not been reviewed by a lawyer. Please have it reviewed before relying on
-        it for a public launch, and fill in the bracketed placeholders (business
-        name, contact email, state) before publishing.
-      </p>
 
       <h2>Who we are</h2>
       <p>
         Build Your Way Out ("we," "us," "our") is operated by Shakyra Johnson.
         This policy explains what information we collect when you use Build Your Way Out,
-        how we use it, and the choices you have.
+        how we use it, who helps us run it, and the choices you have.
       </p>
 
       <h2>What we collect</h2>
       <p>We collect the following information:</p>
       <ul>
-        <li><strong>Account information:</strong> your email address and a securely hashed password, when you create an account.</li>
+        <li><strong>Account information:</strong> your email address, a securely hashed password, and an optional display name, when you create an account.</li>
         <li><strong>Onboarding answers:</strong> your responses to our short getting-started questionnaire (what brought you here, what you're hoping to build, your coding comfort level, and your goals), and the "Build Profile" we generate from them.</li>
         <li><strong>Reflection journal entries:</strong> the text you write in the reflection form (what you built, what you learned, and any optional note about how you feel).</li>
-        <li><strong>Mood ratings:</strong> a 1–5 rating of how you felt immediately before and after each build, so we can show you your emotional trend over time.</li>
-        <li><strong>Mood and build selections:</strong> which mood you chose and which guided build you were given, used only to avoid repeating the same build and to personalize your experience.</li>
+        <li><strong>Mood ratings:</strong> a 1–5 rating of how you felt immediately before and after each build, so we can show you your emotional trend and, on Plus, your Insights.</li>
+        <li><strong>Mood and build selections:</strong> which mood you chose and which guided build you were given, used to avoid repeating the same build and to personalize your experience.</li>
+        <li><strong>Saved builds and Sandbox creations:</strong> the title and the HTML, CSS and JavaScript code of builds you finish or create, so you can reopen them later.</li>
         <li><strong>In-progress build code:</strong> if you leave a guided build partway through, we save a snapshot of your current step and code so you can resume where you left off.</li>
-        <li><strong>Basic technical data:</strong> standard information collected automatically by our hosting and database providers (such as timestamps and error logs) to keep the service running.</li>
+        <li><strong>Preferences:</strong> settings such as your chosen theme and accent color.</li>
+        <li><strong>Subscription information:</strong> whether you have a Plus subscription and the customer reference our payment provider assigns to you. Your card details go directly to our payment provider, Stripe. We never see or store your full card number.</li>
+        <li><strong>Messages to us:</strong> if you email us for support, we keep your message and our reply.</li>
+        <li><strong>Basic technical data:</strong> standard information collected automatically by our hosting, database and security providers (such as timestamps, IP address, browser or device type, and error logs) to keep the service running and protected.</li>
       </ul>
       <p>
-        An account is required to use Build Your Way Out — there is currently no
+        An account is required to use Build Your Way Out. There is currently no
         guest or offline mode.
       </p>
 
       <h2>How we use your information</h2>
       <p>We use your information only to:</p>
       <ul>
-        <li>Provide the core functionality of the app (saving and displaying your journal, personalizing builds, resuming in-progress work).</li>
-        <li>Maintain your account (authentication, password resets).</li>
-        <li>Show you your emotional trend over time and, where relevant, a gentle automated support prompt (see below).</li>
-        <li>Keep the service secure and working as intended.</li>
+        <li>Provide the core functionality of the app (saving and displaying your journal and builds, personalizing builds, resuming in-progress work).</li>
+        <li>Maintain your account (sign-in, confirmation and password-reset emails).</li>
+        <li>Process Plus subscriptions and keep your plan status correct.</li>
+        <li>Show you your emotional trend and Insights and, where relevant, a gentle automated support prompt (see below).</li>
+        <li>Protect against spam, bots and abuse, and find and fix errors.</li>
+        <li>Answer your questions when you contact us.</li>
       </ul>
       <p>
-        We do not sell your data. We do not run third-party advertising or analytics
-        trackers against the content of your reflections.
+        We do not sell your data. We do not show advertising, and we do not use
+        advertising or analytics trackers on the content of your reflections or code.
       </p>
 
       <h2>Automated support prompts</h2>
       <p>
         If your recent mood check-ins are consistently low, we'll show you a gentle,
         automated message with crisis and support resources. This is a simple
-        pattern check on the numbers you enter — not a diagnosis, not a review by a
+        pattern check on the numbers you enter. It is not a diagnosis, not a review by a
         person, and nothing is sent to us or anyone else when it appears. You can
         dismiss it at any time, and it won't reappear for 24 hours after you do.
       </p>
@@ -104,28 +103,35 @@
       <p>
         Your account and journal data are stored in a managed Postgres database
         (via Supabase), with access restricted at the database level so that only
-        you can read or write your own reflections. Data is encrypted at rest and
-        in transit by our infrastructure provider.
+        you can read or write your own reflections and builds. Data is encrypted at
+        rest and in transit by our infrastructure providers.
       </p>
 
-      <h2>Sharing</h2>
+      <h2>Who helps us run the app</h2>
       <p>
-        We do not share your reflection content with third parties. We may share
-        limited technical information with service providers who help us run the
-        app (for example, our hosting and database provider), solely for the
-        purpose of operating the service, and only to the extent necessary for
-        them to do so.
+        We share information only with service providers who help us operate
+        Build Your Way Out, and only what each one needs to do its job:
       </p>
+      <ul>
+        <li><strong>Supabase:</strong> database and sign-in.</li>
+        <li><strong>Netlify:</strong> hosting for the website.</li>
+        <li><strong>Stripe:</strong> payments and subscriptions for Plus. Stripe receives your email and payment details under its own privacy policy.</li>
+        <li><strong>Resend:</strong> sends account emails such as confirmations and password resets.</li>
+        <li><strong>hCaptcha:</strong> bot protection when you sign up or sign in. It looks at technical signals such as your IP address and browser details, under its own privacy policy.</li>
+        <li><strong>Error monitoring (Sentry):</strong> tells us when something breaks. It is set up not to record what you write, to use no session recordings, and not to identify you.</li>
+        <li><strong>Google Fonts and Cloudflare's code library network:</strong> deliver fonts and the code-editor and chart libraries the app uses, so your browser contacts them as it would any website.</li>
+      </ul>
       <p>
-        We may disclose information if required to do so by law, or to protect
-        the rights, safety, or property of Build Your Way Out, our users, or
-        others.
+        We do not share your reflection content or your code with anyone else. We
+        may disclose information if required to do so by law, or to protect the
+        rights, safety, or property of Build Your Way Out, our users, or others.
       </p>
 
       <h2>Your choices and rights</h2>
       <ul>
-        <li><strong>Access and export:</strong> you can view your reflections at any time in your journal.</li>
-        <li><strong>Deletion:</strong> you can delete individual reflections, or delete your account and all associated data, at any time from your account settings.</li>
+        <li><strong>Access and export:</strong> you can view your reflections and builds at any time, export your journal, and download a copy of everything in your account from the Account page ("Download All My Data"). This is free for everyone.</li>
+        <li><strong>Correction:</strong> you can change your display name, email address and password from the Account page.</li>
+        <li><strong>Deletion:</strong> you can delete individual reflections, or delete your account and all associated data, at any time from the Account page.</li>
         <li><strong>California residents:</strong> depending on applicable law, you may have additional rights to know, delete, or opt out of the sale of personal information. We do not sell personal information.</li>
       </ul>
 
@@ -139,10 +145,10 @@
 
       <h2>Data retention</h2>
       <p>
-        We retain your account and reflection data for as long as your account
+        We retain your account, reflection and build data for as long as your account
         is active. If you delete your account, we delete your associated data
-        immediately, except where we're required to retain it for legal
-        reasons.
+        from our database. Payment records are kept by Stripe, and we may keep
+        limited records where the law requires it.
       </p>
 
       <h2>Changes to this policy</h2>
@@ -154,7 +160,8 @@
       <h2>Contact us</h2>
       <p>
         Questions about this policy or your data? Contact us at
-        <a href="mailto:shakyrajohnson800@gmail.com">shakyrajohnson800@gmail.com</a>.
+        <a href="mailto:shakyrajohnson800@gmail.com">shakyrajohnson800@gmail.com</a>,
+        or visit our <a href="support.html">support page</a>.
       </p>
 
     </section>
@@ -179,7 +186,7 @@
       therapy, medical advice, or a crisis service.
     </p>
     <p class="footer-links">
-      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a> · <a href="support.html">Support</a>
     </p>
 <p class="footer-links">Questions or feedback? <a href="mailto:shakyrajohnson800@gmail.com">shakyrajohnson800@gmail.com</a></p>
   </footer>

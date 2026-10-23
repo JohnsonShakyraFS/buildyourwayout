@@ -3716,3 +3716,11 @@ html.is-native .plan-card.current-plan::after {
   font-weight: 600;
   color: var(--accent);
 }
+
+/* Support page question headings */
+.legal-content h3 {
+  margin: var(--space-5) 0 var(--space-1);
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--text);
+}

@@ -1,4 +1,5 @@
 import { supabase } from "./supabaseClient.js";
+import { syncStatusBar } from "./nativeShell.js";
 
 /* ============================================================
    THEMES
@@ -81,6 +82,8 @@ export function applyTheme(theme) {
   } else {
     root.removeAttribute("data-accent");
   }
+
+  syncStatusBar();
 }
 
 async function fetchProfileTheme(userId) {

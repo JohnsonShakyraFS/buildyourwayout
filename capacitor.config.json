@@ -2,6 +2,10 @@
   "appId": "com.buildyourwayout.app",
   "appName": "Build Your Way Out",
   "webDir": "www",
+  "server": {
+    "androidScheme": "https",
+    "hostname": "app.buildyourwayout.app"
+  },
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 1500,

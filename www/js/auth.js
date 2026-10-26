@@ -34,7 +34,22 @@ export async function signOut() {
 
 export async function getCurrentUser() {
   const { data, error } = await supabase.auth.getUser();
-  if (error) return null;
+  if (error) {
+    // A saved session the server no longer accepts (deleted account,
+    // revoked or expired) would otherwise leave different pages
+    // disagreeing about whether you're signed in, which sends the
+    // browser bouncing between the home page and Mood Builds. Clear it
+    // so the visitor is simply logged out. Network failures are left
+    // alone, so going offline never signs anyone out.
+    if (error.status === 401 || error.status === 403) {
+      try {
+        await supabase.auth.signOut({ scope: "local" });
+      } catch (err) {
+        // Nothing more to do; the caller still gets "logged out".
+      }
+    }
+    return null;
+  }
   return data?.user || null;
 }
 
@@ -98,7 +113,21 @@ export async function deleteAccount() {
    user or null.
    ------------------------------------------------------------ */
 export function onAuthChange(callback) {
-  supabase.auth.onAuthStateChange((_event, session) => {
-    callback(session?.user || null);
+  supabase.auth.onAuthStateChange((event, session) => {
+    // INITIAL_SESSION is only whatever is saved in the browser, which can
+    // be stale. Every page already checks the real state itself on load
+    // (getCurrentUser), so skip it here.
+    if (event === "INITIAL_SESSION") return;
+
+    if (!session) {
+      callback(null);
+      return;
+    }
+
+    // Confirm with the server before telling the page someone is signed in.
+    // Deferred so this callback never waits on another Supabase call.
+    setTimeout(async () => {
+      callback(await getCurrentUser());
+    }, 0);
   });
 }

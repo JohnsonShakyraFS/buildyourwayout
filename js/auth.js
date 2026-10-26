@@ -58,7 +58,7 @@ export async function getCurrentUser() {
    the user back to reset-password.html with a temporary
    recovery session already established.
    ------------------------------------------------------------ */
-export async function requestPasswordReset(email) {
+export async function requestPasswordReset(email, captchaToken) {
   // In the phone apps, window.location.origin is an app-only address
   // (capacitor:// or localhost) that an email link can't open, so the
   // link always points at the real website. It must also be listed under
@@ -67,8 +67,10 @@ export async function requestPasswordReset(email) {
     ? "https://buildyourwayout.app"
     : window.location.origin;
 
+  // captchaToken is required once CAPTCHA protection is on in Supabase.
   const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${siteUrl}/reset-password.html`
+    redirectTo: `${siteUrl}/reset-password.html`,
+    captchaToken: captchaToken || undefined
   });
   return { data, error };
 }

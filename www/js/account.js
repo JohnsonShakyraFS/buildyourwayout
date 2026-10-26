@@ -1,3 +1,4 @@
+import "./monitoring.js";
 import { redirectLoggedOut } from "./siteGate.js";
 import { initBillingToggle } from "./billing.js";
 import { exportAllData } from "./dataExport.js";
@@ -8,7 +9,7 @@ import { initMainNav } from "./mainNav.js";
 import { registerServiceWorker } from "./registerServiceWorker.js";
 import {
   getStoredTheme, storeTheme, applyTheme, persistTheme, normalizeTheme,
-  themeNeedsPlus, modeNeedsPlus, accentNeedsPlus, DEFAULT_THEME
+  themeNeedsPlus, modeNeedsPlus, accentNeedsPlus, DEFAULT_THEME, resetThemeToDefault
 } from "./theme.js";
 
 initAuthStatus();
@@ -346,6 +347,11 @@ function highlightSelectedPlan(plan) {
   if (managePlanBlock) {
     managePlanBlock.classList.toggle("hidden", plan !== "plus");
   }
+
+  // iPhone app: Free accounts get a link to upgrade on the website
+  // (CSS only shows this block on iOS; Plus accounts don't need it).
+  const upgradeLinkBlock = document.getElementById("upgradeLinkBlock");
+  if (upgradeLinkBlock) upgradeLinkBlock.hidden = plan === "plus";
 
   initAppearance(plan);
 }
@@ -718,5 +724,7 @@ confirmDeleteBtn.addEventListener("click", async () => {
     return;
   }
 
+  // The account is gone, so its Plus colors go with it.
+  resetThemeToDefault();
   window.location.href = "index.html";
 });

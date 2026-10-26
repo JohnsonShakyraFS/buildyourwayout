@@ -30,6 +30,7 @@ function goToNextStep() {
   steps[currentStepIndex].classList.remove("hidden");
   // Stay at the top of the page on every step.
   window.scrollTo(0, 0);
+  requestAnimationFrame(() => window.scrollTo(0, 0));
 }
 
 document.querySelectorAll(".walkthrough-next-btn").forEach((btn) => {

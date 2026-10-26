@@ -1,4 +1,4 @@
-const CACHE_NAME = "build-your-way-out-v14";
+const CACHE_NAME = "build-your-way-out-v15";
 
 const STATIC_ASSETS = [
   "/",

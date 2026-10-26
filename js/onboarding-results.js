@@ -1,3 +1,4 @@
+import "./monitoring.js";
 import { redirectLoggedOut } from "./siteGate.js";
 import { supabase } from "./supabaseClient.js";
 import { getCurrentUser } from "./auth.js";
@@ -82,7 +83,7 @@ startBtn.addEventListener("click", async () => {
 
   resultsCard.classList.add("hidden");
   upgradeBanner.classList.remove("hidden");
-  upgradeBanner.scrollIntoView({ behavior: "smooth", block: "start" });
+  window.scrollTo(0, 0);
 });
 
 /* Closing the banner (the X) means "not right now" — go through
@@ -92,12 +93,27 @@ upgradeBannerClose.addEventListener("click", () => {
   window.location.href = "onboarding-walkthrough.html?next=mood.html";
 });
 
+const UPGRADE_URL = "https://buildyourwayout.app/login.html?next=account.html";
+
+// In the iPhone app the Plus button opens our website, so say so.
+if (document.documentElement.classList.contains("is-ios")) {
+  document.querySelectorAll('.upgrade-plan-btn[data-plan="plus"]').forEach((btn) => {
+    btn.textContent = "Upgrade on our website";
+  });
+}
+
 document.querySelectorAll(".upgrade-plan-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     const plan = btn.dataset.plan;
 
     if (plan === "free") {
       window.location.href = "onboarding-walkthrough.html?next=mood.html";
+      return;
+    }
+
+    // iPhone app: Plus is bought on the website, so open it in Safari.
+    if (document.documentElement.classList.contains("is-ios")) {
+      window.open(UPGRADE_URL, "_blank", "noopener");
       return;
     }
 

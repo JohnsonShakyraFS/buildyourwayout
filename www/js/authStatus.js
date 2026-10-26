@@ -1,5 +1,6 @@
 import { getCurrentUser, onAuthChange, signOut } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
+import { resetThemeToDefault } from "./theme.js";
 
 /* ------------------------------------------------------------
    Renders login/logout state into any element with
@@ -31,6 +32,7 @@ export function initAuthStatus() {
       const logoutBtn = document.getElementById("logoutBtn");
       logoutBtn.addEventListener("click", async () => {
         await signOut();
+        resetThemeToDefault();
         window.location.href = "index.html";
       });
     } else {

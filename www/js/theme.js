@@ -142,6 +142,14 @@ export async function validateThemeForPlan(userId) {
   }
 }
 
+/* Puts this device back on the default look. Used when someone logs out
+   or deletes their account, so the next person (or the same person
+   signing up again) never sees Plus colors they don't have. */
+export function resetThemeToDefault() {
+  storeTheme(DEFAULT_THEME);
+  applyTheme(DEFAULT_THEME);
+}
+
 /* Called after login, so a theme chosen on one device shows up on
    another. Plus accounts get their saved theme; everyone else gets
    the default. */

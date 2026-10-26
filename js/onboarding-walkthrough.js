@@ -1,3 +1,4 @@
+import "./monitoring.js";
 import { redirectLoggedOut } from "./siteGate.js";
 import { getCurrentUser } from "./auth.js";
 import { initAuthStatus } from "./authStatus.js";
@@ -27,7 +28,8 @@ function goToNextStep() {
   steps[currentStepIndex].classList.add("hidden");
   currentStepIndex++;
   steps[currentStepIndex].classList.remove("hidden");
-  steps[currentStepIndex].scrollIntoView({ behavior: "smooth", block: "start" });
+  // Stay at the top of the page on every step.
+  window.scrollTo(0, 0);
 }
 
 document.querySelectorAll(".walkthrough-next-btn").forEach((btn) => {

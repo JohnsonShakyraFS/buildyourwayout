@@ -1,3 +1,4 @@
+import "./monitoring.js";
 import { signUp, signIn, getCurrentUser } from "./auth.js";
 import { syncThemeFromProfile } from "./theme.js";
 import { initAuthStatus } from "./authStatus.js";
@@ -71,9 +72,26 @@ function resetCaptcha() {
 
 let mode = "signup"; // or "signin" — signup is the default first-open experience
 
+/* The iPhone app's "Upgrade on our website" link opens
+   login.html?next=account.html, so people land on the upgrade screen
+   right after logging in. Only pages listed here are allowed. */
+const ALLOWED_NEXT = ["account.html"];
+const nextPage = (() => {
+  const next = new URLSearchParams(window.location.search).get("next");
+  return ALLOWED_NEXT.includes(next) ? next : null;
+})();
+
+function goAfterAuth(user) {
+  if (nextPage) {
+    window.location.replace(nextPage);
+    return;
+  }
+  return redirectAfterAuth(user);
+}
+
 /* If already logged in, no need to be here */
 getCurrentUser().then(user => {
-  if (user) redirectAfterAuth(user);
+  if (user) goAfterAuth(user);
 });
 
 function validateEmailLive() {
@@ -212,7 +230,8 @@ authForm.addEventListener("submit", async (event) => {
   }
 
   await syncThemeFromProfile(data.user.id);
-  await redirectAfterAuth(data.user);
+  await goAfterAuth(data.user);
 });
 
-setMode("signup");
+// People arriving from the upgrade link almost always have an account already.
+setMode(nextPage ? "signin" : "signup");

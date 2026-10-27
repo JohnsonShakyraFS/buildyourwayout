@@ -3688,8 +3688,15 @@ html.is-ios body {
   padding-left: env(safe-area-inset-left, 0px);
 }
 
-/* iOS zooms the page when a field under 16px is tapped. */
+/* iOS zooms the page when a field under 16px is tapped. The code editor
+   is a contenteditable area, so it needs the same treatment. */
 @supports (-webkit-touch-callout: none) {
+  .CodeMirror,
+  .CodeMirror pre,
+  .CodeMirror-code {
+    font-size: 16px !important;
+  }
+
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
   select,
   textarea {
@@ -3706,6 +3713,28 @@ html.is-native .plan-price,
 html.is-native .plan-price-note,
 html.is-native #managePlanBlock {
   display: none !important;
+}
+
+/* Android app: no purchase path yet, so the Plus card in the
+   post-questionnaire banner is hidden there. */
+html.is-android .upgrade-plan-grid .plan-card[data-plan="plus"] {
+  display: none;
+}
+
+/* iPhone app only: Plus is bought on the website, so Free accounts get a
+   plain link there. Hidden everywhere else (Android and the website). */
+.upgrade-link-block,
+.upgrade-link {
+  display: none;
+}
+
+html.is-ios .upgrade-link-block:not([hidden]) {
+  display: block;
+  margin-block: var(--space-4);
+}
+
+html.is-ios .upgrade-link {
+  display: inline-flex;
 }
 
 html.is-native .plan-card.current-plan::after {

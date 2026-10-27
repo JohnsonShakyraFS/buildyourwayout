@@ -17,6 +17,15 @@
         var cls = document.documentElement.classList;
         cls.add("is-native");
         cls.add("is-" + (cap.getPlatform ? cap.getPlatform() : "native"));
+  
+        // Stop iOS from zooming the page when a field or the code editor is
+        // tapped. Only in the apps; the website keeps normal pinch-to-zoom.
+        var vp = document.querySelector('meta[name="viewport"]');
+        if (vp) {
+          var content = (vp.getAttribute("content") || "")
+            .replace(/,?\s*(maximum-scale|minimum-scale|user-scalable)\s*=\s*[^,]*/g, "");
+          vp.setAttribute("content", content + ", maximum-scale=1, user-scalable=no");
+        }
       }
     } catch (err) {
       // No Capacitor: this is the website.

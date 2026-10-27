@@ -1,3 +1,4 @@
+import "./monitoring.js";
 import { redirectLoggedOut } from "./siteGate.js";
 import { getCurrentUser } from "./auth.js";
 import { supabase } from "./supabaseClient.js";
@@ -64,7 +65,11 @@ nameForm.addEventListener("submit", (event) => {
   welcomeHeading.textContent = `Nice to meet you, ${name}.`;
   welcomeSubheading.textContent = "How old are you?";
   ageForm.classList.remove("hidden");
-  ageInput.focus();
+  window.scrollTo(0, 0);
+  // Skip opening the keyboard in the phone apps: it shoves the page around.
+  if (!document.documentElement.classList.contains("is-native")) {
+    ageInput.focus({ preventScroll: true });
+  }
 });
 
 /* ------------------------------------------------------------
@@ -117,6 +122,7 @@ ageForm.addEventListener("submit", async (event) => {
   transitionMessage.textContent =
     "Let's get to know you and craft the best experience tailored to your needs and goals!";
   transitionStep.classList.remove("hidden");
+  window.scrollTo(0, 0);
 
   /* Auto-advances after a couple seconds so it feels like a
      natural pause rather than a dead end, but a tap continues

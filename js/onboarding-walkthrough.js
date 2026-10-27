@@ -24,13 +24,26 @@ const steps = [
 
 let currentStepIndex = 0;
 
+/* Keeps the page at the very top. Done a few times because the phone
+   can move the page again just after the layout changes. */
+function scrollToTop() {
+  const top = () => {
+    window.scrollTo(0, 0);
+    if (document.scrollingElement) document.scrollingElement.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  };
+  top();
+  requestAnimationFrame(top);
+  setTimeout(top, 60);
+  setTimeout(top, 250);
+}
+
 function goToNextStep() {
   steps[currentStepIndex].classList.add("hidden");
   currentStepIndex++;
   steps[currentStepIndex].classList.remove("hidden");
-  // Stay at the top of the page on every step.
-  window.scrollTo(0, 0);
-  requestAnimationFrame(() => window.scrollTo(0, 0));
+  scrollToTop();
 }
 
 document.querySelectorAll(".walkthrough-next-btn").forEach((btn) => {
